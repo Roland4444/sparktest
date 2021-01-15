@@ -38,7 +38,8 @@ public class InputRequestProcessor {
     }
     public void saveUpdatingRequestinDB(RequestMessage req) throws SQLException, ParseException {
         PreparedStatement stmt = executor.getConn().prepareStatement("UPDATE requests SET updateddata = ?::jsonb, datetimeupdate = ? WHERE id = ?");
-        stmt.setString(1, req.JSONed);
+        System.out.println("JSON::>"+req.JSONed);
+        stmt.setObject(1, req.JSONed);
         stmt.setTimestamp(2, new Timestamp(new Date().getTime()));///new java.sql.Date(new Date().getTime().n));
         stmt.setString(3,  req.ID);
         System.out.println("executing >>>"+ req.ID);

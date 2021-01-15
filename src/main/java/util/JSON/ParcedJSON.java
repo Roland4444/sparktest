@@ -17,6 +17,7 @@ public class ParcedJSON {
     public String Clogging;
     public String Trash;
     public String Comment;
+
     public static ParcedJSON parse(String input) throws ParseException {
        //// System.out.println("PARCING JSON::=>\n\n"+input);
         if (input.length()<5)
@@ -25,14 +26,14 @@ public class ParcedJSON {
         JSONObject jo = (JSONObject) obj;
         ParcedJSON pj = new ParcedJSON();
         pj.Date = (String) jo.get("Date");
-        pj.Time = (String) jo.get("Time");
-        pj.Waybill_number = (String) jo.get("Waybill_number");
+        pj.Time = String.valueOf(jo.get("Time"));
+        pj.Waybill_number = String.valueOf(jo.get("Waybill_number"));
         pj.Metall = (String) jo.get("Metall");
-        pj.Tara = (String) jo.get("Tara");
-        pj.Netto = (String) jo.get("Netto");
-        pj.Brutto = (String) jo.get("Brutto");
-        pj.Clogging = (String) jo.get("Clogging");
-        pj.Trash = (String) jo.get("Trash");
+        pj.Tara = String.valueOf( jo.get("Tara"));
+        pj.Netto = String.valueOf (jo.get("Netto"));
+        pj.Brutto = String.valueOf (jo.get("Brutto"));
+        pj.Clogging = String.valueOf( jo.get("Clogging"));
+        pj.Trash = String.valueOf (jo.get("Trash"));
         pj.Comment = (String) jo.get("Comment");
         return pj;
     };
