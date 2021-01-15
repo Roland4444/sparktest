@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>REACT impove</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="style2.css">
+
     <link rel="stylesheet" href="https://unpkg.com/js-datepicker/dist/datepicker.min.css">
     <script src="https://unpkg.com/js-datepicker"></script>
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+    <link rel="stylesheet" href="style2.css">
 
     <!-- Не используйте это в production -->
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
@@ -19,7 +19,13 @@
     <!-- jQuery and JS bundle w/ Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" href="dp.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
 </head>
+
 <body>
 <script>
 
@@ -52,30 +58,23 @@ function addscript(scripted){
         <button type="submit" onclick="alert('Запрос одобрен')" >Одобрить запрос</button>
     </form>
 </div-->
+
 <script type="text/babel"  src="js/Approve.js"></script>
 <script type="text/babel">
 
 localStorage.setItem('maxitem', 0);
 localStorage.setItem('minitem', 0);
 </script>
-<input type="text" name="birthday" value="10/24/1984" />
-<script>
-$(function() {
-  $('input[name="birthday"]').daterangepicker({
-    singleDatePicker: true,
-    showDropdowns: true,
-    minYear: 1901,
-    maxYear: parseInt(moment().format('YYYY'),10)
-  }, function(start, end, label) {
-    var years = moment().diff(start, 'years');
-    alert("You are " + years + " years old!");
-  });
-});
-</script>
-<label id="picker1">Label</label><label id="picker2">Label</label>
+<input type="text" name="daterange"  id="data00" />
+
+<label id="picker1">Label</label><label id="picker2">Label</label><button onclick="filter()">Filter</button>
 <div id="datapicker"><h5>datapicker div</h5></div>
 <button onClick="clickedNew()">Emulate new</button>
 <button onClick="clickedUpdate()">Emulate exist</button>
+<button onClick="hideRow()">hideRow NOW</button>
+<button onClick="showRow()">showRow NOW</button>
+<button onClick="hideRows()">hideRows NOW</button>
+<button onClick="showRows()">showRows NOW</button>
 <table id="mTable" valign="center" class="table" cellpadding="10" border="10" align="center">
     <tr><th class="text-center">ID</th>
         <th class="text-center">Дата запроса</th>
@@ -95,22 +94,117 @@ $(function() {
 </table>
 <script type="text/babel">
 
-let a = localStorage.getItem('minitem');
-let b = localStorage.getItem('maxitem');
+var a = localStorage.getItem('minitem');
+var b = localStorage.getItem('maxitem');
 //alert(a+":"+b)
-</script>
-<script type="text/babel">
+
+
+function hideRow(){
+  var row___ = document.getElementById("317")
+  row___.hidden=true;
+}
+
+function compareDate(input, dp1, dp2){
+  var input__ = new Date(input)
+  var dp1__ = new Date(dp1)
+  var dp2__ = new Date(dp2)
+  if ((input__<dp1__) || (input__>dp2__))
+    return false;
+  return true;
+}
+
+function filterRows(){
+  var a = localStorage.getItem('minitem')
+  var b = localStorage.getItem('maxitem')
+  let elem = document.getElementById("3171")
+  var begin__ = localStorage.getItem('begindate');
+  var end__ =  localStorage.getItem('enddate');
+
+  for (let i=b; i>=a; i--){
+      let divid = String(i)+1;
+      if (document.getElementById(divid) == null)
+        continue;
+      let elem = document.getElementById(divid).innerHTML;
+      var curDate = elem.substring(0,10);
+      if (!compareDate(curDate, begin__, end__ ))
+        document.getElementById(i).hidden=true;
+      else document.getElementById(i).hidden=false;
+  }
+
+}
+
+function showRows(){
+  var row___ = document.getElementById("317")
+  row___.hidden=false;
+}
+
+function showRow(){
+  var row___ = document.getElementById("317")
+  row___.hidden=false;
+}
+
+
+$(function() {
+  $('input[name="daterange"]').daterangepicker({
+    opens: 'left',
+    "autoApply": true,
+ "locale": {
+        "format": "YYYY/MM/DD",
+        "separator": " - ",
+        "applyLabel": "Применить",
+        "cancelLabel": "Отменить",
+        "fromLabel": "От",
+        "toLabel": "Дo",
+        "customRangeLabel": "Произвольно",
+        "weekLabel": "Н",
+        "daysOfWeek": [
+            "Вс",
+            "Пн",
+            "Вт",
+            "Ср",
+            "Чт",
+            "Пт",
+            "Сб"
+        ],
+        "monthNames": [
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь"
+        ],
+        "firstDay": 1
+    },
+    "startDate" : moment().startOf('day').add(-14, 'day'),
+    "endDate" : moment()
+  }, function(start, end, label) {
+    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    localStorage.setItem('begindate', start.format('YYYY-MM-DD'))
+    localStorage.setItem('enddate', end.format('YYYY-MM-DD'))
+    filterRows()
+  });
+});
 
 
     const json__ =   [{"datetimeupdate":"'null'","initialdata":"'{\"Date\": \"2020-11-03\", \"Mode\": \"Приемка\", \"Tara\": \"0.0\", \"Time\": \"16:18:04\", \"Netto\": \"287.60\", \"Trash\": \"4.0\", \"Brutto\": \"294.5\", \"Metall\": \"Алюминий хлам\", \"Comment\": \"витек\", \"Clogging\": \"1.0\", \"Complete\": \"Да\", \"Condition\": \"Выгружен\", \"Waybill_number\": \"15\"}'","updateddata":"'null'","datetimerequest":"'2021-01-12 13:59:48.627'","comment":"wfwefwfewfw","id":318,"datetimeapprove":"'null'"}];
-    alert('mount datapicker')
+  //  alert('mount datapicker')
     var datapickerdiv = document.getElementById('datapicker');
 //    const picker = datepicker('#picker2')
 //    picker.toggleOverlay()
 
     const start = datepicker('#picker1', { id: 1 })
     const end = datepicker('#picker2', { id: 1 })
-
+    function filter(){
+      let obj____ = start.getRange
+      alert('filter'+JSON.stringify(obj____))
+    }
     const simple__ = [{'id':13}, {'id':14}]
     const declined__ = [{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:40:17.2'","comment":"5464565464","id":274,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:43:22.949'","comment":"hdfdhdxhfdxhdfxh","id":276,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "3.0", "Time": "13:56:33", "Netto": "203.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "12А", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-15 15:25:49.042'","comment":"vdsvsdvdsvsv","id":169,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-18 15:29:53.097'","comment":"879797898778998797","id":249,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий пищевой", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:37:36.278'","comment":"ers54waetg","id":317,"datetimeapprove":"'2020-12-21 15:43:27.324'"}]
     const exist__ = [{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:40:17.2'","comment":"5464565464","id":274,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:43:22.949'","comment":"hdfdhdxhfdxhdfxh","id":276,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "3.0", "Time": "13:56:33", "Netto": "203.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "12А", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-15 15:25:49.042'","comment":"vdsvsdvdsvsv","id":169,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-18 15:29:53.097'","comment":"879797898778998797","id":249,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий пищевой", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:37:36.278'","comment":"ers54waetg","id":317,"datetimeapprove":"'2020-12-21 15:43:27.324'"}]
@@ -338,6 +432,9 @@ let b = localStorage.getItem('maxitem');
   ///  alert(flow("'7878778'"))
 
 //    new_withUpdate()
+localStorage.setItem('begindate', moment().startOf('day').add(-14, 'day'))
+localStorage.setItem('enddate', moment())
+  filterRows()
 </script>
 </body>
 </html>

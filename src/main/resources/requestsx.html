@@ -14,6 +14,11 @@
     <!-- jQuery and JS bundle w/ Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="dp.css">
 </head>
 <body>
 
@@ -23,16 +28,25 @@
         <button type="submit" onclick="alert('Запрос одобрен')" >Одобрить запрос</button>
     </form>
 </div-->
-<script type="text/babel"  src="js/Approve.js"></script>
 <script type="text/babel">
 localStorage.setItem('maxitem', 0);
 localStorage.setItem('minitem', 0);
 
 
 </script>
+<script type="text/babel"  src="js/Approve.js"></script>
 
 <button onClick="clickedNew()">Emulate new</button>
 <button onClick="clickedUpdate()">Emulate exist</button>
+<input type="text" name="daterange"  id="data00" />
+
+<label id="picker1">Label</label><label id="picker2">Label</label><button onclick="filter()">Filter</button>
+<div id="datapicker"><h5>datapicker div</h5></div>
+<button onClick="clickedNew()">Emulate new</button>
+<button onClick="clickedUpdate()">Emulate exist</button>
+<button onClick="filterRows()">hideRows NOW</button>
+
+
 <table  id="mTable" border="10" cellpadding="10"  align="center" valign="center" class="table">
     <th class="text-center">ID</th>
     <th class="text-center">Дата запроса</th>
@@ -49,17 +63,97 @@ localStorage.setItem('minitem', 0);
 
 
 <script type="text/babel">
-let a = localStorage.getItem('minitem');
-let b = localStorage.getItem('maxitem');
-//alert(a+":"+b)
+
 function renderReact(json_____, id_____){
     ReactDOM.render(<Approve info={json_____}/>, document.getElementById(id_____));
 }
 </script>
 
-
-
 <script>
+
+function compareDate(input, dp1, dp2){
+  var input__ = new Date(input)
+  var dp1__ = new Date(dp1)
+  var dp2__ = new Date(dp2)
+  if ((input__<dp1__) || (input__>dp2__))
+    return false;
+  return true;
+}
+
+
+
+function filterRows(){
+  alert('button clicked!')
+  alert('in filter')
+  var a = localStorage.getItem('minitem')
+  var b = localStorage.getItem('maxitem')
+  let elem = document.getElementById("3171")
+  var begin__ = localStorage.getItem('begindate');
+  var end__ =  localStorage.getItem('enddate');
+
+  for (let i=b; i>=a; i--){
+      let divid = String(i)+'a'+1;
+      if (document.getElementById(divid) == null)
+        continue;
+      let elem = document.getElementById(divid).innerHTML;
+      var curDate = elem.substring(0,10);
+      if (!compareDate(curDate, begin__, end__ ))
+        document.getElementById(i).hidden=true;
+      else document.getElementById(i).hidden=false;
+  }
+
+}
+
+
+$(function() {
+  $('input[name="daterange"]').daterangepicker({
+    opens: 'left',
+    "autoApply": true,
+ "locale": {
+        "format": "YYYY/MM/DD",
+        "separator": " - ",
+        "applyLabel": "Применить",
+        "cancelLabel": "Отменить",
+        "fromLabel": "От",
+        "toLabel": "Дo",
+        "customRangeLabel": "Произвольно",
+        "weekLabel": "Н",
+        "daysOfWeek": [
+            "Вс",
+            "Пн",
+            "Вт",
+            "Ср",
+            "Чт",
+            "Пт",
+            "Сб"
+        ],
+        "monthNames": [
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь"
+        ],
+        "firstDay": 1
+    },
+    "startDate" : moment().startOf('day').add(-14, 'day'),
+    "endDate" : moment()
+  }, function(start, end, label) {
+    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    localStorage.setItem('begindate', start.format('YYYY-MM-DD'))
+    localStorage.setItem('enddate', end.format('YYYY-MM-DD'))
+    filterRows()
+  });
+});
+
+
     const simple__ = [{'id':13}, {'id':14}]
     const declined__ = [{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:40:17.2'","comment":"5464565464","id":274,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:43:22.949'","comment":"hdfdhdxhfdxhdfxh","id":276,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "3.0", "Time": "13:56:33", "Netto": "203.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "12А", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-15 15:25:49.042'","comment":"vdsvsdvdsvsv","id":169,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-18 15:29:53.097'","comment":"879797898778998797","id":249,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий пищевой", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:37:36.278'","comment":"ers54waetg","id":317,"datetimeapprove":"'2020-12-21 15:43:27.324'"}]
     const exist__ = [{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:40:17.2'","comment":"5464565464","id":274,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:43:22.949'","comment":"hdfdhdxhfdxhdfxh","id":276,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "3.0", "Time": "13:56:33", "Netto": "203.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "12А", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-15 15:25:49.042'","comment":"vdsvsdvdsvsv","id":169,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-18 15:29:53.097'","comment":"879797898778998797","id":249,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий пищевой", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:37:36.278'","comment":"ers54waetg","id":317,"datetimeapprove":"'2020-12-21 15:43:27.324'"}]
@@ -76,35 +170,20 @@ function renderReact(json_____, id_____){
     var declined_obj_updateddata = declined__[0].updateddata
   //  alert('length=>'+JSON.stringify(declined_obj_updateddata).length)
 
-    function summ(){
-        var a = 2
-        return
-    }
-
 
     function proccessJSON(q){
         let maxitem = localStorage.getItem('maxitem');
-    ///    alert('q::'+q)
         var obj = JSON.parse(q)
-    /////    alert('obj'+obj[0].id)
         for (var item in obj){
             var id  = (obj[item].id);
             createRow(obj[item])
-
-          ////  //if (maxitem<id)
-
         }
-           ///// else
-           ///////     updateRow(q[item])
     }
 
     function createRow(a){
         var counter = String(a.id)
-     /////   alert('a>>'+a)
-    ////    alert(document.getElementById(counter))
         if (document.getElementById(counter)==null)
         {
-
             var table = document.getElementById("mTable");
             var row = table.insertRow(1);
             var tbdy = document.getElementById('tbody');
@@ -332,6 +411,9 @@ function addscript(scripted){
  //  new_withUpdate()
 // alert('blob process')
 ///proccessJSON(bulljson)
+localStorage.setItem('begindate', moment().startOf('day').add(-14, 'day'))
+localStorage.setItem('enddate', moment())
+  filterRows()
 </script>
 
 </body>
