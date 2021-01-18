@@ -34,7 +34,11 @@ localStorage.setItem('minitem', 0);
 
 
 </script>
+<script type="text/babel"  src="js/websocket.js"></script>
 <script type="text/babel"  src="js/Approve.js"></script>
+<script type="text/babel"  src="js/datapicker.js"></script>
+<script type="text/babel"  src="js/filter.js"></script>
+<script type="text/babel"  src="js/processJSON.js"></script>
 <!--
 <button onClick="clickedNew()">Emulate new</button>
 <button onClick="clickedUpdate()">Emulate exist</button>  -->
@@ -58,6 +62,7 @@ localStorage.setItem('minitem', 0);
     <th class="text-center">Одобрить запрос
         <select id="requestselect" onchange="filterRequest(this.value);">
             <option value="N">Не выбрано</option>
+            <option value="W">Ожидание</option>
             <option value="Разрешено">Разрешено</option>
             <option value="Запрещено">Запрещено</option>
         </select>
@@ -76,113 +81,6 @@ function renderReact(json_____, id_____){
 </script>
 
 <script>
-
-function compareDate(input, dp1, dp2){
-  var input__ = new Date(input)
-  var dp1__ = new Date(dp1)
-  var dp2__ = new Date(dp2)
-  if ((input__<dp1__) || (input__>dp2__))
-    return false;
-  return true;
-}
-
-
-
-function filterRows(){
- // alert('button clicked!')
- // alert('in filter')
-  var a = localStorage.getItem('minitem')
-  var b = localStorage.getItem('maxitem')
-  let elem = document.getElementById("3171")
-  var begin__ = localStorage.getItem('begindate');
-  var end__ =  localStorage.getItem('enddate');
-
-  for (let i=b; i>=a; i--){
-      let divid = String(i)+'a'+1;
-      if (document.getElementById(divid) == null)
-        continue;
-      let elem = document.getElementById(divid).innerHTML;
-      var curDate = elem.substring(0,10);
-      if (!compareDate(curDate, begin__, end__ ))
-        document.getElementById(i).hidden=true;
-      else document.getElementById(i).hidden=false;
-  }
-
-}
-
-function filterRequest(value) {
-  let startItem = localStorage.getItem('minitem');
-  let endItem = localStorage.getItem('maxitem');
-
-  for (let i = endItem; i >= startItem; i--) {
-    let divid = "approvetag" + String(i);
-
-    if (document.getElementById(divid) == null)
-        continue;
-
-    let elem = document.getElementById(divid).firstChild.firstChild.innerHTML;
-
-    if (value == "N")
-        document.getElementById(i).hidden=false;
-        else if (elem != value)
-                document.getElementById(i).hidden=true;
-                else document.getElementById(i).hidden=false;
-
-  }
-}
-
-
-
-$(function() {
-  $('input[name="daterange"]').daterangepicker({
-    opens: 'left',
-    "autoApply": true,
-    "showDropdowns": true,
- "locale": {
-        "format": "YYYY/MM/DD",
-        "separator": " - ",
-        "applyLabel": "Применить",
-        "cancelLabel": "Отменить",
-        "fromLabel": "От",
-        "toLabel": "Дo",
-        "customRangeLabel": "Произвольно",
-        "weekLabel": "Н",
-        "daysOfWeek": [
-            "Вс",
-            "Пн",
-            "Вт",
-            "Ср",
-            "Чт",
-            "Пт",
-            "Сб"
-        ],
-        "monthNames": [
-            "Январь",
-            "Февраль",
-            "Март",
-            "Апрель",
-            "Май",
-            "Июнь",
-            "Июль",
-            "Август",
-            "Сентябрь",
-            "Октябрь",
-            "Ноябрь",
-            "Декабрь"
-        ],
-        "firstDay": 1
-    },
-    "startDate" : moment().startOf('day').add(-14, 'day'),
-    "endDate" : moment()
-  }, function(start, end, label) {
-    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-    localStorage.setItem('begindate', start.format('YYYY-MM-DD'))
-    localStorage.setItem('enddate', end.format('YYYY-MM-DD'))
-    filterRows()
-  });
-});
-
-
     const simple__ = [{'id':13}, {'id':14}]
     const declined__ = [{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:40:17.2'","comment":"5464565464","id":274,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:43:22.949'","comment":"hdfdhdxhfdxhdfxh","id":276,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "3.0", "Time": "13:56:33", "Netto": "203.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "12А", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-15 15:25:49.042'","comment":"vdsvsdvdsvsv","id":169,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-18 15:29:53.097'","comment":"879797898778998797","id":249,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий пищевой", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:37:36.278'","comment":"ers54waetg","id":317,"datetimeapprove":"'2020-12-21 15:43:27.324'"}]
     const exist__ = [{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:40:17.2'","comment":"5464565464","id":274,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:43:22.949'","comment":"hdfdhdxhfdxhdfxh","id":276,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "3.0", "Time": "13:56:33", "Netto": "203.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "12А", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-15 15:25:49.042'","comment":"vdsvsdvdsvsv","id":169,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-18 15:29:53.097'","comment":"879797898778998797","id":249,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий пищевой", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:37:36.278'","comment":"ers54waetg","id":317,"datetimeapprove":"'2020-12-21 15:43:27.324'"}]
@@ -198,197 +96,6 @@ $(function() {
    // alert('obj==>'+obj_____)
     var declined_obj_updateddata = declined__[0].updateddata
   //  alert('length=>'+JSON.stringify(declined_obj_updateddata).length)
-
-
-    function proccessJSON(q){
-        let maxitem = localStorage.getItem('maxitem');
-        var obj = JSON.parse(q)
-        for (var item in obj){
-            var id  = (obj[item].id);
-            createRow(obj[item])
-        }
-    }
-
-    function createRow(a){
-        var counter = String(a.id)
-        if (document.getElementById(counter)==null)
-        {
-            var table = document.getElementById("mTable");
-            var row = table.insertRow(1);
-            var tbdy = document.getElementById('tbody');
-            var tr = document.createElement('tr');
-            tr.setAttribute("id", counter);
-            for (var j = 0; j < 7; j++)
-            {
-                var td = document.createElement('td');
-                td.setAttribute("align", "center");
-                var div = document.createElement("div");
-                var id = counter+'a'+j
-                console.log(id)
-                div.setAttribute("id", id);
-                td.appendChild(div)
-                tr.appendChild(td)
-            }
-            var td = document.createElement('td');
-            var div = document.createElement("div");
-            var id = 'approvetag'+counter
-            div.setAttribute("id", id);
-            td.setAttribute("align", "center");
-            td.appendChild(div)
-            tr.appendChild(td)
-            tbdy.prepend(tr);
-        }
-        var id = 'approvetag'+counter
-        var status___ = processRow(a)
-        var json__a = {'number': a.id, 'status': status___};
-        renderReact(json__a, id)
-
-    }
-
-  function flow(a222)
-    {
-        if (a222 == null)
-            return ''
-        if (a222 == "'null'")
-            return '';
-        if ((a222[0]=="'") && (a222[a222.length-1]=="'"))
-        return a222.substring(1, a222.length-1)
-        return a222;
-    }
-    function schoneJSON(input){
-        if (input==null)
-            return "";
-        if (input.a ==0)
-            return '';
-        var result="";
-        result+="<p>Дата: "+ input.Date +   "<br>";
-        result+="<p>Время: "+ input.Time +   "<br>";
-        result+="<p>Номер накладной: "+ input.Waybill_number +    "<br>";
-        result+="<p>Металл: "+ input.Metall +    "<br>";
-        result+="<p>Тара: "+ input.Tara +    "<br>";
-        result+="<p>Нетто: "+ input.Netto +   "<br>";
-        result+="<p>Брутто: "+ input.Brutto +   "<br>";
-        result+="<p>Засор: "+ input.Clogging +   "<br>";
-        result+="<p>Примесь: "+ input.Trash +   "<br>";
-        result+="<p>Комментарий: "+ input.Comment +   "<br>";
-        return result
-    }
-
-    function compareundschoneJSON(input, compare, rownumber)
-    {
-///alert('in compareundschoneJSON')
-        if ((input==null) || (compare==null) ||  (input.a ==0) ){
-            return schoneJSON(input);
-        }
-        var div = document.getElementById(String(rownumber)+'a'+5);
-        div.innerHTML = "";
-
-        var p1 = document.createElement("p");
-        p1.innerHTML = 'Дата: '+input.Date
-        if (input.Date != compare.Date)
-            p1.setAttribute("style", 'background-color: yellow');
-        div.appendChild(p1);
-
-        var p2 = document.createElement("p");
-        p2.innerHTML = 'Время: '+input.Time
-        if (input.Time != compare.Time)
-            p2.setAttribute("style", 'background-color: yellow');
-        div.appendChild(p2);
-
-        var p3 = document.createElement("p");
-        p3.innerHTML = 'Номер накладной: '+input.Waybill_number
-        if (input.Waybill_number != compare.Waybill_number)
-            p3.setAttribute("style", 'background-color: yellow');
-        div.appendChild(p3);
-
-        var p4 = document.createElement("p");
-        p4.innerHTML = 'Металл: '+input.Metall
-        if (input.Metall != compare.Metall)
-            p4.setAttribute("style", 'background-color: yellow');
-        div.appendChild(p4);
-
-        var p5 = document.createElement("p");
-        p5.innerHTML = 'Тара: '+input.Tara
-        if (input.Tara != compare.Tara)
-            p5.setAttribute("style", 'background-color: yellow');
-        div.appendChild(p5);
-
-        var p6 = document.createElement("p");
-        p6.innerHTML = 'Нетто: '+input.Netto
-        if (input.Netto != compare.Netto)
-            p6.setAttribute("style", 'background-color: yellow');
-        div.appendChild(p6);
-
-        var p7 = document.createElement("p");
-        p7.innerHTML = 'Брутто: '+input.Brutto
-        if (input.Brutto != compare.Brutto)
-            p7.setAttribute("style", 'background-color: yellow');
-        div.appendChild(p7);
-
-        var p8 = document.createElement("p");
-        p8.innerHTML = 'Засор: '+input.Clogging
-        if (input.Clogging != compare.Clogging)
-            p8.setAttribute("style", 'background-color: yellow');
-        div.appendChild(p8);
-
-        var p9 = document.createElement("p");
-        p9.innerHTML = 'Примесь: '+input.Trash
-        if (input.Trash != compare.Trash)
-            p9.setAttribute("style", 'background-color: yellow');
-        div.appendChild(p9);
-
-        var p10 = document.createElement("p");
-        p10.innerHTML = 'Комментарий: '+input.Comment
-        if (input.Comment != compare.Comment)
-            p10.setAttribute("style", 'background-color: yellow');
-        div.appendChild(p10);
-    }
-    function fillRow(a)
-    {
-         ////   alert('in fillRow')
-
-       let index____ = String(a.id)
-     ///////  alert(index____)
-       var id = document.getElementById(index____+'a'+0);
-       var datetimerequest = document.getElementById(index____+'a'+1);
-       var comment = document.getElementById(index____+'a'+2);
-       var initialdata = document.getElementById(index____+'a'+3);
-       var datetimeapprove = document.getElementById(index____+'a'+4);
-       var updateddata = document.getElementById(index____+'a'+5);
-       var datetimeupdate = document.getElementById(index____+'a'+6);
-       id.innerHTML =''
-       datetimerequest.innerHTML =''
-       comment.innerHTML =''
-       initialdata.innerHTML=''
-       datetimeapprove.innerHTML=''
-       updateddata.innerHTML = ''
-       datetimeupdate.innerHTML =''
-       id.innerHTML =flow( a.id)
-       datetimerequest.innerHTML =flow( a.datetimerequest)
-       comment.innerHTML =flow( a.comment)
-       initialdata.innerHTML = schoneJSON((a.initialdata))
-       datetimeapprove.innerHTML =flow( a.datetimeapprove)
-       compareundschoneJSON((a.updateddata), (a.initialdata), a.id)
-       datetimeupdate.innerHTML =flow( a.datetimeupdate)
-    }
-
-    function processRow(a22)
-    {
-     /////   alert('in process row')
-     //////   alert('a22>>>>'+a22)
-        fillRow(a22)
-        if (a22.updateddata == null)
-            return 'SUSPENDING'
-        if (a22.updateddata.a==0)
-            return 'DECLINED'
-        if (JSON.stringify(a22.updateddata).length>15)
-            return 'APPROVED'
-        return 'SUSPENDING'
-
-    };
-
-
-
 
     function clickedNew(){
     //    alert('there works')
@@ -406,43 +113,19 @@ $(function() {
       proccessJSON(new_withupdated)
     }
 
-if (!window.WebSocket) {
-	document.body.innerHTML = 'WebSocket в этом браузере не поддерживается.';
-}
-// создать подключение
 
 
 const incomingBLOB = [{"datetimeupdate":"'null'","initialdata":{"Date": "2019-09-06", "Mode": "Приемка", "Tara": "1.0", "Time": "13:40:12", "Netto": "3.30", "Trash": "0.0", "Brutto": "4.3", "Metall": "Алюминий хлам", "Comment": "Микаилов", "Clogging": "0.0", "Complete": "Да", "Condition": "Выгружен", "Waybill_number": "5"},"updateddata":null,"datetimerequest":"'2021-01-14 12:22:25.303'","comment":"миха","id":332,"datetimeapprove":"'null'"}]
 const bulljson = [{"datetimeupdate":"'null'","initialdata":{"Date": "2019-09-06", "Mode": "Приемка", "Tara": "1.0", "Time": "14:59:22", "Netto": "0.40", "Trash": "0.0", "Brutto": "1.4", "Metall": "Латунь", "Comment": "бычков", "Clogging": "0.0", "Complete": "Да", "Condition": "Выгружен", "Waybill_number": "7"},"updateddata":null,"datetimerequest":"'2021-01-14 12:34:30.605'","comment":"бычккк","id":334,"datetimeapprove":"'null'"}]
 
 
-
-var socket = new WebSocket("ws://localhost:4567/echo");
-// обработчик входящих сообщений
-socket.onmessage = function(event) {
-  var incomingMessage = event.data;
-  ///addscript(incomingMessage);
-  console.log('message'+incomingMessage)
-  proccessJSON(incomingMessage)
-  alert('получен новый запрос. проверьте таблицу')
-  //location.reload();
-};
-// показать сообщение в div#subscribe
-function addscript(scripted){
-    var script = document.createElement('script');
-    script.onload = function ()
-    {
-     ////   alert('dynamical loaded');
-    };
-    script.src = alert(scripted);;;
-    document.head.appendChild(script);
-}
  //  new_withUpdate()
 // alert('blob process')
 ///proccessJSON(bulljson)
 localStorage.setItem('begindate', moment().startOf('day').add(-14, 'day'))
 localStorage.setItem('enddate', moment())
-  filterRows()
+  filterRows();
+
 </script>
 
 </body>
