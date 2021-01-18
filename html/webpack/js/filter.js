@@ -8,6 +8,8 @@ function compareDate(input, dp1, dp2)
   return true;
 }
 
+
+
 function filterRequest(value)
 {
   let startItem = localStorage.getItem('minitem');
