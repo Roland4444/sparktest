@@ -48,7 +48,7 @@
         <dependency>
             <groupId>eu.roland</groupId>
             <artifactId>JAKtor</artifactId>
-            <version>1.8-ROLLBACK</version>
+            <version>1.9-ROLLBACK</version>
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
