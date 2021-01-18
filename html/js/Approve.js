@@ -32,7 +32,7 @@ approve= () =>
         }
 
         var xhr = getXmlHttp()
-        var params= this.props.info.number  ;
+        var params= this.props.info.number ;
         var request = "/approve?id="+params;
         xhr.open("GET", request, true);
         xhr.onreadystatechange=function()
@@ -62,7 +62,7 @@ approve= () =>
 
 suppress= () =>
       {
-                              this.setState({ state: 0 })
+        this.setState({ state: 0 })
 
         function getXmlHttp()
                 {
@@ -118,20 +118,23 @@ suppress= () =>
     render() {
         let minitem = Number(localStorage.getItem('minitem'));
         let maxitem = Number(localStorage.getItem('maxitem'));
-        let number = Number(this.props.number)
+        console.log('min>>'+minitem)
+        console.log('max>>'+maxitem)
+        let number = Number(this.props.info.number)
         if ((minitem == 0) && (maxitem == 0))
         {
-            localStorage.setItem('minitem', this.props.number)
-            localStorage.setItem('maxitem', this.props.number)
+            localStorage.setItem('minitem', this.props.info.number)
+            localStorage.setItem('maxitem', this.props.info.number)
         }
         else
         {
             if (number > maxitem)
                 localStorage.setItem('maxitem', number)
             if (number < minitem)
-                localStorage.setItem('minitem', this.props.number)
+                localStorage.setItem('minitem', number)
         }
 
+    console.log('min/max elem'+localStorage.getItem('minitem')+':'+localStorage.getItem('maxitem'))
     if (this.state.state==1) {
         return  (<div align='center'>
         <h5 class="approved">Разрешено</h5>

@@ -35,22 +35,13 @@ localStorage.setItem('minitem', 0);
 
 </script>
 <script type="text/babel"  src="js/websocket.js"></script>
+
 <script type="text/babel"  src="js/Approve.js"></script>
 <script type="text/babel"  src="js/datapicker.js"></script>
-<script type="text/babel"  src="js/filter.js"></script>
+
 <script type="text/babel"  src="js/processJSON.js"></script>
-<!--
-<button onClick="clickedNew()">Emulate new</button>
-<button onClick="clickedUpdate()">Emulate exist</button>  -->
+<script type="text/babel"  src="js/filter.js"></script>
 <input type="text" name="daterange"  id="data00" />
-<!--
-<label id="picker1">Label</label><label id="picker2">Label</label><button onclick="filter()">Filter</button>
-<div id="datapicker"><h5>datapicker div</h5></div>-->
-<!--button onClick="clickedNew()">Emulate new</button>
-<button onClick="clickedUpdate()">Emulate exist</button>
-<button onClick="filterRows()">Фильтр</button-->
-
-
 <table  id="mTable" border="10" cellpadding="10"  align="center" valign="center" class="table">
     <th class="text-center">ID</th>
     <th class="text-center">Дата запроса</th>
@@ -80,53 +71,7 @@ function renderReact(json_____, id_____){
 }
 </script>
 
-<script>
-    const simple__ = [{'id':13}, {'id':14}]
-    const declined__ = [{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:40:17.2'","comment":"5464565464","id":274,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:43:22.949'","comment":"hdfdhdxhfdxhdfxh","id":276,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "3.0", "Time": "13:56:33", "Netto": "203.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "12А", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-15 15:25:49.042'","comment":"vdsvsdvdsvsv","id":169,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-18 15:29:53.097'","comment":"879797898778998797","id":249,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий пищевой", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:37:36.278'","comment":"ers54waetg","id":317,"datetimeapprove":"'2020-12-21 15:43:27.324'"}]
-    const exist__ = [{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:40:17.2'","comment":"5464565464","id":274,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:43:22.949'","comment":"hdfdhdxhfdxhdfxh","id":276,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "3.0", "Time": "13:56:33", "Netto": "203.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "12А", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-15 15:25:49.042'","comment":"vdsvsdvdsvsv","id":169,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'2020-12-18 15:30:10.563'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий электротех", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-18 15:29:53.097'","comment":"879797898778998797","id":249,"datetimeapprove":"'2020-12-21 15:43:27.324'"},{"datetimeupdate":"'null'","initialdata":{"Date": "2020-12-15", "Mode": "Приемка", "Tara": "0.0", "Time": "13:56:33", "Netto": "206.70", "Trash": "0.0", "Brutto": "206.7", "Metall": "Алюминий пищевой", "Comment": "ошщ", "Clogging": "0.0", "Complete": "Нет", "Condition": "Не выгружен", "Waybill_number": "4"},"updateddata":{"a": "0"},"datetimerequest":"'2020-12-21 15:37:36.278'","comment":"ers54waetg","id":317,"datetimeapprove":"'2020-12-21 15:43:27.324'"}]
-    const with__updated____ = [{"datetimeupdate":"'2021-01-12 13:58:29.418'","initialdata":{"Date": "2020-11-03", "Mode": "Приемка", "Tara": "0.0", "Time": "16:18:04", "Netto": "287.60", "Trash": "4.0", "Brutto": "294.5", "Metall": "Алюминий хлам", "Comment": "витек", "Clogging": "1.0", "Complete": "Да", "Condition": "Выгружен", "Waybill_number": "15"},"updateddata":{"Date": "2020-11-03", "Mode": "Приемка", "Tara": "0.0", "Time": "16:18:04", "Netto": "287.60", "Trash": "4.0", "Brutto": "294.5", "Metall": "Бабит 16%", "Comment": "витек", "Clogging": "1.0", "Complete": "Да", "Condition": "Выгружен", "Waybill_number": "15"},"datetimerequest":"'2021-01-12 13:57:46.715'","comment":"dfgfdgfdgfdgfdgd","id":316,"datetimeapprove":"'2021-01-13 12:27:26.255'"}]
 
-    const new_withupdated  =  [{"datetimeupdate":"'2021-01-12 13:58:29.418'","initialdata":{"Date": "2020-11-03", "Mode": "Приемка", "Tara": "0.0", "Time": "16:18:04", "Netto": "287.60", "Trash": "4.0", "Brutto": "294.5", "Metall": "Алюминий хлам", "Comment": "витек", "Clogging": "1.0", "Complete": "Да", "Condition": "Выгружен", "Waybill_number": "15"},"updateddata":{"Date": "2020-11-03", "Mode": "Приемка", "Tara": "0.0", "Time": "16:18:04", "Netto": "287.60", "Trash": "4.0", "Brutto": "294.5", "Metall": "Бабит 16%", "Comment": "витек", "Clogging": "1.0", "Complete": "Да", "Condition": "Выгружен", "Waybill_number": "15"},"datetimerequest":"'2021-01-12 13:57:46.715'","comment":"dfgfdgfdgfdgfdgd","id":500,"datetimeapprove":"'2021-01-13 12:27:26.255'"}]
-
-    const extracted__ = {"Date":"2020-12-15","Mode":"Приемка","Tara":"0.0","Time":"13:56:33","Netto":"206.70","Trash":"0.0","Brutto":"206.7","Metall":"Алюминий пищевой","Comment":"ошщ","Clogging":"0.0","Complete":"Нет","Condition":"Не выгружен","Waybill_number":"4"}
- ///   alert('extracted=>'+extracted__.Date)
-    localStorage.setItem('maxitem', 317);
-
-    var obj_____ = declined__[0].initialdata.Date;
-   // alert('obj==>'+obj_____)
-    var declined_obj_updateddata = declined__[0].updateddata
-  //  alert('length=>'+JSON.stringify(declined_obj_updateddata).length)
-
-    function clickedNew(){
-    //    alert('there works')
-    //    proccessJSON(declined__)
-    new_withUpdate()
-    }
-
-    function clickedUpdate(){
-    /////    alert('there works')
-        proccessJSON(with__updated____)
-        proccessJSON(declined__)
-    }
-
-    function new_withUpdate(){
-      proccessJSON(new_withupdated)
-    }
-
-
-
-const incomingBLOB = [{"datetimeupdate":"'null'","initialdata":{"Date": "2019-09-06", "Mode": "Приемка", "Tara": "1.0", "Time": "13:40:12", "Netto": "3.30", "Trash": "0.0", "Brutto": "4.3", "Metall": "Алюминий хлам", "Comment": "Микаилов", "Clogging": "0.0", "Complete": "Да", "Condition": "Выгружен", "Waybill_number": "5"},"updateddata":null,"datetimerequest":"'2021-01-14 12:22:25.303'","comment":"миха","id":332,"datetimeapprove":"'null'"}]
-const bulljson = [{"datetimeupdate":"'null'","initialdata":{"Date": "2019-09-06", "Mode": "Приемка", "Tara": "1.0", "Time": "14:59:22", "Netto": "0.40", "Trash": "0.0", "Brutto": "1.4", "Metall": "Латунь", "Comment": "бычков", "Clogging": "0.0", "Complete": "Да", "Condition": "Выгружен", "Waybill_number": "7"},"updateddata":null,"datetimerequest":"'2021-01-14 12:34:30.605'","comment":"бычккк","id":334,"datetimeapprove":"'null'"}]
-
-
- //  new_withUpdate()
-// alert('blob process')
-///proccessJSON(bulljson)
-localStorage.setItem('begindate', moment().startOf('day').add(-14, 'day'))
-localStorage.setItem('enddate', moment())
-  filterRows();
-
-</script>
 
 </body>
 </html>
