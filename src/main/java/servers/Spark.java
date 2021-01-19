@@ -73,6 +73,28 @@ public class Spark {
                     new ModelAndView(model, "onereact.html"));
         });
 
+        get("ajson", (req,res)->{
+            model.clear();
+            String params = req.queryParams("params");
+
+           // System.out.println("AJAX called get");
+            return deps.LoaderJSON.loadAll2JSON();
+        });
+
+        post("ajson", (req,res)->{
+            model.clear();
+            String params = req.queryParams("params");
+
+            System.out.println("AJAX called get");
+            return deps.LoaderJSON.loadAll2JSON();
+        });
+
+        get("emptyajax", (req,res)->{
+            model.clear();
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "emptyajax.html"));
+        });
+
         get("ajax", (req,res)->{
             model.clear();
             String params = req.queryParams("params");
@@ -144,6 +166,14 @@ public class Spark {
             model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "requestsx.html"));
+        });
+
+
+        get("emptyws", (req, res) -> {
+            model.clear();
+            model.put("requests", "");
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "emptyws.html"));
         });
 
         get("dump", (req, res) -> {

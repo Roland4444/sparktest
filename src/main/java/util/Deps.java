@@ -2,7 +2,6 @@ package util;
 
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
-import abstractions.Settings;
 import servers.EchoWebSocket;
 import servers.ServerAktor;
 import util.DB.DataBaseHelper;
@@ -66,6 +65,7 @@ public class Deps {
         idh = new IDHelper(requests.executor);
         irp = new InputRequestProcessor(requests.executor);
         irp.prod=prod;
+        irp.loader=LoaderJSON;
         this.cypher = new CypherImpl();
         aktor = new ServerAktor();
         aktor.irp=irp;

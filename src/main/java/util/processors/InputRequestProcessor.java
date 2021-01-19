@@ -11,12 +11,9 @@ import servers.ServerAktor;
 import util.DB.ProductionUPDATE;
 import util.Deps;
 import util.JSON.Beatyfulizer;
+import util.JSON.LoaderJSON;
 import util.JSON.ParcedJSON;
-
-import javax.xml.crypto.dsig.keyinfo.KeyName;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,6 +26,7 @@ public class InputRequestProcessor {
     public ServerAktor jaktor;
     private Executor executor;
     public ProductionUPDATE prod;
+    public LoaderJSON loader;
 
     public InputRequestProcessor(){
     };
@@ -243,6 +241,9 @@ public class InputRequestProcessor {
 
     };
 
+    public String DumpAllRequestToJSON() throws SQLException {
+        return loader.loadAll2JSON();
+    };
 
     public String DumpRequestToHTMLTable8usingmatrixhardcoded() throws SQLException, ParseException {
         ArrayList<ArrayList> data = loadrequests8inmatrix();

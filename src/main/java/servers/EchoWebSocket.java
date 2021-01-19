@@ -4,11 +4,10 @@ import Message.abstractions.BinaryMessage;
 import org.eclipse.jetty.websocket.api.*;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import util.DB.DataBaseHelper;
-import util.Deps;
 import util.JSON.LoaderJSON;
 
 import java.io.*;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.*;
@@ -60,8 +59,9 @@ public class EchoWebSocket {
 
     @OnWebSocketConnect
     public void connected(Session session) {
-     //   System.out.println("Connceted: " );   // Print message
+        System.out.println("Connceted: " );   // Print message
         sessions.add(session);
+
     }
 
     @OnWebSocketClose
@@ -70,9 +70,19 @@ public class EchoWebSocket {
     }
 
     @OnWebSocketMessage
-    public void message(Session session, String message) throws IOException {
-        System.out.println("Got: " + message);   // Print message
-        session.getRemote().sendString(message); // and send it back
+    public void message(Session session, String message) throws IOException, SQLException {
+        if (message.equals("load")){
+            System.out.println("SEND JSON");
+
+            String data = LoaderJSON.loadAll2JSON();
+      //      System.out.println(data);
+//            fos.write(data.getBytes());
+ //           fos.close();
+            session.getRemote().sendString(data);
+            return;
+       }
+       System.out.println("Got: " + message);   // Print message
+     session.getRemote().sendString(message); // and send it back
 
     }
 

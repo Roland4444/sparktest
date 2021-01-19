@@ -21,6 +21,32 @@ public class LoaderJSON {
         }
         return result;
     };
+
+    public String loadAll2JSON() throws SQLException {
+        ArrayList param = new ArrayList();
+         /// ResultSet select = executor.submit("select * from requests ORDER BY counter;" );
+        //     JSONObject obj = new JSONObject();
+        JSONArray list = new JSONArray();
+        int i = 0;
+        for (int j=0; j<30; j++) {
+            ResultSet select = executor.submit("select * from requests ORDER BY counter;");
+
+            while (select.next())  {
+                JSONObject rowJSON = new JSONObject();
+                rowJSON.put("id", ++i);//select.getObject("counter"));
+                rowJSON.put("datetimerequest", "'" + select.getObject("datetimerequest") + "'");
+                rowJSON.put("initialdata", select.getObject("initialdata"));
+                rowJSON.put("datetimeupdate", "'" + select.getObject("datetimeupdate") + "'");
+                rowJSON.put("updateddata", select.getObject("updateddata"));
+                rowJSON.put("datetimeapprove", "'" + select.getObject("datetimeapprove") + "'");
+                rowJSON.put("comment", select.getObject("comment"));
+                list.add(rowJSON);
+            }
+            ;
+        }
+        return list.toJSONString();
+
+    };
     public String LoadResult2JSON(String result) throws SQLException {
         ArrayList param = new ArrayList();
         param.add(result);
@@ -28,7 +54,6 @@ public class LoaderJSON {
    //     JSONObject obj = new JSONObject();
         JSONArray list = new JSONArray();
         while (select.next()){
-            System.out.println("ID::>>"+select.getObject("counter"));
             JSONObject rowJSON = new JSONObject();
             rowJSON.put("id", select.getObject("counter"));
             rowJSON.put("datetimerequest", "'"+select.getObject("datetimerequest")+"'");
@@ -50,7 +75,6 @@ public class LoaderJSON {
         JSONArray list = new JSONArray();
         if (select.next()){
             JSONObject rowJSON = new JSONObject();
-            System.out.println("ID::>>"+select.getObject("counter"));
             rowJSON.put("id", select.getObject("counter"));
             rowJSON.put("datetimerequest", "'"+select.getObject("datetimerequest")+"'");
             rowJSON.put("initialdata", select.getObject("initialdata"));

@@ -29,10 +29,12 @@
       var request = "/ajax?params="+params;
       xhr.open("GET", request, true);
       xhr.onreadystatechange=function(){
+        alert(xhr.responseText);
         if (xhr.readyState != 4) return
         clearTimeout(xhrTimeout)
         if (xhr.status == 200) {
-          alert('запрос разрешен');
+          var json = JSON.parse(xhr.responseText);
+          alert(xhr.responseText);
       } else {
         }
       }

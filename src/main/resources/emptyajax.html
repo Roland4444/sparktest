@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>REACT impove</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="style2.css">
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Не используйте это в production -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+    <!-- jQuery and JS bundle w/ Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="dp.css">
+</head>
+<body>
+<button onclick="getjsonAjax()">LOAD JSON @ AJAX</button>>
+<button onclick="getjsonWS()">Load @ Websocket</button>>
+<!--div id="loginform" class="logindiv">
+    <form action="approve" >
+        <h5>ID</h5><input name="id" id="inputid"> </input><br>
+        <button type="submit" onclick="alert('Запрос одобрен')" >Одобрить запрос</button>
+    </form>
+</div-->
+<script type="text/babel">
+localStorage.setItem('maxitem', 0);
+localStorage.setItem('minitem', 0);
+
+
+</script>
+<script type="text/babel"  src="js/Approve.js"></script>
+<input type="text" name="daterange"  id="data00" />
+<table  id="mTable" border="10" cellpadding="10"  align="center" valign="center" class="table">
+    <th class="text-center">ID</th>
+    <th class="text-center">Дата запроса</th>
+    <th class="text-center">Комментарий</th>
+    <th class="text-center">Позиция</th>
+    <th class="text-center">Дата разрешения /запрешения</th>
+    <th class="text-center">Измененная позиция</th>
+    <th class="text-center">Дата изменения</th>
+    <th class="text-center">Одобрить запрос
+    </th>
+    <tbody id="tbody">
+    $requests
+    </tbody>
+</table>
+
+<script type="text/babel">
+   function renderReact(json_____, id_____){
+    ReactDOM.render(<Approve info={json_____}/>, document.getElementById(id_____));
+}
+   function proccessJSON(q){
+        let maxitem = localStorage.getItem('maxitem');
+        var obj = JSON.parse(q)
+        for (var item in obj){
+            var id  = (obj[item].id);
+            createRow(obj[item])
+        }
+    }
+
+    function createRow(a){
+        var counter = String(a.id)
+        if (document.getElementById(counter)==null)
+        {
+            var table = document.getElementById("mTable");
+            var row = table.insertRow(1);
+            var tbdy = document.getElementById('tbody');
+            var tr = document.createElement('tr');
+            tr.setAttribute("id", counter);
+            for (var j = 0; j < 7; j++)
+            {
+                var td = document.createElement('td');
+                td.setAttribute("align", "center");
+                var div = document.createElement("div");
+                var id = counter+'a'+j
+                console.log(id)
+                div.setAttribute("id", id);
+                td.appendChild(div)
+                tr.appendChild(td)
+            }
+            var td = document.createElement('td');
+            var div = document.createElement("div");
+            var id = 'approvetag'+counter
+            div.setAttribute("id", id);
+            td.setAttribute("align", "center");
+            td.appendChild(div)
+            tr.appendChild(td)
+            tbdy.prepend(tr);
+        }
+        var id = 'approvetag'+counter
+        var status___ = processRow(a)
+        var json__a = {'number': a.id, 'status': status___};
+        renderReact(json__a, id)
+
+    }
+
+  function flow(a222)
+    {
+        if (a222 == null)
+            return ''
+        if (a222 == "'null'")
+            return '';
+        if ((a222[0]=="'") && (a222[a222.length-1]=="'"))
+        return a222.substring(1, a222.length-1)
+        return a222;
+    }
+    function schoneJSON(input){
+        if (input==null)
+            return "";
+        if (input.a ==0)
+            return '';
+        var result="";
+        result+="<p>Дата: "+ input.Date +   "<br>";
+        result+="<p>Время: "+ input.Time +   "<br>";
+        result+="<p>Номер накладной: "+ input.Waybill_number +    "<br>";
+        result+="<p>Металл: "+ input.Metall +    "<br>";
+        result+="<p>Тара: "+ input.Tara +    "<br>";
+        result+="<p>Нетто: "+ input.Netto +   "<br>";
+        result+="<p>Брутто: "+ input.Brutto +   "<br>";
+        result+="<p>Засор: "+ input.Clogging +   "<br>";
+        result+="<p>Примесь: "+ input.Trash +   "<br>";
+        result+="<p>Комментарий: "+ input.Comment +   "<br>";
+        return result
+    }
+
+    function compareundschoneJSON(input, compare, rownumber)
+    {
+///alert('in compareundschoneJSON')
+        if ((input==null) || (compare==null) ||  (input.a ==0) ){
+            return schoneJSON(input);
+        }
+        var div = document.getElementById(String(rownumber)+'a'+5);
+        div.innerHTML = "";
+
+        var p1 = document.createElement("p");
+        p1.innerHTML = 'Дата: '+input.Date
+        if (input.Date != compare.Date)
+            p1.setAttribute("style", 'background-color: yellow');
+        div.appendChild(p1);
+
+        var p2 = document.createElement("p");
+        p2.innerHTML = 'Время: '+input.Time
+        if (input.Time != compare.Time)
+            p2.setAttribute("style", 'background-color: yellow');
+        div.appendChild(p2);
+
+        var p3 = document.createElement("p");
+        p3.innerHTML = 'Номер накладной: '+input.Waybill_number
+        if (input.Waybill_number != compare.Waybill_number)
+            p3.setAttribute("style", 'background-color: yellow');
+        div.appendChild(p3);
+
+        var p4 = document.createElement("p");
+        p4.innerHTML = 'Металл: '+input.Metall
+        if (input.Metall != compare.Metall)
+            p4.setAttribute("style", 'background-color: yellow');
+        div.appendChild(p4);
+
+        var p5 = document.createElement("p");
+        p5.innerHTML = 'Тара: '+input.Tara
+        if (input.Tara != compare.Tara)
+            p5.setAttribute("style", 'background-color: yellow');
+        div.appendChild(p5);
+
+        var p6 = document.createElement("p");
+        p6.innerHTML = 'Нетто: '+input.Netto
+        if (input.Netto != compare.Netto)
+            p6.setAttribute("style", 'background-color: yellow');
+        div.appendChild(p6);
+
+        var p7 = document.createElement("p");
+        p7.innerHTML = 'Брутто: '+input.Brutto
+        if (input.Brutto != compare.Brutto)
+            p7.setAttribute("style", 'background-color: yellow');
+        div.appendChild(p7);
+
+        var p8 = document.createElement("p");
+        p8.innerHTML = 'Засор: '+input.Clogging
+        if (input.Clogging != compare.Clogging)
+            p8.setAttribute("style", 'background-color: yellow');
+        div.appendChild(p8);
+
+        var p9 = document.createElement("p");
+        p9.innerHTML = 'Примесь: '+input.Trash
+        if (input.Trash != compare.Trash)
+            p9.setAttribute("style", 'background-color: yellow');
+        div.appendChild(p9);
+
+        var p10 = document.createElement("p");
+        p10.innerHTML = 'Комментарий: '+input.Comment
+        if (input.Comment != compare.Comment)
+            p10.setAttribute("style", 'background-color: yellow');
+        div.appendChild(p10);
+    }
+    function fillRow(a)
+    {
+         ////   alert('in fillRow')
+
+       let index____ = String(a.id)
+     ///////  alert(index____)
+       var id = document.getElementById(index____+'a'+0);
+       var datetimerequest = document.getElementById(index____+'a'+1);
+       var comment = document.getElementById(index____+'a'+2);
+       var initialdata = document.getElementById(index____+'a'+3);
+       var datetimeapprove = document.getElementById(index____+'a'+4);
+       var updateddata = document.getElementById(index____+'a'+5);
+       var datetimeupdate = document.getElementById(index____+'a'+6);
+       id.innerHTML =''
+       datetimerequest.innerHTML =''
+       comment.innerHTML =''
+       initialdata.innerHTML=''
+       datetimeapprove.innerHTML=''
+       updateddata.innerHTML = ''
+       datetimeupdate.innerHTML =''
+       id.innerHTML =flow( a.id)
+       datetimerequest.innerHTML =flow( a.datetimerequest)
+       comment.innerHTML =flow( a.comment)
+       initialdata.innerHTML = schoneJSON((a.initialdata))
+       datetimeapprove.innerHTML =flow( a.datetimeapprove)
+       compareundschoneJSON((a.updateddata), (a.initialdata), a.id)
+       datetimeupdate.innerHTML =flow( a.datetimeupdate)
+    }
+
+    function processRow(a22)
+    {
+     /////   alert('in process row')
+     //////   alert('a22>>>>'+a22)
+        fillRow(a22)
+        if (a22.updateddata == null)
+            return 'SUSPENDING'
+        if (a22.updateddata.a==0)
+            return 'DECLINED'
+        if (JSON.stringify(a22.updateddata).length>15)
+            return 'APPROVED'
+        return 'SUSPENDING'
+
+    };
+
+
+
+ function getjsonAjax(){
+     function getXmlHttp()
+      {
+        var xmlhttp;
+        try {
+          xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e) {
+          try {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+          } catch (E) {
+            xmlhttp = false;
+          }
+        }
+        if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+          xmlhttp = new XMLHttpRequest();
+        }
+        return xmlhttp;
+      }
+      var xhr = getXmlHttp()
+      var request = "/ajson";
+      xhr.open("POST", request, true);
+      xhr.onreadystatechange=function(){
+      //  alert(xhr.responseText);
+        if (xhr.readyState != 4) return
+        clearTimeout(xhrTimeout)
+        if (xhr.status == 200) {
+          //var json = JSON.parse(xhr.responseText);
+      ////    alert('nice')///xhr.responseText);
+        proccessJSON(xhr.responseText)
+      } else {
+        }
+      }
+      xhr.send("a=5&b=4");
+      var xhrTimeout = setTimeout( function(){ xhr.abort(); handleError("Timeout") }, 10000);
+        function handleError(message) {
+      ///      alert("Ошибка: "+message)
+        }
+    }
+
+
+
+getjsonAjax()
+</script>
+<script type="text/babel">
+
+
+</script>
+
+
+
+</body>
+</html>
