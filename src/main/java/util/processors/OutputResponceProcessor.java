@@ -55,7 +55,7 @@ public class OutputResponceProcessor {
         }
         try {
             saveStatus(Deps.PendingResponcesFile, res.ID, Condition.APPROVED);
-            jaktor.async.asyncSend(res);
+        //    jaktor.async.asyncSend(res);
             System.out.println("send responce");
         } catch (IOException e) {
             System.out.println("\n\n\n\nerroe when send!\n\n\n");
@@ -163,7 +163,7 @@ public class OutputResponceProcessor {
         }
         try {
             saveStatus(Deps.PendingResponcesFile, res.ID, Condition.DECLINED);
-            jaktor.async.asyncSend(res);
+         ///   jaktor.async.asyncSend(res);
             System.out.println("send responce");
         } catch (IOException e) {
             System.out.println("\n\n\n\nerroe when send!\n\n\n");
