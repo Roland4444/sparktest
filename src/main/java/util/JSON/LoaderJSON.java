@@ -27,23 +27,19 @@ public class LoaderJSON {
          /// ResultSet select = executor.submit("select * from requests ORDER BY counter;" );
         //     JSONObject obj = new JSONObject();
         JSONArray list = new JSONArray();
-        int i = 0;
-        for (int j=0; j<30; j++) {
-            ResultSet select = executor.submit("select * from requests ORDER BY counter;");
+        ResultSet select = executor.submit("select * from requests ORDER BY counter;");
+        while (select.next())  {
+            JSONObject rowJSON = new JSONObject();
+            rowJSON.put("id", select.getObject("counter"));
+            rowJSON.put("datetimerequest", "'" + select.getObject("datetimerequest") + "'");
+            rowJSON.put("initialdata", select.getObject("initialdata"));
+            rowJSON.put("datetimeupdate", "'" + select.getObject("datetimeupdate") + "'");
+            rowJSON.put("updateddata", select.getObject("updateddata"));
+            rowJSON.put("datetimeapprove", "'" + select.getObject("datetimeapprove") + "'");
+            rowJSON.put("comment", select.getObject("comment"));
+            list.add(rowJSON);
+        };
 
-            while (select.next())  {
-                JSONObject rowJSON = new JSONObject();
-                rowJSON.put("id", ++i);//select.getObject("counter"));
-                rowJSON.put("datetimerequest", "'" + select.getObject("datetimerequest") + "'");
-                rowJSON.put("initialdata", select.getObject("initialdata"));
-                rowJSON.put("datetimeupdate", "'" + select.getObject("datetimeupdate") + "'");
-                rowJSON.put("updateddata", select.getObject("updateddata"));
-                rowJSON.put("datetimeapprove", "'" + select.getObject("datetimeapprove") + "'");
-                rowJSON.put("comment", select.getObject("comment"));
-                list.add(rowJSON);
-            }
-            ;
-        }
         return list.toJSONString();
 
     };

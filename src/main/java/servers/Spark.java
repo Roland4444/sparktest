@@ -29,6 +29,13 @@ public class Spark {
         webSocket("/echo", EchoWebSocket.class);
 
 
+
+        get("purews", (req, res) -> {
+            model.clear();
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "wsreact.html"));
+        });
+
         get("todo", (req, res) -> {
             model.clear();
             return new VelocityTemplateEngine().render(

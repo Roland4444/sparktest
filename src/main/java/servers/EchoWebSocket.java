@@ -71,6 +71,8 @@ public class EchoWebSocket {
 
     @OnWebSocketMessage
     public void message(Session session, String message) throws IOException, SQLException {
+        System.out.println(message);
+
         if (message.equals("load")){
             System.out.println("SEND JSON");
 
