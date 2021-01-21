@@ -113,7 +113,7 @@ $(function() {
     filterRows()
   });
 });
-alert('loaded!!!!')
+////alert('loaded!!!!')
 
 localStorage.setItem('begindate', moment().startOf('day').add(-14, 'day'))
 localStorage.setItem('enddate', moment())
