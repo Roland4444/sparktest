@@ -323,7 +323,7 @@ public class InputRequestProcessor {
         return sb.toString();
     }
 
-    Condition getStatus(String ID, String FileName) throws IOException {
+    public Condition getStatus(String ID, String FileName) throws IOException {
         if (!new File(FileName).exists())
             return null;
         PendingResponces resp = (PendingResponces) BinaryMessage.restored(BinaryMessage.readBytes(FileName));
@@ -350,7 +350,7 @@ public class InputRequestProcessor {
         if (cond.equals(Condition.APPROVED))
            res.approved=true;
         System.out.println("SENDING RESPONXE");
-        removeStatus(res.ID , Deps.PendingResponcesFile);
+ ////////////////       removeStatus(res.ID , Deps.PendingResponcesFile);
         jaktor.sendResponce(res);
         //sendWebsocketAlerts();
     };

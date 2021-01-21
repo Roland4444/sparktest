@@ -30,7 +30,6 @@ public class ProductionUPDATE {
     };
 
     public int getId(ParcedJSON json) throws SQLException {
-
         ArrayList arr = new ArrayList();
         arr.add(json.Waybill_number);
         arr.add(json.Date);
@@ -75,7 +74,6 @@ public class ProductionUPDATE {
         stmt.setInt(6, id);
 
         stmt.executeUpdate();
-
     };
 
     public void fullupdate(ParcedJSON json) throws SQLException {
