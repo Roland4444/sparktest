@@ -16,6 +16,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import static Message.abstractions.BinaryMessage.*;
 
@@ -64,6 +65,16 @@ public class OutputResponceProcessor {
 
     };
 
+    public String printstatuses(String FileName) throws IOException {
+        PendingResponces pend= (PendingResponces) BinaryMessage.restored(BinaryMessage.readBytes(FileName));
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Condition> entry : pend.ReqMap.entrySet()) {
+            sb.append(entry.getKey() + "/" + entry.getValue()+"\n");
+            System.out.println(entry.getKey() + "/" + entry.getValue());
+        };
+        return sb.toString();
+    };
+
     public void saveStatus(String FileName, String Id, Condition cond) throws IOException {
         if (!new File(FileName).exists()){
             BinaryMessage.write(BinaryMessage.savedToBLOB( new PendingResponces(new HashMap<>())), FileName);
@@ -75,6 +86,7 @@ public class OutputResponceProcessor {
         };
         PendingResponces pend__ = (PendingResponces) restored(readBytes(FileName));
         pend__.ReqMap.put(Id, cond);
+        System.out.println("saving id:>>"+Id);
         BinaryMessage.write(BinaryMessage.savedToBLOB(pend__), FileName);
     };
 

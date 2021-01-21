@@ -26,4 +26,11 @@ public class OutputResponceProcessorTest {
     }
 
 
+    @Test
+    public void printstatuses() throws IOException {
+        OutputResponceProcessor orp = new OutputResponceProcessor();
+        String out = orp.printstatuses("rendresp.bin");
+        assertNotEquals(null, out);
+
+    }
 }
