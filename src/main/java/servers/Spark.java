@@ -32,26 +32,6 @@ public class Spark {
 
         webSocket("/echo", EchoWebSocket.class);
 
-        post("/checkstatus", (req,res)->{
-            RequestMessage req_msg= (RequestMessage) BinaryMessage.restored(req.bodyAsBytes());
-
-            if (deps.irp.getStatus(req_msg.ID, Deps.PendingResponcesFile)==null)
-                return "";
-            ResponceMessage res_msg = new ResponceMessage();
-            res_msg.ID = req_msg.ID;
-            res_msg.approved=false;
-            Condition cond = deps.irp.getStatus(req_msg.ID, Deps.PendingResponcesFile);
-            if (cond.equals(Condition.APPROVED))
-                res_msg.approved=true;
-            System.out.println("SENDING RESPONXE");
-            deps.irp.removeStatus(res_msg.ID , Deps.PendingResponcesFile);
-
-           return BinaryMessage.savedToBLOB(res_msg);
-        });
-        get("/checkstatus", (req,res)->{
-            System.out.println("CHECKSTATUS::\n"+req.body());
-            return req.bodyAsBytes();
-        });
         get("todo", (req, res) -> {
             model.clear();
             return new VelocityTemplateEngine().render(
