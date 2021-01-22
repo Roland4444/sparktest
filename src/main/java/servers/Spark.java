@@ -25,7 +25,9 @@ public class Spark {
     public static ModelAndView SOCKET = new ModelAndView(map_, "websocket.html");
 
     public static Map<String, Object> model = new HashMap<>();
-    public static void main(String[] args) throws InterruptedException, SQLException, IOException {
+    public static void main(String[] args) throws InterruptedException, SQLException, IOException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("org.postgresql.Driver");
         staticFiles.location("/public");
         Deps deps = new Deps();
         deps.echoWebSocket =  EchoWebSocket.class;
