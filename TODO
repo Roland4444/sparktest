@@ -27,3 +27,11 @@ NEED TEST WebSocket and React poages;
 React может автоматически создавать элементы div с id и монтиться туда
 
 React + lambda
+
+ALTER USER user2 WITH SUPERUSER;
+Развертывание на сервере sparktest;
+install java 11;
+git clone ..;;
+install postgres;
+migrate postgres;
+create user2;
