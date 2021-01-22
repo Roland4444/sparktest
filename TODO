@@ -35,3 +35,6 @@ git clone ..;;
 install postgres;
 migrate postgres;
 create user2;
+
+
+TODO:: dynamical update files depends current server IP!:

@@ -5,7 +5,7 @@ import org.eclipse.jetty.util.Loader;
 import org.junit.Test;
 import util.DB.DataBaseHelper;
 
-import java.io.FileNotFoundException;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;

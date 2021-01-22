@@ -27,6 +27,8 @@ public class IDHelper {
     };
 
     public static  String getaddress(String incomingFolder, String ID) throws IOException {
+        System.out.println("Try reading::>"+incomingFolder + "/" + ID);
+
         FileReader fr = new FileReader(incomingFolder + "/" + ID);
         char[] a = new char[200];
         fr.read(a);

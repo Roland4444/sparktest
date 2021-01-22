@@ -45,6 +45,7 @@ public class Deps {
             return;
         }
         setts = (abstractions.Settings) BinaryMessage.restored(BinaryMessage.readBytes(binprops));
+        System.out.println(setts.AktorPORT+"\n:::\n"+setts.usersPostgresConnect+"\n:::\n"+ setts.requestsPOSTGRESConnect);
         prod = new ProductionUPDATE();
         if (new File(lockProd).exists()){
             prod.Production=true;
