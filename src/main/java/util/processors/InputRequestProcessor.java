@@ -27,6 +27,7 @@ public class InputRequestProcessor {
     private Executor executor;
     public ProductionUPDATE prod;
     public LoaderJSON loader;
+    public int numberApprovetag;
 
     public InputRequestProcessor(){
     };
@@ -189,6 +190,7 @@ public class InputRequestProcessor {
         if (!result.equals(Condition.DECLINED))
             savedJSON = Beatyfulizer.compareundschoneJSON(ParcedJSON.parse(String.valueOf(data.get(5))), ParcedJSON.parse(String.valueOf(data.get(3))));
         int counter = (int) data.get(0);
+
         sb.append("<tr>");
         sb.append("<td align=\"center\"><div id='"+counter+"0'>"+data.get(0)+"</div></td>");
         sb.append("<td align=\"center\"><div id='"+counter+"1'>"+data.get(1)+"</div></td>");
@@ -223,7 +225,9 @@ public class InputRequestProcessor {
         if (!result.equals(Condition.DECLINED))
             savedJSON = Beatyfulizer.compareundschoneJSON(ParcedJSON.parse(String.valueOf(data.get(5))), ParcedJSON.parse(String.valueOf(data.get(3))));
         int counter = (int) data.get(0);
-        sb.append("<tr id=\""+numberrow+"\">");
+        numberApprovetag = counter;
+        sb.append("<tr id=\""+counter+"\">");
+       ////////// sb.append("<tr id=\""+numberrow+"\">");
         sb.append("<td align=\"center\"><div id='"+counter+"a0'>"+data.get(0)+"</div></td>");
         sb.append("<td align=\"center\"><div id='"+counter+"a1'>"+data.get(1)+"</div></td>");
         sb.append("<td align=\"center\"><div id='"+counter+"a2'>"+data.get(2)+"</div></td>");
@@ -279,9 +283,9 @@ public class InputRequestProcessor {
         for (int i=0; i<data.size(); i++){
             String result = String.valueOf(processRow(sb, data.get(i), number_row));
             int numbertag=number_row--;
-            sb.append("<td><div id=\"approvetag"+(numbertag)+"\"></div></td><tr>" +
+            sb.append("<td><div id=\"approvetag"+(numberApprovetag)+"\"></div></td><tr>" +
                     " <script type=\"text/babel\">\n" +
-                    "const json__={'number':"+numbertag+", 'status':'"+result+"'}; ReactDOM.hydrate(<Approve info={json__}/>, document.getElementById('approvetag"+numbertag+"'));" +
+                    "const json__={'number':"+numberApprovetag+", 'status':'"+result+"'}; ReactDOM.hydrate(<Approve info={json__}/>, document.getElementById('approvetag"+numberApprovetag+"'));" +
                     "         </script></tr>  ");
   ///////       String dump = "ReactDOM.render(<Approve number=\""+numbertag+"\" status=\""+result+"\"/>, document.getElementById('approvetag"+numbertag+"'));\n" ;
   ///////       fos.write(dump.getBytes() );
