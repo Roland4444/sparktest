@@ -48,6 +48,7 @@ public class InputRequestProcessor {
 
     public void saveRequestinDB(RequestMessage req) throws SQLException {
         PreparedStatement stmt = executor.getConn().prepareStatement("INSERT INTO requests  VALUES (?, ?, ?::jsonb, NULL, NULL, NULL, ?)");
+        System.out.println("in saveRequestinDB:: req.ID::"+req.ID);
         stmt.setString(1, req.ID);
         stmt.setTimestamp(2, new Timestamp(new Date().getTime()));///new java.sql.Date(new Date().getTime().n));
         long now = new Date().getTime();
