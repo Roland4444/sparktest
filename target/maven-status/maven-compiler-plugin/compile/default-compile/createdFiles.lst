@@ -5,11 +5,13 @@ util/Deps.class
 abstractions/PendingResponces.class
 util/LoginChecker$1.class
 servers/ServerAktor.class
+abstractions/Settings.class
 servers/Spark.class
 util/processors/OutputResponceProcessor.class
 abstractions/Condition.class
 util/readfile/Readfile.class
 util/JSON/ParcedJSON.class
+util/react/ReactBlob.class
 servers/AsyncSend.class
 util/Base64Encoder.class
 util/DB/MapDB.class
