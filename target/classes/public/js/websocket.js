@@ -3,6 +3,9 @@ if (!window.WebSocket) {
 }
 var socket = new WebSocket("ws://localhost:4567/echo");
 // обработчик входящих сообщений
+socket.onopen = function() {
+  console.log("Соединение установлено.");
+};
 socket.onmessage = function(event) {
   var incomingMessage = event.data;
   ///addscript(incomingMessage);
