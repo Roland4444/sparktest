@@ -175,6 +175,18 @@ public class InputRequestProcessor {
         return sb.toString();
     }
 
+    public static String transformlongString(String input, int cutter){
+        int i =0;
+        StringBuilder sb = new StringBuilder();
+        while (i+cutter<input.length()-1){
+          sb.append(input.substring(i, i+cutter));
+          sb.append("<br>");
+          i+=cutter;
+        }
+        sb.append(input.substring(i, input.length()));
+        return sb.toString();
+    };
+
     public Condition processRow(StringBuilder sb, ArrayList data) throws ParseException {
         String savedJS = String.valueOf(data.get(5));
         Condition result=Condition.SUSPENDING;

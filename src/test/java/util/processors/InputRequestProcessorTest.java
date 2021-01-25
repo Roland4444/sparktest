@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
+import static util.processors.InputRequestProcessor.transformlongString;
 
 public class InputRequestProcessorTest {
     InputRequestProcessor irp = new InputRequestProcessor();
@@ -31,5 +32,12 @@ public class InputRequestProcessorTest {
         irp.removeStatus(id, filename);
         assertEquals(null, irp.getStatus("ioioio", filename));
 
+    }
+
+    @Test
+    public void transformlongStringtest() {
+        String input222 = "realylongcommentary";
+        String etalon = "realy<br>longc<br>ommen<br>tary";
+        assertEquals(etalon, transformlongString(input222,5));
     }
 }
