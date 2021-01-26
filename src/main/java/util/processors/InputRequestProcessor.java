@@ -177,6 +177,8 @@ public class InputRequestProcessor {
 
     public static String transformlongString(String input, int cutter){
         int i =0;
+        if (input == null)
+            return "";
         StringBuilder sb = new StringBuilder();
         while (i+cutter<input.length()-1){
           sb.append(input.substring(i, i+cutter));
@@ -242,7 +244,7 @@ public class InputRequestProcessor {
        ////////// sb.append("<tr id=\""+numberrow+"\">");
         sb.append("<td align=\"center\"><div id='"+counter+"a0'>"+data.get(0)+"</div></td>");
         sb.append("<td align=\"center\"><div id='"+counter+"a1'>"+data.get(1)+"</div></td>");
-        sb.append("<td align=\"center\"><div id='"+counter+"a2'>"+data.get(2)+"</div></td>");
+        sb.append("<td align=\"center\"><div id='"+counter+"a2'>"+transformlongString((String) data.get(2),60)+"</div></td>");
         sb.append("<td align=\"center\"><div id='"+counter+"a3'>"+initialJSON+"</div></td>");
         if (data.get(4)==null)
             sb.append("<td><div id='"+counter+"a4'>"+"</div></td>");
