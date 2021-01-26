@@ -1,4 +1,4 @@
-
+const transform = require('./transformlongString');
     function proccessJSON(q){
         let maxitem = localStorage.getItem('maxitem');
         var obj = JSON.parse(q)
@@ -142,6 +142,23 @@
             p10.setAttribute("style", 'background-color: yellow');
         div.appendChild(p10);
     }
+
+    function transformlongString(input, cutter) {
+        let i =0
+        if (input == null)
+            return ''
+        let sb = ''
+        while (i+cutter<input.length-1)
+        {
+            sb+=input.substring(i, i+cutter);
+            sb+="<br>";
+            i+=cutter;
+        }
+        sb+=input.substring(i, input.length);
+        return sb
+    };
+
+
     function fillRow(a)
     {
          ////   alert('in fillRow')
@@ -164,7 +181,7 @@
        datetimeupdate.innerHTML =''
        id.innerHTML =flow( a.id)
        datetimerequest.innerHTML =flow( a.datetimerequest)
-       comment.innerHTML =flow( a.comment)
+       comment.innerHTML =flow(transformlongString(a.comment,60))
        initialdata.innerHTML = schoneJSON((a.initialdata))
        datetimeapprove.innerHTML =flow( a.datetimeapprove)
        compareundschoneJSON((a.updateddata), (a.initialdata), a.id)
