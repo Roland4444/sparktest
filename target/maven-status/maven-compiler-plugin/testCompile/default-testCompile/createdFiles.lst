@@ -1,6 +1,6 @@
 util/processors/OutputResponceProcessorTest.class
-util/DB/MapDBTest.class
 util/ParcedJSONTest.class
+util/DB/MapDBTest.class
 util/Base64EncoderTest.class
 abstractions/SettingsTest.class
 util/DataBaseHelperTest.class

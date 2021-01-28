@@ -31,11 +31,13 @@ public class ProductionUPDATE {
     };
 
     public int getId(ParcedJSON json) throws SQLException {
+        System.out.println("INSIDE gitID");
         ArrayList arr = new ArrayList();
         arr.add(json.Waybill_number);
         arr.add(json.Date);
         arr.add(json.Time);
         var r = exec.executePreparedSelect("SELECT * FROM weighings WHERE waybill = ? AND  date =? and time = ?", arr);
+        System.out.println("EXECUTE SELECT");
         if (r.next())
             return (int) r.getObject("id");
         return -1;
