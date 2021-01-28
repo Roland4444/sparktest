@@ -1,4 +1,7 @@
-class Approve extends React.Component {
+const REQUEST = 'REQUEST'
+const SUCCESS = 'SUCCESS'
+const FAILURE = 'FAILURE'
+export default class  Approve extends React.Component {
 constructor(props) {
     super(props);
     this.state = { state: -1};

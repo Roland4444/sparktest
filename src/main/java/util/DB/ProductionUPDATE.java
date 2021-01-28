@@ -17,6 +17,7 @@ public class ProductionUPDATE {
 
     };
     public void init() throws SQLException {
+        System.out.println("\n\n\n\nWARNING!!!!    PRODUCTION MODE!!!");
         exec  = new Executor("jdbc:mysql://localhost:3306/avs", "avs", "evbhPoU5JkW9fZyX") ;;
     }
     public String getMetalID(String metal) throws SQLException {
