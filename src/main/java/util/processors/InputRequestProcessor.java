@@ -43,7 +43,20 @@ public class InputRequestProcessor {
         stmt.setString(3,  req.ID);
         System.out.println("executing >>>"+ req.ID);
         stmt.executeUpdate();
-        prod.fullupdate(ParcedJSON.parse(req.JSONed));
+        ArrayList arr = new ArrayList();
+        System.out.println("ID::::===>>>>"+req.ID);
+        arr.add(req.ID);
+        var Result = executor.executePreparedSelect("SELECT * from requests WHERE id = ?", arr);
+        String json = null;
+        if (Result.next()){
+            json = Result.getString("initialdata");
+        }
+        System.out.println("INITIAL JSON::::===>>>>"+json);
+        if (json == null){
+            System.out.println("\n\n\nproduction update impossible\n\n\n");
+            return;
+        }
+        prod.fullupdate(ParcedJSON.parse(req.JSONed), ParcedJSON.parse(json));
 
     }
 

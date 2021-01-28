@@ -53,11 +53,11 @@ public class ProductionUPDATE {
         stmt.executeUpdate();
     };
 
-    public void updateweighing_items(ParcedJSON json) throws SQLException {
+    public void updateweighing_items(ParcedJSON json, ParcedJSON initial) throws SQLException {
         if (!Production)
             return;
         var id = getId(json);
-        PreparedStatement stmt = exec.getConn().prepareStatement("update weighing_items set trash = ?, clogging=?, tare =?, brutto =?, metal_id=?  WHERE weighing_id=?");// metal_id =
+        PreparedStatement stmt = exec.getConn().prepareStatement("update weighing_items set trash = ?, clogging=?, tare =?, brutto =?, metal_id=?  WHERE weighing_id=? AND trash = ? AND clogging=? AND tare =? AND brutto =? AND metal_id=?");// metal_id =
         System.out.println("TRASH:"+ json.Trash);
         stmt.setBigDecimal(1,new BigDecimal(json.Trash) );
 
@@ -76,14 +76,28 @@ public class ProductionUPDATE {
         System.out.println("id:"+ id);
         stmt.setInt(6, id);
 
+        System.out.println("initial trash:"+ initial.Trash);
+        stmt.setBigDecimal(7, new BigDecimal(initial.Trash));
+
+        System.out.println("initial clogging:"+ initial.Clogging);
+        stmt.setBigDecimal(8, new BigDecimal(initial.Clogging));
+
+        System.out.println("initial tare:"+ initial.Tara);
+        stmt.setBigDecimal(9, new BigDecimal(initial.Tara));
+
+        System.out.println("initial brutto:"+ initial.Brutto);
+        stmt.setBigDecimal(10, new BigDecimal(initial.Brutto));
+
+        System.out.println("initial metal_id:"+ initial.Metall);
+        stmt.setString(11, String.valueOf(getMetalID(initial.Metall)));
         stmt.executeUpdate();
     };
 
-    public void fullupdate(ParcedJSON json) throws SQLException {
+    public void fullupdate(ParcedJSON json, ParcedJSON initial) throws SQLException {
         if (!Production)
             return;
         updateComment(json);
-        updateweighing_items(json);
+        updateweighing_items(json, initial);
     }
 
 
@@ -109,7 +123,7 @@ public class ProductionUPDATE {
         json.Brutto="33.80";
         json.Clogging="6.00";
         System.out.println("EXTRACTED ID=>"+pr.getId(json));
-        pr.updateweighing_items(json);
+        pr.updateweighing_items(json, json);
       //  pr.directupdate();
     }
 
