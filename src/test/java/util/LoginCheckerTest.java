@@ -8,7 +8,7 @@ public class LoginCheckerTest {
 
     @Test
     public void checklogin() throws SQLException {
-        LoginChecker check = new LoginChecker(new DataBaseHelper().executor);
+        LoginProcessor check = new LoginProcessor(new DataBaseHelper().executor);
         assertEquals(true, check.checklogin("roman", "123"));
     }
 }

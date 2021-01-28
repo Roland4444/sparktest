@@ -86,6 +86,26 @@ public class Spark {
             return deps.LoaderJSON.loadAll2JSON();
         });
 
+
+        get("pass2", (req,res)->{
+            model.clear();
+            String user = req.session().attribute("user");
+            System.out.println("USER"+user);
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "pass.html"));
+        });
+        get("pass", (req, res)->{
+            if (check(req)){
+                String user = req.session().attribute("user");
+                String pass = req.queryParams("pass");
+                deps.loginchecker.updatepass(user, pass);
+                return "OK";
+            }
+            res.status(500);
+            return "BAD";
+        //    return "-";
+        });
+
         post("ajson", (req,res)->{
             model.clear();
             String params = req.queryParams("params");
@@ -242,6 +262,12 @@ public class Spark {
         });
 
 
+        get("/logout", (req,res)->{
+            req.session().attribute("logined", false);
+            res.redirect("/login.area");
+            return "";
+        });
+
         get("/decline", (req,res)->{
             if (check(req)){
                 String id = req.queryParams("id");
@@ -251,16 +277,22 @@ public class Spark {
             }
             return eng.render(BAD);
         });
-        get("/login", (req, res) -> {
+        post("/login", (req, res) -> {
+            System.out.println("IN LOGIN AREA");
             String login = req.queryParams("login");
             String pass = req.queryParams("password");
             if (deps.loginchecker.checklogin(login, pass)) {
                 req.session().attribute("logined", true);
+                req.session().attribute("user", login);
+                System.out.println((String) req.session().attribute("user"));
                 model.clear();
             ///    model.put("requests", deps.irp.DumpRequestToHTMLTable8());
             ///    System.out.println(deps.irp.DumpRequestToHTMLTable8());
                 model.clear();
                 model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
+                char first = Character.toUpperCase(login.charAt(0));
+                String uppercasedUser =  first + login.substring(1);
+                model.put("user", uppercasedUser);
                 return new VelocityTemplateEngine().render(
                         new ModelAndView(model, "requestsx.html"));
 
@@ -270,6 +302,7 @@ public class Spark {
             }
             else
                 req.session().attribute("logined", false);
+
                 return eng.render(BAD);
         });
 

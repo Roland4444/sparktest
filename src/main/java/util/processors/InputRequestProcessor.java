@@ -387,5 +387,8 @@ public class InputRequestProcessor {
         //sendWebsocketAlerts();
     };
 
+    public void updatePass(Object user, String pass) {
+    }
+
 
 }

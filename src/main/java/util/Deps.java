@@ -19,7 +19,7 @@ import java.sql.SQLException;
 public class Deps {
     public final String lockProd = "prod.bin";
     public static String PendingResponcesFile = "rendresp.bin";
-    public LoginChecker loginchecker;
+    public LoginProcessor loginchecker;
     public DataBaseHelper dbhelper;
     public Cypher cypher;
     public ServerAktor aktor;
@@ -58,7 +58,7 @@ public class Deps {
 
         Incomming = new Readfile(incomingFolder);
         try {
-            this.loginchecker = new LoginChecker( users.executor);
+            this.loginchecker = new LoginProcessor( users.executor);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

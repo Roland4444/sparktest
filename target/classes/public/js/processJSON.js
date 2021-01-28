@@ -1,4 +1,3 @@
-const transform = require('./transformlongString');
     function proccessJSON(q){
         let maxitem = localStorage.getItem('maxitem');
         var obj = JSON.parse(q)

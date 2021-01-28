@@ -12,9 +12,12 @@
 .approved{
     color:green;
 }
+.container {
+  width: 500px;
+  clear: both;
+}
 
-/* REMOVE SECOND CALENDAR */
-
-
-
-/* REMOVE SECOND CALENDAR */
+.container input {
+  width: 100%;
+  clear: both;
+}

@@ -118,8 +118,6 @@ suppress= () =>
     render() {
         let minitem = Number(localStorage.getItem('minitem'));
         let maxitem = Number(localStorage.getItem('maxitem'));
-        console.log('min>>'+minitem)
-        console.log('max>>'+maxitem)
         let number = Number(this.props.info.number)
         if ((minitem == 0) && (maxitem == 0))
         {
@@ -133,8 +131,6 @@ suppress= () =>
             if (number < minitem)
                 localStorage.setItem('minitem', number)
         }
-
-    console.log('min/max elem'+localStorage.getItem('minitem')+':'+localStorage.getItem('maxitem'))
     if (this.state.state==1) {
         return  (<div align='center'>
         <h5 class="approved">Разрешено</h5>

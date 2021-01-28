@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style2.css">
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://use.fontawesome.com/a0f7b43176.js"></script>
+
 
     <!-- Не используйте это в production -->
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
@@ -21,6 +23,32 @@
     <link rel="stylesheet" href="dp.css">
 </head>
 <body>
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <form class="form-inline">
+
+    </form>
+
+    <div class="btn-group  mr-sm-2">
+        <button type="button" class="btn btn-sq-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-user fa-2x">$user</i><br>
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item"   data-toggle="modal"  data-target="#gridSystemModal">Сменить пароль</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/logout">Выйти</a>
+        </div>
+    </div>
+</nav>
+
+<!--nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <div class="bd-example bd-example-padded-bottom">
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"  data-target="#gridSystemModal">
+            Сменить пароль
+        </button>
+    </div>
+</nav-->
+
+
 
 <!--div id="loginform" class="logindiv">
     <form action="approve" >
@@ -29,11 +57,103 @@
     </form>
 </div-->
 <script type="text/babel">
+function check(p1, p2)
+{
+    if ((p1.length>1) && (p1==p2))
+        return true;
+    return false;
+}
+function changepass()
+{
+    var pass1 = document.getElementById('pass1').value
+    var pass2 = document.getElementById('pass2').value
+    if (!check(pass1, pass2)){
+        alert('пароли должны совпадать и должны быть длиннее 1 символа')
+        return;
+    }
+    function getXmlHttp()
+        {
+            var xmlhttp;
+            try {
+                xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e)
+            {
+                try
+                {
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (E)
+                {
+                    xmlhttp = false;
+                }
+            }
+            if (!xmlhttp && typeof XMLHttpRequest!='undefined')
+            {
+                xmlhttp = new XMLHttpRequest();
+            }
+            return xmlhttp;
+        }
+
+        var xhr = getXmlHttp()
+
+        var request = "/pass?pass="+pass1;
+
+        xhr.open("GET", request, true);
+        xhr.onreadystatechange=function()
+        {
+            if (xhr.readyState != 4) return
+            clearTimeout(xhrTimeout)
+            if (xhr.status == 200)
+               alert('пароль изменен!' );
+            
+            if (xhr.status == 500)
+                alert('пароль невозможно поменять');
+ ////////////               location.reload();
+
+        }
+
+        xhr.send("a=5&b=4");
+        var xhrTimeout = setTimeout( function(){ xhr.abort(); handleError("Timeout") }, 10000);
+
+        function handleError(message)
+        {
+            alert("Ошибка: "+message)
+        }
+
+
+}
 localStorage.setItem('maxitem', 0);
 localStorage.setItem('minitem', 0);
 
-
 </script>
+<div id="gridSystemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменение пароля</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+
+                    <p>Введите новый пароль<input type="password" class="float-right" id="pass1">     <br>
+                    <p>Повторите пароль<input type="password" class="float-right" id="pass2">     <br><br>
+                        <button  class="btn btn-secondary" align="center" onclick="changepass()">Изменить пароль</button><button type="button" class="btn btn-secondary float-right" data-dismiss="modal">Закрыть</button>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
 <script type="text/babel"  src="js/websocket.js"></script>
 
 <script type="text/babel"  src="js/Approve.js"></script>
@@ -41,10 +161,10 @@ localStorage.setItem('minitem', 0);
 
 <script type="text/babel"  src="js/processJSON.js"></script>
 <script type="text/babel"  src="js/filter.js"></script>
-<input type="text" name="daterange"  id="data00" />
+
 <table  id="mTable" border="10" cellpadding="10"  align="center" valign="center" class="table">
     <th class="text-center">ID</th>
-    <th class="text-center">Дата запроса</th>
+    <th class="text-center">Дата запроса <input type="text" name="daterange"  id="data00" /></th>
     <th class="text-center">Комментарий</th>
     <th class="text-center">Позиция</th>
     <th class="text-center">Дата разрешения /запрешения</th>
