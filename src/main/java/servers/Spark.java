@@ -215,6 +215,13 @@ public class Spark {
                     new ModelAndView(model, "requests.html"));
         });
 
+        get("zzz", (req, res) -> {
+            model.clear();
+            model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "call.html"));
+        });
+
         get("websocket", (req, res) -> eng.render(SOCKET));
 
         redirect.get("/", "login.area");
