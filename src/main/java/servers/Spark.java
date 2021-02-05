@@ -1,15 +1,18 @@
 package servers;
-import Message.abstractions.BinaryMessage;
-import abstractions.Condition;
-import abstractions.RequestMessage;
-import abstractions.ResponceMessage;
+
 import org.jetbrains.annotations.NotNull;
 import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
+import spark.utils.IOUtils;
 import util.Deps;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.Part;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -33,6 +36,29 @@ public class Spark {
         deps.echoWebSocket =  EchoWebSocket.class;
 
         webSocket("/echo", EchoWebSocket.class);
+
+
+        get("upload", (req, res) -> {
+            model.clear();
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "upload.html"));
+        });
+
+
+        post("/api/upload", (req, res) -> {
+            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("D:/tmp"));
+            Part filePart = req.raw().getPart("myfile");
+
+            try (InputStream inputStream = ((Part) filePart).getInputStream()) {
+                OutputStream outputStream = new FileOutputStream("./" + filePart.getSubmittedFileName());
+                IOUtils.copy(inputStream, outputStream);
+                outputStream.close();
+            }
+
+            return "File uploaded and saved.";
+        });
+
+
 
         get("todo", (req, res) -> {
             model.clear();
@@ -98,7 +124,7 @@ public class Spark {
             if (check(req)){
                 String user = req.session().attribute("user");
                 String pass = req.queryParams("pass");
-                deps.loginchecker.updatepass(user, pass);
+            //    deps.loginchecker.updatepass(user, pass);
                 return "OK";
             }
             res.status(500);

@@ -4,6 +4,7 @@
 /home/romanx/IdeaProjects/spark/src/main/java/servers/Spark.java
 /home/romanx/IdeaProjects/spark/src/main/java/servers/EchoWebSocket.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/IDHelper.java
+/home/romanx/IdeaProjects/spark/src/main/java/util/LoginProcessor.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/Base64Encoder.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/JSON/LoaderJSON.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/Deps.java
@@ -11,7 +12,6 @@
 /home/romanx/IdeaProjects/spark/src/main/java/servers/ServerAktor.java
 /home/romanx/IdeaProjects/spark/src/main/java/abstractions/Cypher.java
 /home/romanx/IdeaProjects/spark/src/main/java/abstractions/PendingResponces.java
-/home/romanx/IdeaProjects/spark/src/main/java/util/LoginChecker.java
 /home/romanx/IdeaProjects/spark/src/main/java/abstractions/Condition.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/react/ReactBlob.java
 /home/romanx/IdeaProjects/spark/src/main/java/abstractions/Settings.java
