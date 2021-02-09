@@ -3,6 +3,7 @@ package test;
 import fr.roland.DB.Executor;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public class TestClass {
     public static void main(String[] args) throws SQLException {
@@ -19,5 +20,14 @@ public class TestClass {
         while (metals.next()){
             System.out.println(String.valueOf(metals.getObject("id")) + " :::  "+ String.valueOf(metals.getObject("name")));
         }
+    }
+    public static Integer compute(Function<Integer, Integer> function, Integer value) {
+        return function.apply(value);
+    }
+
+
+
+    public static Integer sum(Integer integer, Integer integer2) {
+        return integer+integer2;
     }
 }
