@@ -1,5 +1,6 @@
 package servers;
 
+import Accesser.AccesserRequests;
 import org.jetbrains.annotations.NotNull;
 import spark.ModelAndView;
 import spark.Request;
@@ -318,16 +319,10 @@ public class Spark {
                 req.session().attribute("logined", true);
                 req.session().attribute("user", login);
                 System.out.println((String) req.session().attribute("user"));
-                model.clear();
+
             ///    model.put("requests", deps.irp.DumpRequestToHTMLTable8());
             ///    System.out.println(deps.irp.DumpRequestToHTMLTable8());
-                model.clear();
-                model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
-                char first = Character.toUpperCase(login.charAt(0));
-                String uppercasedUser =  first + login.substring(1);
-                model.put("user", uppercasedUser);
-                return new VelocityTemplateEngine().render(
-                        new ModelAndView(model, "requestsx.html"));
+                return AccesserRequests.Companion.access(login, deps);
 
            //     model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
            //     return new VelocityTemplateEngine().render(
