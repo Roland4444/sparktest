@@ -37,3 +37,5 @@ lambda react => https://itnext.io/react-patterns-lambda-components-and-render-pr
 
  -XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC   EPSILON GC
 -XX:+UnlockExperimentalVMOptions -XX:+UseZGC         ZGC
+
+https://medium.com/@mr_asqd/ruby-functional-programming-part2-647a93ddf80d

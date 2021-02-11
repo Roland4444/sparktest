@@ -1,7 +1,7 @@
 package servers;
 
-import Accesser.AccesserRequests;
 import org.jetbrains.annotations.NotNull;
+import sc.Functor;
 import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
@@ -312,6 +312,7 @@ public class Spark {
             return eng.render(BAD);
         });
         post("/login", (req, res) -> {
+            System.out.println("Call from scala"+Functor.sum(5,7));
             System.out.println("IN LOGIN AREA");
             String login = req.queryParams("login");
             String pass = req.queryParams("password");
@@ -322,11 +323,11 @@ public class Spark {
 
             ///    model.put("requests", deps.irp.DumpRequestToHTMLTable8());
             ///    System.out.println(deps.irp.DumpRequestToHTMLTable8());
-                return AccesserRequests.Companion.access(login, deps);
+              //  return AccesserRequests.Companion.access(login, deps);
 
-           //     model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
-           //     return new VelocityTemplateEngine().render(
-           //             new ModelAndView(model, "requests.html"));
+                model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
+                return new VelocityTemplateEngine().render(
+                        new ModelAndView(model, "requests.html"));
             }
             else
                 req.session().attribute("logined", false);
