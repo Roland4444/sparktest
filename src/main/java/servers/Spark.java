@@ -281,10 +281,10 @@ public class Spark {
             return eng.render(BAD);
         });
         post("login", (req, res) -> {
-            String login = req.queryParams("login");
-            String pass = req.queryParams("password");
-            return deps.dslmap.MapProcessor().get("login").process(req, deps.resolver.resolveDSL("login", login));
-     /*       System.out.println("Call from scala"+Functor.sum(5,7));
+        ///    String login = req.queryParams("login");
+        ///    String pass = req.queryParams("password");
+         ////   return deps.dslmap.MapProcessor().get("login").process(req, deps.resolver.resolveDSL("login", login));
+        //   System.out.println("Call from scala"+Functor.sum(5,7));
             System.out.println("IN LOGIN AREA");
             String login = req.queryParams("login");
             String pass = req.queryParams("password");
@@ -297,14 +297,14 @@ public class Spark {
             ///    System.out.println(deps.irp.DumpRequestToHTMLTable8());
               //  return AccesserRequests.Companion.access(login, deps);
 
-                model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
+                model.put("requestsx", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
                 return new VelocityTemplateEngine().render(
                         new ModelAndView(model, "requestsx.html"));
             }
             else
                 req.session().attribute("logined", false);
 
-                return eng.render(BAD);  */
+                return eng.render(BAD);
         });
 
         get("/attr", (req,res)->{

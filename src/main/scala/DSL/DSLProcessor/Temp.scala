@@ -16,7 +16,6 @@ class Temp extends Processor{
   def marinafunc(foo: String, bar: String): String="Σ="+String.valueOf(Integer.valueOf(foo)+Integer.valueOf(bar))
   def guest(a: String, b: String): String=""
 
-
   override def process(request: Request, DSL: String): AnyRef = {
     val foo = "2"
     print(String.valueOf(Integer.valueOf(foo)))
