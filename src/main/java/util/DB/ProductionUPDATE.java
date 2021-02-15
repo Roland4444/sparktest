@@ -43,6 +43,19 @@ public class ProductionUPDATE {
         return -1;
     }
 
+    public int getCount(ParcedJSON json) throws SQLException {
+        System.out.println("INSIDE gitID");
+        ArrayList arr = new ArrayList();
+        arr.add(json.Waybill_number);
+        var r = exec.executePreparedSelect("SELECT * FROM weighings WHERE waybill = ?", arr);
+        System.out.println("EXECUTE SELECT.... COUNTING ITEMS");
+        var counter = 0;
+        while (r.next())
+            counter++;
+        return counter;
+    }
+
+
     public void updateComment(ParcedJSON json) throws SQLException {
         if (!Production)
             return;
@@ -51,6 +64,37 @@ public class ProductionUPDATE {
         stmt.setString(1, json.Comment);
         stmt.setLong(2, id);
         stmt.executeUpdate();
+    };
+
+    public void productiondelete(ParcedJSON json, ParcedJSON initial) throws SQLException {
+        PreparedStatement stmt = exec.getConn().prepareStatement("DELETE from weighing_items  WHERE weighing_id=? AND trash = ? AND clogging=? AND tare =? AND brutto =? AND metal_id=?");// metal_id =
+
+        System.out.println("DELETING ITEM USING SQL::>>");
+        System.out.println("DELETE from weighing_items  WHERE weighing_id=<"+getId(json) +">  AND trash =<"+initial.Trash +">  AND clogging= <"+initial.Clogging +"> AND tare =<"+ initial.Tara +"> AND brutto ="+ initial.Brutto+" AND metal_id=<"+ String.valueOf(getMetalID(initial.Metall))+">");
+        stmt.setInt(1,  getId(json));
+
+        System.out.println("initial trash:"+ initial.Trash);
+        stmt.setBigDecimal(2, new BigDecimal(initial.Trash));
+
+        System.out.println("initial clogging:"+ initial.Clogging);
+        stmt.setBigDecimal(3, new BigDecimal(initial.Clogging));
+
+        System.out.println("initial tare:"+ initial.Tara);
+        stmt.setBigDecimal(4, new BigDecimal(initial.Tara));
+
+        System.out.println("initial brutto:"+ initial.Brutto);
+        stmt.setBigDecimal(5, new BigDecimal(initial.Brutto));
+
+        System.out.println("initial metal_id:"+ initial.Metall);
+        stmt.setString(6, String.valueOf(getMetalID(initial.Metall)));
+        stmt.executeUpdate();
+        if (getCount(initial)<2) {
+            var stmt2 = exec.getConn().prepareStatement("DELETE from weighings WHERE id = ?");
+            stmt.setLong(1, getId(initial));
+
+            stmt.executeUpdate();
+        }
+
     };
 
     public void updateweighing_items(ParcedJSON json, ParcedJSON initial) throws SQLException {
@@ -91,19 +135,21 @@ public class ProductionUPDATE {
         System.out.println("initial metal_id:"+ initial.Metall);
         stmt.setString(11, String.valueOf(getMetalID(initial.Metall)));
         stmt.executeUpdate();
+        updateComment(json);
+
     };
 
     public void fullupdate(ParcedJSON json, ParcedJSON initial) throws SQLException {
         if (!Production)
             return;
+        if (json.Brutto.equals("0.00")){
+            productiondelete(json, initial);
+            return;
+        }
         updateComment(json);
         updateweighing_items(json, initial);
+
     }
-
-
-
-
-
 
     //    UPDATE weighings set comment = 'TEST'  WHERE id = '34';//
 
