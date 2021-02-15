@@ -1,0 +1,17 @@
+util/processors/OutputResponceProcessorTest.class
+util/DB/MapDBTest.class
+util/ParcedJSONTest.class
+util/Base64EncoderTest.class
+abstractions/SettingsTest.class
+util/DataBaseHelperTest.class
+util/OutputResponceProcessorTest.class
+util/IDHelperTest.class
+util/LoginCheckerTest.class
+util/InputRequestProcessorTest.class
+util/JSON/ParcedJSONTest.class
+util/JSON/LoaderJSONTest.class
+util/LoaderJSONTest.class
+servers/ServerAktorTest.class
+util/DB/ProductionUPDATETest.class
+util/processors/InputRequestProcessorTest.class
+util/BeatyfulizerTest.class

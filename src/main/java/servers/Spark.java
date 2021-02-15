@@ -29,6 +29,7 @@ public class Spark {
 
     public static Map<String, Object> model = new HashMap<>();
     public static void main(String[] args) throws InterruptedException, SQLException, IOException, ClassNotFoundException {
+        System.out.println("production RF Version");
         Class.forName("com.mysql.jdbc.Driver");
         Class.forName("org.postgresql.Driver");
         staticFiles.location("/public");
