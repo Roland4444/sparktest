@@ -1,7 +1,7 @@
 /home/coder/spark/sparktest/src/main/java/test/TestClass.java
 /home/coder/spark/sparktest/src/main/java/abstractions/Cypher.java
 /home/coder/spark/sparktest/src/main/java/util/DB/DataBaseHelper.java
-/home/coder/spark/sparktest/src/main/java/util/LoginChecker.java
+/home/coder/spark/sparktest/src/main/java/util/LoginProcessor.java
 /home/coder/spark/sparktest/src/main/java/servers/Spark.java
 /home/coder/spark/sparktest/src/main/java/abstractions/PendingResponces.java
 /home/coder/spark/sparktest/src/main/java/util/processors/InputRequestProcessor.java

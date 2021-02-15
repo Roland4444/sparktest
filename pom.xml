@@ -94,7 +94,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>util.DB.ProductionUPDATE</mainClass>
+                            <mainClass>servers.Spark</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -120,7 +120,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>util.DB.ProductionUPDATE</mainClass>
+                                    <mainClass>servers.Spark</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
