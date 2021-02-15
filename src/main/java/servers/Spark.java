@@ -1,6 +1,8 @@
 package servers;
 
 import org.jetbrains.annotations.NotNull;
+import DSL.DSLProcessor.Temp;
+import DSL.DSLProcessor.Login;
 import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
@@ -26,13 +28,25 @@ public class Spark {
     public static ModelAndView OK = new ModelAndView(map_, "OK.html");
     public static ModelAndView BAD = new ModelAndView(map_, "Bad.html");
     public static ModelAndView SOCKET = new ModelAndView(map_, "websocket.html");
+    public static Deps deps;
+
+    static {
+        try {
+            deps = new Deps();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static Map<String, Object> model = new HashMap<>();
     public static void main(String[] args) throws InterruptedException, SQLException, IOException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
         Class.forName("org.postgresql.Driver");
         staticFiles.location("/public");
-        Deps deps = new Deps();
         deps.echoWebSocket =  EchoWebSocket.class;
 
         webSocket("/echo", EchoWebSocket.class);
@@ -186,46 +200,14 @@ public class Spark {
                     new ModelAndView(model, "timer.html"));
         });
 
-        get("getriot", (req, res)->{
-            String login = req.queryParams("value");
-            return login;
+
+
+
+        get("temp", (req, res) -> {
+            var user = req.queryParams("login");
+           return   new Temp().process(req, "");
         });
 
-        get("riot", (req, res) -> {
-            model.clear();
-            return new VelocityTemplateEngine().render(
-                    new ModelAndView(model, "riot.html"));
-        });
-
-        get("riotsocket", (req, res) -> {
-            model.clear();
-            return new VelocityTemplateEngine().render(
-                    new ModelAndView(model, "riotsocket.html"));
-        });
-
-
-        get("requests8", (req, res) -> {
-            model.clear();
-            model.put("requests", deps.irp.DumpRequestToHTMLTable8());
-            System.out.println(deps.irp.DumpRequestToHTMLTable8());
-            return new VelocityTemplateEngine().render(
-                    new ModelAndView(model, "requests.html"));
-        });
-
-        get("requestsx", (req, res) -> {
-            model.clear();
-            model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
-            return new VelocityTemplateEngine().render(
-                    new ModelAndView(model, "requestsx.html"));
-        });
-
-
-        get("emptyws", (req, res) -> {
-            model.clear();
-            model.put("requests", "");
-            return new VelocityTemplateEngine().render(
-                    new ModelAndView(model, "emptyws.html"));
-        });
 
         get("dump", (req, res) -> {
             model.clear();
@@ -234,24 +216,12 @@ public class Spark {
                     new ModelAndView(model, "dump.html"));
         });
 
-        get("requests", (req, res) -> {
-            model.clear();
-            model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
-            return new VelocityTemplateEngine().render(
-                    new ModelAndView(model, "requests.html"));
-        });
-
-        get("zzz", (req, res) -> {
-            model.clear();
-            model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
-            return new VelocityTemplateEngine().render(
-                    new ModelAndView(model, "call.html"));
-        });
 
         get("websocket", (req, res) -> eng.render(SOCKET));
 
         redirect.get("/", "login.area");
         get("/hello", (req, res) -> "Hello World");
+        get("/redirect", (req, res) ->{ res.redirect("login.area"); return "";});
         get("login.area", (req, res) -> {
             boolean authenticated=true;
             // ... check if authenticated
@@ -310,7 +280,11 @@ public class Spark {
             }
             return eng.render(BAD);
         });
-        post("/login", (req, res) -> {
+        post("login", (req, res) -> {
+        ///    String login = req.queryParams("login");
+        ///    String pass = req.queryParams("password");
+         ////   return deps.dslmap.MapProcessor().get("login").process(req, deps.resolver.resolveDSL("login", login));
+        //   System.out.println("Call from scala"+Functor.sum(5,7));
             System.out.println("IN LOGIN AREA");
             String login = req.queryParams("login");
             String pass = req.queryParams("password");
@@ -318,20 +292,14 @@ public class Spark {
                 req.session().attribute("logined", true);
                 req.session().attribute("user", login);
                 System.out.println((String) req.session().attribute("user"));
-                model.clear();
+
             ///    model.put("requests", deps.irp.DumpRequestToHTMLTable8());
             ///    System.out.println(deps.irp.DumpRequestToHTMLTable8());
-                model.clear();
-                model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
-                char first = Character.toUpperCase(login.charAt(0));
-                String uppercasedUser =  first + login.substring(1);
-                model.put("user", uppercasedUser);
+              //  return AccesserRequests.Companion.access(login, deps);
+
+                model.put("requestsx", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
                 return new VelocityTemplateEngine().render(
                         new ModelAndView(model, "requestsx.html"));
-
-           //     model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
-           //     return new VelocityTemplateEngine().render(
-           //             new ModelAndView(model, "requests.html"));
             }
             else
                 req.session().attribute("logined", false);
@@ -421,6 +389,11 @@ public class Spark {
 */
 
 }
+
+
+
+
+
     public static boolean check(Request req){
         Set<String> attr = req.session().attributes();
         attr.forEach(a -> {System.out.println(a);});
@@ -429,6 +402,9 @@ public class Spark {
         if (req.session().attribute("logined").equals(true))
             return true;
         return false;
+    }
+    public static String result(String foo, String bar, String f){
+        return f;
     }
 
     public static void flushsession(@NotNull Request req){

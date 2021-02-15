@@ -1,5 +1,6 @@
 package util;
 
+import DSL.DSLMap;
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
 import servers.EchoWebSocket;
@@ -17,6 +18,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class Deps {
+    public DSLMap dslmap;
+    public Resolver resolver;
     public final String lockProd = "prod.bin";
     public static String PendingResponcesFile = "rendresp.bin";
     public LoginProcessor loginchecker;
@@ -40,6 +43,8 @@ public class Deps {
     private abstractions.Settings setts;
 
     public Deps() throws InterruptedException, SQLException, IOException {
+        dslmap =  new DSLMap();
+        resolver = new Resolver();
         if (!new File(binprops).exists()){
             System.out.println("Binnary settings file not exist");
             return;

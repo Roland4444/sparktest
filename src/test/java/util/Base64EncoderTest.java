@@ -11,19 +11,19 @@ public class Base64EncoderTest {
     String etalon= "{\"a\": 6, \"first_name\" : \"Sammy\", \"last_name\" : \"Shark\", \"location\" : \"Ocean\"}\n";
     String initial = "eyJhIjogNiwgImZpcnN0X25hbWUiIDogIlNhbW15IiwgImxhc3RfbmFtZSIgOiAiU2hhcmsiLCAibG9jYXRpb24iIDogIk9jZWFuIn0K";
 
-    @Test
+ //   @Test
     public void decode() {
         assertEquals(etalon, enc.decode(initial));
     }
 
-    @Test
+   // @Test
     public void encode(){
         assertEquals(initial, enc.encode(etalon));
         System.out.println(enc.encode("{\"Date\": \"2020-11-05\", \"Mode\": \"Приемка\", \"Tara\": \"0.0\", \"Time\": \"14:16:26\", \"Netto\": \"0.99\", \"Trash\": \"0.1\", \"Brutto\": \"1.1\", \"Metall\": \"Нержавейка\", \"Comment\": \"войт\", \"Clogging\": \"1.0\", \"Complete\": \"Да\", \"Condition\": \"Выгружен\", \"Waybill_number\": \"8\"}"));
 
     }
 
-    @Test
+   // @Test
     public void encode2(){
         assertEquals(initial, enc.encode(etalon));
         String coded = "{\"a\": 6, \"first_name\" : \"Sammy\", \"last_name\" : \"дроздов\", \"location\" : \"Ocean\"}";

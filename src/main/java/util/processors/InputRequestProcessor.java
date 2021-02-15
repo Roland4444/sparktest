@@ -301,7 +301,6 @@ public class InputRequestProcessor {
     };
 
     public String DumpRequestToHTMLTableReact() throws SQLException, ParseException, IOException {
- ////////  FileOutputStream fos = new FileOutputStream("dump.requests");
         ArrayList<ArrayList> data = loadrequests8inmatrix();
         System.out.println("SIZE::"+data.size());
         StringBuilder sb = new StringBuilder();
@@ -314,10 +313,7 @@ public class InputRequestProcessor {
                     " <script type=\"text/babel\">\n" +
                     "const json__={'number':"+numberApprovetag+", 'status':'"+result+"'}; ReactDOM.hydrate(<Approve info={json__}/>, document.getElementById('approvetag"+numberApprovetag+"'));" +
                     "         </script></tr>  ");
-  ///////       String dump = "ReactDOM.render(<Approve number=\""+numbertag+"\" status=\""+result+"\"/>, document.getElementById('approvetag"+numbertag+"'));\n" ;
-  ///////       fos.write(dump.getBytes() );
         };
- ///////   fos.close();
         return sb.toString();
     }
 

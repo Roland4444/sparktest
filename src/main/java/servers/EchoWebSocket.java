@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 
-@WebSocket(maxIdleTime=50000000)
+@WebSocket(maxIdleTime=500000000)
 public class EchoWebSocket {
     // Store sessions if you want to, for example, broadcast a message to all users
     private static final Queue<Session> sessions = new ConcurrentLinkedQueue<>();
