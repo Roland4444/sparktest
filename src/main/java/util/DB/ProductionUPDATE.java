@@ -3,6 +3,7 @@ package util.DB;
 import fr.roland.DB.Executor;
 import util.JSON.ParcedJSON;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public class ProductionUPDATE {
     public Executor exec;
     public boolean Production;
+    public String hookdelete = "hookdelete.bin";
     public ProductionUPDATE() throws SQLException {
 
     };
@@ -65,35 +67,41 @@ public class ProductionUPDATE {
         stmt.executeUpdate();
     };
 
+    public boolean hockDeleting(){
+        return new File(hookdelete).exists();
+    }
+
     public void productiondelete(ParcedJSON json, ParcedJSON initial) throws SQLException {
         PreparedStatement stmt = exec.getConn().prepareStatement("DELETE from weighing_items  WHERE weighing_id=? AND trash = ? AND clogging=? AND tare =? AND brutto =? AND metal_id=?");// metal_id =
 
         System.out.println("DELETING ITEM USING SQL::>>");
-        System.out.println("DELETE from weighing_items  WHERE weighing_id=<"+getId(json) +">  AND trash =<"+initial.Trash +">  AND clogging= <"+initial.Clogging +"> AND tare =<"+ initial.Tara +"> AND brutto ="+ initial.Brutto+" AND metal_id=<"+ String.valueOf(getMetalID(initial.Metall))+">");
-        stmt.setInt(1,  getId(json));
+        System.out.println("DELETE from weighing_items  WHERE weighing_id=<" + getId(json) + ">  AND trash =<" + initial.Trash + ">  AND clogging= <" + initial.Clogging + "> AND tare =<" + initial.Tara + "> AND brutto =" + initial.Brutto + " AND metal_id=<" + String.valueOf(getMetalID(initial.Metall)) + ">");
+        stmt.setInt(1, getId(json));
 
-        System.out.println("initial trash:"+ initial.Trash);
+        System.out.println("initial trash:" + initial.Trash);
         stmt.setBigDecimal(2, new BigDecimal(initial.Trash));
 
-        System.out.println("initial clogging:"+ initial.Clogging);
+        System.out.println("initial clogging:" + initial.Clogging);
         stmt.setBigDecimal(3, new BigDecimal(initial.Clogging));
 
-        System.out.println("initial tare:"+ initial.Tara);
+        System.out.println("initial tare:" + initial.Tara);
         stmt.setBigDecimal(4, new BigDecimal(initial.Tara));
 
-        System.out.println("initial brutto:"+ initial.Brutto);
+        System.out.println("initial brutto:" + initial.Brutto);
         stmt.setBigDecimal(5, new BigDecimal(initial.Brutto));
 
-        System.out.println("initial metal_id:"+ initial.Metall);
+        System.out.println("initial metal_id:" + initial.Metall);
         stmt.setString(6, String.valueOf(getMetalID(initial.Metall)));
-        stmt.executeUpdate();
-        if (getCount(initial)<2) {
-            var stmt2 = exec.getConn().prepareStatement("DELETE from weighings WHERE id = ?");
-            stmt.setLong(1, getId(initial));
-
-            stmt.executeUpdate();
+        if (hockDeleting()) {
+            System.out.println("HOOK ON DELETE!!!");
+            return;
         }
-
+        stmt.executeUpdate();
+        if (getCount(initial) < 2) {
+            var stmt2 = exec.getConn().prepareStatement("DELETE from weighings WHERE id = ?");
+            stmt2.setLong(1, getId(initial));
+            stmt2.executeUpdate();
+        }
     };
 
     public void updateweighing_items(ParcedJSON json, ParcedJSON initial) throws SQLException {
