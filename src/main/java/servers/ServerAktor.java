@@ -2,20 +2,19 @@ package servers;
 
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
+import abstractions.InfoMessage;
 import abstractions.RequestMessage;
 import abstractions.ResponceMessage;
-//import client.J11Client;
 import impl.JAktor;
 import org.json.simple.parser.ParseException;
 import servers.threadMessager.ThreadMessager;
 import util.JSON.Beatyfulizer;
 import util.IDHelper;
-import util.JSON.ParcedJSON;
 import util.processors.InputRequestProcessor;
 
 import java.io.*;
-import java.net.ConnectException;
 import java.sql.SQLException;
+
 
 public class ServerAktor extends JAktor {
     public String incomingFolder;
@@ -84,7 +83,13 @@ public class ServerAktor extends JAktor {
         }
         if (req.type.equals(RequestMessage.Type.update)) {
             try {
-                irp.saveUpdatingRequestinDB(req);
+               var res = irp.saveUpdatingRequestinDB(req);
+               if  (true){/////res>0) {
+                   InfoMessage info= new InfoMessage();
+                   info.counter = res;
+                   send(BinaryMessage.savedToBLOB(info), req.addressToReply);
+               }
+
             } catch (SQLException | ParseException throwables) {
                 throwables.printStackTrace();
             }

@@ -30,9 +30,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.example</groupId>
+            <groupId>se.roland</groupId>
             <artifactId>MessagingAVS</artifactId>
-            <version>1.5-SNAPSHOT</version>
+            <version>1.6-SNAPSHOT</version>
         </dependency>
 
         <dependency>

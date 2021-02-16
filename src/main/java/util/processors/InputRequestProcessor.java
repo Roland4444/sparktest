@@ -35,7 +35,7 @@ public class InputRequestProcessor {
     public InputRequestProcessor(Executor executor){
         this.executor = executor;
     }
-    public void saveUpdatingRequestinDB(RequestMessage req) throws SQLException, ParseException {
+    public int saveUpdatingRequestinDB(RequestMessage req) throws SQLException, ParseException {
         PreparedStatement stmt = executor.getConn().prepareStatement("UPDATE requests SET updateddata = ?::jsonb, datetimeupdate = ? WHERE id = ?");
         System.out.println("JSON::>"+req.JSONed);
         stmt.setObject(1, req.JSONed);
@@ -54,9 +54,9 @@ public class InputRequestProcessor {
         System.out.println("INITIAL JSON::::===>>>>"+json);
         if (json == null){
             System.out.println("\n\n\nproduction update impossible\n\n\n");
-            return;
+            return -1;
         }
-        prod.fullupdate(ParcedJSON.parse(req.JSONed), ParcedJSON.parse(json));
+         return prod.fullupdate(ParcedJSON.parse(req.JSONed), ParcedJSON.parse(json));
 
     }
 

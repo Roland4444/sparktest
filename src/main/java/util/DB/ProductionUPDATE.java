@@ -66,7 +66,7 @@ public class ProductionUPDATE {
         stmt.executeUpdate();
     };
 
-    public void productiondelete(ParcedJSON json, ParcedJSON initial) throws SQLException {
+    public int productiondelete(ParcedJSON json, ParcedJSON initial) throws SQLException {
         PreparedStatement stmt = exec.getConn().prepareStatement("DELETE from weighing_items  WHERE weighing_id=? AND trash = ? AND clogging=? AND tare =? AND brutto =? AND metal_id=?");// metal_id =
 
         System.out.println("DELETING ITEM USING SQL::>>");
@@ -94,12 +94,13 @@ public class ProductionUPDATE {
 
             stmt.executeUpdate();
         }
+        return getCount(initial);
 
     };
 
     public void updateweighing_items(ParcedJSON json, ParcedJSON initial) throws SQLException {
         if (!Production)
-            return;
+            return ;
         var id = getId(json);
         PreparedStatement stmt = exec.getConn().prepareStatement("update weighing_items set trash = ?, clogging=?, tare =?, brutto =?, metal_id=?  WHERE weighing_id=? AND trash = ? AND clogging=? AND tare =? AND brutto =? AND metal_id=?");// metal_id =
         System.out.println("TRASH:"+ json.Trash);
@@ -139,15 +140,16 @@ public class ProductionUPDATE {
 
     };
 
-    public void fullupdate(ParcedJSON json, ParcedJSON initial) throws SQLException {
+    public int fullupdate(ParcedJSON json, ParcedJSON initial) throws SQLException {
         if (!Production)
-            return;
+            return -2;
         if (json.Brutto.equals("0.00")){
-            productiondelete(json, initial);
-            return;
+            return productiondelete(json, initial);
+
         }
         updateComment(json);
         updateweighing_items(json, initial);
+        return -3 ;
 
     }
 
