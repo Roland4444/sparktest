@@ -151,6 +151,7 @@ public class ProductionUPDATE {
             return ;
         if (json.Brutto.equals("0.00")){
             productiondelete(json, initial);
+            return;
         }
         updateComment(json);
         updateweighing_items(json, initial);
