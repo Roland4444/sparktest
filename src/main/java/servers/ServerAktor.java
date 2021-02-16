@@ -2,7 +2,6 @@ package servers;
 
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
-import abstractions.InfoMessage;
 import abstractions.RequestMessage;
 import abstractions.ResponceMessage;
 import impl.JAktor;
@@ -83,13 +82,7 @@ public class ServerAktor extends JAktor {
         }
         if (req.type.equals(RequestMessage.Type.update)) {
             try {
-               var res = irp.saveUpdatingRequestinDB(req);
-               if  (true){/////res>0) {
-                   InfoMessage info= new InfoMessage();
-                   info.counter = res;
-                   send(BinaryMessage.savedToBLOB(info), req.addressToReply);
-               }
-
+               irp.saveUpdatingRequestinDB(req);
             } catch (SQLException | ParseException throwables) {
                 throwables.printStackTrace();
             }

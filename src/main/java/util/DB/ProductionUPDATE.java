@@ -21,7 +21,6 @@ public class ProductionUPDATE {
         exec  = new Executor("jdbc:mysql://localhost:3306/avs", "avs", "evbhPoU5JkW9fZyX") ;;
     }
     public String getMetalID(String metal) throws SQLException {
-
         PreparedStatement pst = exec.getConn().prepareStatement("SELECT * FROM metal where name=?");
         pst.setString(1, metal);
         ResultSet metals = pst.executeQuery();
@@ -66,7 +65,7 @@ public class ProductionUPDATE {
         stmt.executeUpdate();
     };
 
-    public int productiondelete(ParcedJSON json, ParcedJSON initial) throws SQLException {
+    public void productiondelete(ParcedJSON json, ParcedJSON initial) throws SQLException {
         PreparedStatement stmt = exec.getConn().prepareStatement("DELETE from weighing_items  WHERE weighing_id=? AND trash = ? AND clogging=? AND tare =? AND brutto =? AND metal_id=?");// metal_id =
 
         System.out.println("DELETING ITEM USING SQL::>>");
@@ -94,7 +93,6 @@ public class ProductionUPDATE {
 
             stmt.executeUpdate();
         }
-        return getCount(initial);
 
     };
 
@@ -140,16 +138,15 @@ public class ProductionUPDATE {
 
     };
 
-    public int fullupdate(ParcedJSON json, ParcedJSON initial) throws SQLException {
+    public void fullupdate(ParcedJSON json, ParcedJSON initial) throws SQLException {
         if (!Production)
-            return -2;
+            return ;
         if (json.Brutto.equals("0.00")){
-            return productiondelete(json, initial);
-
+            productiondelete(json, initial);
         }
         updateComment(json);
         updateweighing_items(json, initial);
-        return -3 ;
+
 
     }
 
