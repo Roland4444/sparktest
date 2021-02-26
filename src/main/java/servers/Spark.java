@@ -1,5 +1,6 @@
 package servers;
 
+import DSLGuided.requestsx.requests;
 import org.jetbrains.annotations.NotNull;
 import spark.ModelAndView;
 import spark.Request;
@@ -218,6 +219,11 @@ public class Spark {
             model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "requestsx.html"));
+        });
+
+        get("dsl", (req, res) -> {
+            return new requests().render("'requests' => ::read{}, ::write{}, ::create{}.");
+
         });
 
 
