@@ -147,6 +147,10 @@ suppress= () =>
         <button type="button"  class="btn btn-danger" onClick={this.suppress}>Запретить''</button>
         </div>)
     }
+
+    if (this.props.info.status=="EMPTY"){
+            return  (<div align='center'>В ОЖИДАНИИ</div>)
+    }
     if (this.props.info.status=="DECLINED"){
         return  (<div align='center'>
         <h5 class="declined">Запрещено</h5>

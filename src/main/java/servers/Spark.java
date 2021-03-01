@@ -14,6 +14,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -36,7 +39,7 @@ public class Spark {
         staticFiles.location("/public");
         Deps deps = new Deps();
         deps.echoWebSocket =  EchoWebSocket.class;
-
+        var template =  new VelocityTemplateEngine();
         webSocket("/echo", EchoWebSocket.class);
 
 
@@ -215,15 +218,29 @@ public class Spark {
         });
 
         get("requestsx", (req, res) -> {
+            String dsl = new String(Files.readAllBytes(Path.of("rules")));
+            requests reqs = new requests();
             model.clear();
             model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
+            reqs.setOuttemplate( new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "requestsx.html")));
+            System.out.println("DSL::>>"+dsl);
+            return reqs.render(dsl);
+           /* model.clear();
+            model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
             return new VelocityTemplateEngine().render(
-                    new ModelAndView(model, "requestsx.html"));
+                    new ModelAndView(model, "requestsx.html")); */
         });
 
         get("dsl", (req, res) -> {
-            return new requests().render("'requests' => ::read{}, ::write{}, ::create{}.");
-
+            String dsl = new String(Files.readAllBytes(Path.of("rules")));
+            requests reqs = new requests();
+            model.clear();
+            model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
+            reqs.setOuttemplate( new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "requestsx.html")));
+            System.out.println("DSL::>>"+dsl);
+            return reqs.render(dsl);
         });
 
 
@@ -325,17 +342,26 @@ public class Spark {
                 req.session().attribute("logined", true);
                 req.session().attribute("user", login);
                 System.out.println((String) req.session().attribute("user"));
-                model.clear();
+          //////////      model.clear();
             ///    model.put("requests", deps.irp.DumpRequestToHTMLTable8());
             ///    System.out.println(deps.irp.DumpRequestToHTMLTable8());
                 model.clear();
+         //////////////       model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
+       ////////////////         char first = Character.toUpperCase(login.charAt(0));
+        ///////////////        String uppercasedUser =  first + login.substring(1);
+        ///////////////        model.put("user", uppercasedUser);
+          ////////////////      return new VelocityTemplateEngine().render(
+           //////////////             new ModelAndView(model, "requestsx.html"));
+                requests reqs = new requests();
+                String dsl = new String(Files.readAllBytes(Path.of("rules")));
                 model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
                 char first = Character.toUpperCase(login.charAt(0));
                 String uppercasedUser =  first + login.substring(1);
                 model.put("user", uppercasedUser);
-                return new VelocityTemplateEngine().render(
-                        new ModelAndView(model, "requestsx.html"));
-
+                reqs.setOuttemplate( new VelocityTemplateEngine().render(
+                        new ModelAndView(model, "requestsx.html")));
+                System.out.println("DSL::>>"+dsl);
+                return reqs.render(dsl);
            //     model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
            //     return new VelocityTemplateEngine().render(
            //             new ModelAndView(model, "requests.html"));
