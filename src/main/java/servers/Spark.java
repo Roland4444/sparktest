@@ -1,13 +1,10 @@
 package servers;
-
-import DSLGuided.requestsx.requests;
 import org.jetbrains.annotations.NotNull;
 import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
 import spark.utils.IOUtils;
 import util.Deps;
-
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
 import java.io.FileOutputStream;
@@ -16,21 +13,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import static spark.Spark.*;
-
 public class Spark {
     public static Map map_ = new HashMap<>();
     public static VelocityTemplateEngine eng =  new VelocityTemplateEngine();
     public static ModelAndView OK = new ModelAndView(map_, "OK.html");
     public static ModelAndView BAD = new ModelAndView(map_, "Bad.html");
     public static ModelAndView SOCKET = new ModelAndView(map_, "websocket.html");
-
     public static Map<String, Object> model = new HashMap<>();
     public static void main(String[] args) throws InterruptedException, SQLException, IOException, ClassNotFoundException {
         System.out.println("production RF Version");
@@ -42,28 +36,22 @@ public class Spark {
         var template =  new VelocityTemplateEngine();
         webSocket("/echo", EchoWebSocket.class);
 
-
         get("upload", (req, res) -> {
             model.clear();
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "upload.html"));
         });
 
-
         post("/api/upload", (req, res) -> {
             req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("D:/tmp"));
             Part filePart = req.raw().getPart("myfile");
-
             try (InputStream inputStream = ((Part) filePart).getInputStream()) {
                 OutputStream outputStream = new FileOutputStream("./" + filePart.getSubmittedFileName());
                 IOUtils.copy(inputStream, outputStream);
                 outputStream.close();
             }
-
             return "File uploaded and saved.";
         });
-
-
 
         get("todo", (req, res) -> {
             model.clear();
@@ -112,9 +100,8 @@ public class Spark {
         get("ajson", (req,res)->{
             model.clear();
             String params = req.queryParams("params");
-
            // System.out.println("AJAX called get");
-            return deps.LoaderJSON.loadAll2JSON();
+            return deps.LoaderJSON_.loadAll2JSON();
         });
 
 
@@ -142,7 +129,7 @@ public class Spark {
             String params = req.queryParams("params");
 
             System.out.println("AJAX called get");
-            return deps.LoaderJSON.loadAll2JSON();
+            return deps.LoaderJSON_.loadAll2JSON();
         });
 
         get("emptyajax", (req,res)->{
@@ -219,7 +206,7 @@ public class Spark {
 
         get("requestsx", (req, res) -> {
             String dsl = new String(Files.readAllBytes(Path.of("rules")));
-            requests reqs = new requests();
+            var  reqs =  deps.DSL.dslProcessors.get("requests");
             model.clear();
             model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
             reqs.setOuttemplate( new VelocityTemplateEngine().render(
@@ -234,7 +221,7 @@ public class Spark {
 
         get("dsl", (req, res) -> {
             String dsl = new String(Files.readAllBytes(Path.of("rules")));
-            requests reqs = new requests();
+            var  reqs =  deps.DSL.dslProcessors.get("requests");
             model.clear();
             model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
             reqs.setOuttemplate( new VelocityTemplateEngine().render(
@@ -335,6 +322,7 @@ public class Spark {
             return eng.render(BAD);
         });
         post("/login", (req, res) -> {
+            System.out.println(req.pathInfo());
             System.out.println("IN LOGIN AREA");
             String login = req.queryParams("login");
             String pass = req.queryParams("password");
@@ -352,8 +340,9 @@ public class Spark {
         ///////////////        model.put("user", uppercasedUser);
           ////////////////      return new VelocityTemplateEngine().render(
            //////////////             new ModelAndView(model, "requestsx.html"));
-                requests reqs = new requests();
-                String dsl = new String(Files.readAllBytes(Path.of("rules")));
+                String pseudoProc = deps.DSL.urltoDSLProc.get(req.pathInfo());
+                var reqs = deps.DSL.dslProcessors.get(pseudoProc);
+                String dsl = deps.DSL.getDSLforObject(pseudoProc, login);   ///// new String(Files.readAllBytes(Path.of("rules")));
                 model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
                 char first = Character.toUpperCase(login.charAt(0));
                 String uppercasedUser =  first + login.substring(1);

@@ -6,6 +6,8 @@ import abstractions.PendingResponces;
 import abstractions.RequestMessage;
 import abstractions.ResponceMessage;
 import fr.roland.DB.Executor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import servers.ServerAktor;
 import util.DB.ProductionUPDATE;
@@ -60,7 +62,7 @@ public class InputRequestProcessor {
 
     }
 
-    public void saveRequestinDB(RequestMessage req) throws SQLException {
+    public void saveRequestinDB(RequestMessage req) throws SQLException, ParseException {
         PreparedStatement stmt = executor.getConn().prepareStatement("INSERT INTO requests  VALUES (?, ?, ?::jsonb, NULL, NULL, NULL, ?)");
         System.out.println("in saveRequestinDB:: req.ID::"+req.ID);
         stmt.setString(1, req.ID);
@@ -70,6 +72,9 @@ public class InputRequestProcessor {
         Date date = new java.sql.Date(now);
         System.out.println("Date = "+date.toString());
         stmt.setString(3, req.JSONed);
+        Object obj = new JSONParser().parse(req.JSONed);
+        JSONObject jo = (JSONObject) obj;
+        System.out.println("PZU::>>>"+jo.get("pzu"));
         stmt.setString(4, req.Description);
         System.out.println("executing");
         stmt.executeUpdate();

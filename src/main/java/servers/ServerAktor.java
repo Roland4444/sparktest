@@ -2,6 +2,7 @@ package servers;
 
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
+import abstractions.OnRequest;
 import abstractions.RequestMessage;
 import abstractions.ResponceMessage;
 import impl.JAktor;
@@ -25,6 +26,7 @@ public class ServerAktor extends JAktor {
         this.cypher = cypher;
     }
     public ThreadMessager msg ;
+    public OnRequest onRequest;
     public AsyncSend async = new AsyncSend() {
         @Override
         public void asyncSend(ResponceMessage resp) throws IOException {
@@ -67,10 +69,10 @@ public class ServerAktor extends JAktor {
 
         if (req.type.equals(RequestMessage.Type.request)) {
             saveRequest(req);
-
+            onRequest.action(req);
             try {
                 saveinDB(req);
-            } catch (SQLException throwables) {
+            } catch (SQLException | ParseException throwables) {
                 throwables.printStackTrace();
             }
             try {
@@ -105,8 +107,6 @@ public class ServerAktor extends JAktor {
         EchoWebSocket.sendall(id);
     }
 
-
-
     public void saveRequest(RequestMessage req) throws IOException {
         System.out.println("Save request");
         FileWriter fw = new FileWriter(incomingFolder+"/"+req.ID, false);
@@ -136,7 +136,7 @@ public class ServerAktor extends JAktor {
     };
 
 
-    public void saveinDB(RequestMessage requestMessage) throws SQLException {
+    public void saveinDB(RequestMessage requestMessage) throws SQLException, ParseException {
         irp.saveRequestinDB(requestMessage);
 
     };
