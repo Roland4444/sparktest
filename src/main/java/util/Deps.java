@@ -89,6 +89,7 @@ public class Deps {
         aktor.onRequest = new OnRequest() {
             @Override
             public void action(RequestMessage req) throws IOException {
+                if (!prod.Production) return;
                 byte[] arr = Saver.Companion.readBytes("cred.bin");
                 Credential cred = (Credential) Saver.Companion.restored(arr);
                 subscribers.forEach(a-> {
