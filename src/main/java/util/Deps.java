@@ -1,4 +1,6 @@
 package util;
+import DSLGuided.requestsx.SMS.SMSDSLProcessor;
+import DSLGuided.requestsx.SMS.SendSMS;
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
 import abstractions.OnRequest;
@@ -48,19 +50,12 @@ public class Deps {
 
     private abstractions.Settings setts;
 
-
-    public void initSubscribers(){
-        subscribers = new ArrayList<>();
-        subscribers.add("89050604353");
-    };
-
     public Deps() throws InterruptedException, SQLException, IOException {
-        initSubscribers();
         if (!new File(binprops).exists()){
             System.out.println("Binnary settings file not exist");
             return;
         }
-        DSL = new DSL(DSLRules);
+        DSL = new DSL();
         setts = (abstractions.Settings) BinaryMessage.restored(BinaryMessage.readBytes(binprops));
         System.out.println(setts.AktorPORT+"\n:::\n"+setts.usersPostgresConnect+"\n:::\n"+ setts.requestsPOSTGRESConnect);
         prod = new ProductionUPDATE();
@@ -88,18 +83,12 @@ public class Deps {
         aktor = new ServerAktor();
         aktor.onRequest = new OnRequest() {
             @Override
-            public void action(RequestMessage req) throws IOException {
-                if (!prod.Production) return;
-                byte[] arr = Saver.Companion.readBytes("cred.bin");
-                Credential cred = (Credential) Saver.Companion.restored(arr);
-                subscribers.forEach(a-> {
-                    try {
-                        System.out.println("SENDING via"+cred.getLogin()+";;"+cred.getPass()+"новый запрос от "+LoaderJSON.loadPzu(req));
-                        SMSNotify.sendSMS(cred.getLogin(), cred.getPass(),a, "новый запрос от "+LoaderJSON.loadPzu(req));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                });
+            public void action(RequestMessage req) throws IOException, ParseException {
+                String msg = "Новый запрос от @"+LoaderJSON.loadPzu(req);
+                var DSLforSMS = DSL.getDSLforObject("sms", "server");
+                System.out.println("\n\n\nDSL for SMS loaded::"+DSLforSMS+"\n\n\n");
+                var reqs = DSL.dslProcessors.get("sms");
+                SendSMS.Companion.sendSMS(msg, DSLforSMS, (SMSDSLProcessor) reqs);
             }
         };
         aktor.irp=irp;

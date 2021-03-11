@@ -1,0 +1,1 @@
+'sms'=>::login{'avs'}, ::pass{'7BBAP7nkTCA4L3r'},::sendto{'89608607763','89996013370'},::enabled{'true'}.  в sendto должно быть минимум два отправителя '', ''

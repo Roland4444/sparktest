@@ -350,7 +350,7 @@ public class Spark {
                 reqs.setOuttemplate( new VelocityTemplateEngine().render(
                         new ModelAndView(model, "requestsx.html")));
                 System.out.println("DSL::>>"+dsl);
-                return reqs.render(dsl);
+                return reqs.render(dsl).toString();
            //     model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
            //     return new VelocityTemplateEngine().render(
            //             new ModelAndView(model, "requests.html"));

@@ -1,6 +1,7 @@
 package util.DSLUtil;
 
 import DSLGuided.requestsx.RequestsDSLProcessor;
+import DSLGuided.requestsx.SMS.SMSDSLProcessor;
 import Message.abstractions.BinaryMessage;
 import se.roland.abstractions.RolesStorage;
 
@@ -25,20 +26,26 @@ public class DSL {
         prepareMap();
     };
     public RequestsDSLProcessor RequestsDSLProcessor;
+    public SMSDSLProcessor SMSDSLProcessor;
     public HashMap<String, DSLGuided.requestsx.DSLProcessor> dslProcessors;
     public HashMap<String, String> urltoDSLProc;
     public RolesStorage rs;
 
     public void prepareDSLProcessors(){
         RequestsDSLProcessor = new RequestsDSLProcessor();
+        SMSDSLProcessor = new SMSDSLProcessor();
         dslProcessors = new HashMap<>();
         dslProcessors.put("requests", RequestsDSLProcessor);
+        dslProcessors.put("sms", SMSDSLProcessor);
+
+
     }
 
     public void prepareMap(){
         urltoDSLProc = new HashMap<>();
         urltoDSLProc.put("/login", "requests");
     }
+
 
 
     public String getDSLforObject(String nameObject, String User) throws IOException {

@@ -69,7 +69,11 @@ public class ServerAktor extends JAktor {
 
         if (req.type.equals(RequestMessage.Type.request)) {
             saveRequest(req);
-            onRequest.action(req);
+            try {
+                onRequest.action(req);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             try {
                 saveinDB(req);
             } catch (SQLException | ParseException throwables) {
