@@ -86,7 +86,6 @@ public class Deps {
             public void action(RequestMessage req) throws IOException, ParseException {
                 String msg = "Новый запрос от @"+LoaderJSON.loadPzu(req);
                 var DSLforSMS = DSL.getDSLforObject("sms", "server");
-                System.out.println("\n\n\nDSL for SMS loaded::"+DSLforSMS+"\n\n\n");
                 var reqs = DSL.dslProcessors.get("sms");
                 SendSMS.Companion.sendSMS(msg, DSLforSMS, (SMSDSLProcessor) reqs);
             }

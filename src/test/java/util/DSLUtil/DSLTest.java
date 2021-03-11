@@ -11,7 +11,7 @@ public class DSLTest {
     @Test
     public void getDSLforObject() throws IOException {
         DSL dsl = new DSL();
-        assertEquals("'requests' => ::marina{}.", dsl.getDSLforObject("requests","roman"));
+        assertEquals("'requests' => ::full{}.", dsl.getDSLforObject("requests","roman"));
     }
 
     @Test

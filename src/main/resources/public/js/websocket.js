@@ -1,7 +1,7 @@
 if (!window.WebSocket) {
 	document.body.innerHTML = 'WebSocket в этом браузере не поддерживается.';
 }
-var socket = new WebSocket("ws://192.168.0.2:4567/echo");
+var socket = new WebSocket("ws://192.168.0.126:4567/echo");
 // обработчик входящих сообщений
 socket.onopen = function() {
   console.log("Соединение установлено.");
