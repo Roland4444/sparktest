@@ -44,3 +44,5 @@ Need transform long decsription to <br> blocks
 Return to client how much record must deleted
 
 send SMS:: https://smsc.ru/sys/send.php?login=avs&psw=7BBAP7nkTCA4L3r&phones=89608607763&mes=1212
+
+Black , brach beta работает с микросервисом LOADscales
