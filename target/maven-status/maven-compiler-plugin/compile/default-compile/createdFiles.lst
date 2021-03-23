@@ -19,7 +19,6 @@ util/Deps$1.class
 util/processors/OutputResponceProcessor.class
 util/readfile/Readfile.class
 util/react/ReactBlob.class
-util/Base64Encoder.class
 util/DSLUtil/DSL.class
 test/TestClass.class
 util/LoginProcessor$1.class

@@ -36,6 +36,16 @@ public class Spark {
         var template =  new VelocityTemplateEngine();
         webSocket("/echo", EchoWebSocket.class);
 
+        post("/draftpsa", (req, res)->{
+            String json = req.queryParams("login");
+            return "OK";
+        });
+
+
+        post("/psa", (req, res)->{
+            return "OK";
+        });
+
         get("upload", (req, res) -> {
             model.clear();
             return new VelocityTemplateEngine().render(
@@ -321,6 +331,11 @@ public class Spark {
             }
             return eng.render(BAD);
         });
+        get("/android", (req,res)->{
+            System.out.println("ANDROID GET!");
+            return "responce";
+        });
+
         post("/login", (req, res) -> {
             System.out.println(req.pathInfo());
             System.out.println("IN LOGIN AREA");
