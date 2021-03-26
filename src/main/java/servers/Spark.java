@@ -1,10 +1,13 @@
 package servers;
+import DSLGuided.requestsx.PSA.PSADSLProcessor;
 import org.jetbrains.annotations.NotNull;
 import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
 import spark.utils.IOUtils;
 import util.Deps;
+import util.JSON.LoaderJSON;
+
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
 import java.io.FileOutputStream;
@@ -26,6 +29,7 @@ public class Spark {
     public static ModelAndView BAD = new ModelAndView(map_, "Bad.html");
     public static ModelAndView SOCKET = new ModelAndView(map_, "websocket.html");
     public static Map<String, Object> model = new HashMap<>();
+
     public static void main(String[] args) throws InterruptedException, SQLException, IOException, ClassNotFoundException {
         System.out.println("production RF Version");
         Class.forName("com.mysql.jdbc.Driver");
@@ -37,7 +41,28 @@ public class Spark {
         webSocket("/echo", EchoWebSocket.class);
 
         post("/draftpsa", (req, res)->{
-            String json = req.queryParams("login");
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("Brutto", req.queryParams("Brutto"));
+            params.put("Sor", req.queryParams("Sor"));
+            params.put("Metal", req.queryParams("Metal"));
+            params.put("DepId", req.queryParams("DepId"));
+            params.put("PlateNumber", req.queryParams("PlateNumber"));
+            params.put("UUID", req.queryParams("UUID"));
+            params.put("Type", req.queryParams("Type"));
+            var DSLforSMS = deps.DSL.getDSLforObject("psa", "server");
+            var reqs = deps.DSL.dslProcessors.get("psa");
+            PSADSLProcessor.Companion.createdraftPSA(params, DSLforSMS, (PSADSLProcessor) reqs);
+            return "OK";
+        });
+
+        post("/completepsa", (req, res)->{
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("Sor", req.queryParams("Sor"));
+            params.put("Tara", req.queryParams("Tara"));
+            params.put("UUID", req.queryParams("UUID"));
+            var DSLforSMS = deps.DSL.getDSLforObject("psa", "server");
+            var reqs = deps.DSL.dslProcessors.get("psa");
+            PSADSLProcessor.Companion.completePSA(params, DSLforSMS, (PSADSLProcessor) reqs);
             return "OK";
         });
 

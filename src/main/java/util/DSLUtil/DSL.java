@@ -1,5 +1,6 @@
 package util.DSLUtil;
 
+import DSLGuided.requestsx.PSA.PSADSLProcessor;
 import DSLGuided.requestsx.RequestsDSLProcessor;
 import DSLGuided.requestsx.SMS.SMSDSLProcessor;
 import Message.abstractions.BinaryMessage;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 
 public class DSL {
     public String dslfile;
-    public DSL() throws IOException {
+    public DSL() {
         prepareMap();
         prepareDSLProcessors();
     };
@@ -26,6 +27,7 @@ public class DSL {
         prepareMap();
     };
     public RequestsDSLProcessor RequestsDSLProcessor;
+    public PSADSLProcessor PSADSLProcessor;
     public SMSDSLProcessor SMSDSLProcessor;
     public HashMap<String, DSLGuided.requestsx.DSLProcessor> dslProcessors;
     public HashMap<String, String> urltoDSLProc;
@@ -34,11 +36,11 @@ public class DSL {
     public void prepareDSLProcessors(){
         RequestsDSLProcessor = new RequestsDSLProcessor();
         SMSDSLProcessor = new SMSDSLProcessor();
+        PSADSLProcessor = new PSADSLProcessor();
         dslProcessors = new HashMap<>();
         dslProcessors.put("requests", RequestsDSLProcessor);
         dslProcessors.put("sms", SMSDSLProcessor);
-
-
+        dslProcessors.put("psa", PSADSLProcessor);
     }
 
     public void prepareMap(){

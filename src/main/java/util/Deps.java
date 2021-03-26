@@ -1,6 +1,5 @@
 package util;
 import DSLGuided.requestsx.SMS.SMSDSLProcessor;
-import DSLGuided.requestsx.SMS.SendSMS;
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
 import abstractions.OnRequest;
@@ -87,7 +86,7 @@ public class Deps {
                 String msg = "Новый запрос от @"+LoaderJSON.loadPzu(req);
                 var DSLforSMS = DSL.getDSLforObject("sms", "server");
                 var reqs = DSL.dslProcessors.get("sms");
-                SendSMS.Companion.sendSMS(msg, DSLforSMS, (SMSDSLProcessor) reqs);
+                SMSDSLProcessor.Companion.sendSMS(msg, DSLforSMS, (SMSDSLProcessor) reqs);
             }
         };
         aktor.irp=irp;
