@@ -21,8 +21,14 @@ public class LoginProcessor {
         pstm.setObject(1, password);
         pstm.setObject(2, login);
         pstm.executeUpdate();
-
     }
+    public String test() throws SQLException {
+        var result  = executor.submit("SELECT * FROM users");
+        if (result.next())
+            return result.getString(1);
+        return "hi";
+    }
+
     public boolean checklogin(String login, String password) throws SQLException {
         String pass="____";
         ArrayList list = new ArrayList<String>() {{

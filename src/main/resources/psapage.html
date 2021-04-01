@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p> Введите ИНН или Номер паспорта
+<input id="googlesearch" onkeyup="search()">
+<div id="client"></div>
+<script>
+    function search(){
+        function getXmlHttp()
+        {
+            var xmlhttp;
+            try {
+                xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e)
+            {
+                try
+                {
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (E)
+                {
+                    xmlhttp = false;
+                }
+            }
+            if (!xmlhttp && typeof XMLHttpRequest!='undefined')
+            {
+                xmlhttp = new XMLHttpRequest();
+            }
+            return xmlhttp;
+        }
+
+        var xhr = getXmlHttp()
+        var request = "/psaproc?input="+googlesearch.value;
+        console.log('sending  ' +googlesearch.value)
+        xhr.open("GET", request, true);
+        xhr.onreadystatechange=function()
+        {
+            if (xhr.readyState != 4) return
+            clearTimeout(xhrTimeout)
+            if (xhr.status == 200) {
+                let elem = document.getElementById("client")
+                elem.innerHTML = "<h1>"+xhr.responseText+"</h1>"
+                console.log("responce::   "+xhr.responseText)
+               //// alert('ответ отправлен');
+  /////////////              location.reload();
+            }
+            if (xhr.status == 500) {
+           //////     alert('ответ отправлен');
+ ////////////               location.reload();
+            }
+        }
+
+        xhr.send("a=5&b=4");
+        var xhrTimeout = setTimeout( function(){ xhr.abort(); handleError("Timeout") }, 10000);
+
+        function handleError(message)
+        {
+            alert("Ошибка: "+message)
+        }
+
+      }
+
+</script>
+</body>
+</html>

@@ -31,7 +31,7 @@ public class Spark {
     public static Map<String, Object> model = new HashMap<>();
 
     public static void main(String[] args) throws InterruptedException, SQLException, IOException, ClassNotFoundException {
-        System.out.println("production RF Version");
+        System.out.println("production RF Version with PSA DSL MODULE");
         Class.forName("com.mysql.jdbc.Driver");
         Class.forName("org.postgresql.Driver");
         staticFiles.location("/public");
@@ -40,8 +40,30 @@ public class Spark {
         var template =  new VelocityTemplateEngine();
         webSocket("/echo", EchoWebSocket.class);
 
+        get("/hello", (req,res)-> {return deps.loginchecker.test();});
+
+        get("/psaproc", (req,res)-> {
+            var reqs = req.queryParams("input");
+            System.out.println(reqs);
+            return reqs;});
+
+        get("/psapage", (req,res)-> {
+            model.clear();
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "psapage.html"));});
+
         post("/draftpsa", (req, res)->{
-            HashMap<String, Object> params = new HashMap<>();
+            System.out.println("RECEIVED draft psa request");
+            HashMap<String, String> params = new HashMap<>();
+            System.out.println("PARAMS!!!!!");
+            System.out.println(req.queryParams("Brutto"));
+            System.out.println(req.queryParams("Sor"));
+            System.out.println(req.queryParams("Metal"));
+            System.out.println(req.queryParams("DepId"));
+            System.out.println(req.queryParams("PlateNumber"));
+            System.out.println(req.queryParams("UUID"));
+            System.out.println(req.queryParams("Type"));
+
             params.put("Brutto", req.queryParams("Brutto"));
             params.put("Sor", req.queryParams("Sor"));
             params.put("Metal", req.queryParams("Metal"));
@@ -56,7 +78,8 @@ public class Spark {
         });
 
         post("/completepsa", (req, res)->{
-            HashMap<String, Object> params = new HashMap<>();
+            System.out.println("RECEIVED complete psa request");
+            HashMap<String, String> params = new HashMap<>();
             params.put("Sor", req.queryParams("Sor"));
             params.put("Tara", req.queryParams("Tara"));
             params.put("UUID", req.queryParams("UUID"));
