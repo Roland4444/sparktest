@@ -11,14 +11,15 @@ public class ClientFinder {
         System.out.println("VERSION CLIENT SEARCHER DEFAULT ");
         exec  = new Executor(url, login, pass) ;
     };
-    StringBuilder sb_series = new StringBuilder();
-    StringBuilder sb_number = new StringBuilder();
+
     public String getCompanyID(String input){
         return "";
     };
     public String getClientName(String input) throws SQLException {
         ArrayList param = new ArrayList();
 /////////process coimpany
+        StringBuilder sb_series = new StringBuilder();
+        StringBuilder sb_number = new StringBuilder();
         param.add("%"+input+"%");
         var res = exec.executePreparedSelect("SELECT `name` FROM `psa`.`company` WHERE `inn` LIKE ?;",param);
         if (res.next())
