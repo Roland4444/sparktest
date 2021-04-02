@@ -17,20 +17,17 @@ public class ClientFinder {
     };
     public String getClientName(String input) throws SQLException {
         ArrayList param = new ArrayList();
-/////////process coimpany
         param.add("%"+input+"%");
         var res = exec.executePreparedSelect("SELECT `name` FROM `psa`.`company` WHERE `inn` LIKE ?;",param);
         if (res.next())
             return res.getString(1);
-/////////process russian poassport
-        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;",processPassportField(input, 4, false));//, `number` LIKE ?
+        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;",processPassportField(input, 4, false));   ///process russian passport
         if (res.next())
             return res.getString("fname")+" "+res.getString("mname")+" "+res.getString("lname");
-///////process another
-        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", processPassportField(input, 2, true));//, `number` LIKE ?
+        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", processPassportField(input, 2, true));    ///process another
         if (res.next())
             return res.getString("fname")+" "+res.getString("mname")+" "+res.getString("lname");
-        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", processPassportField(input, 3, true)       );//, `number` LIKE ?
+        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", processPassportField(input, 3, true));
         if (res.next())
             return res.getString("fname")+" "+res.getString("mname")+" "+res.getString("lname");
         return "";
