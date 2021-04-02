@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class ClientFinder {
     public Executor exec;
     public ClientFinder(String url, String login, String pass) throws SQLException {
+        System.out.println("VERSION CLIENT SEARCHER DEFAULT ");
         exec  = new Executor(url, login, pass) ;
     };
     StringBuilder sb_series = new StringBuilder();
