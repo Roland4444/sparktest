@@ -41,7 +41,7 @@ public class ClientFinder {
         var sb_number = new StringBuilder();
         int seriescounter = 0;
         for (int i=1; i<=input.length(); i++){
-            if ((checkdigit(input.charAt(i-1))||ignoreDigits) && (++seriescounter <seriesLength))
+            if ((checkdigit(input.charAt(i-1))||ignoreDigits) && (seriescounter++ <seriesLength))
                 sb_series.append(input.charAt(i-1));
             else
                 sb_number.append(input.charAt(i-1));
