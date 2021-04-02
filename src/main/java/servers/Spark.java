@@ -48,7 +48,11 @@ public class Spark {
             return deps.ClientFinder.getClientName(reqs);});
 
         get("/psapage", (req,res)-> {
+            var reqs = req.queryParams("psanumber");
             model.clear();
+            model.put("psanumber", reqs);
+            model.put("initial", reqs);
+
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psapage.html"));});
 

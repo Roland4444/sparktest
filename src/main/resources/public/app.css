@@ -1,0 +1,86 @@
+.table tbody .actions{
+	white-space: nowrap;
+}
+
+@font-face {
+  font-family: 'Glyphicons Halflings2';
+
+  src: url('fonts/glyphicons-halflings-regular.eot');
+  src: url('fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('fonts/glyphicons-halflings-regular.woff') format('woff'), url('fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+.glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings2';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.glyphicon-refresh-animate {
+  -animation: spin 2000ms infinite linear;
+  -ms-animation: spin 2000ms infinite linear;
+  -webkit-animation: spinw 2000ms infinite linear;
+  -moz-animation: spinm 2000ms infinite linear;
+}
+@keyframes spin {
+  from { transform: scale(1) rotate(0deg);}
+  to { transform: scale(1) rotate(360deg);}
+}
+
+@-webkit-keyframes spinw {
+  from { -webkit-transform: rotate(0deg);}
+  to { -webkit-transform: rotate(360deg);}
+}
+
+@-moz-keyframes spinm {
+  from { -moz-transform: rotate(0deg);}
+  to { -moz-transform: rotate(360deg);}
+}
+
+.Completed {
+  color: #31813a;
+}
+
+.InProgress, .New {
+  color: #2556ff;
+}
+
+.LimitError, .Rejected, .PayError, .InfoError {
+  color: #ff5246;
+}
+
+.print-only{
+    display: none;
+}
+
+@media print {
+    @page
+    {
+      size:  auto;   /* auto is the initial value */
+      margin: 0mm;  /* this affects the margin in the printer settings */
+    }
+    html
+    {
+      background-color: #FFFFFF;
+      margin: 0px;  /* this affects the margin on the html before sending to printer */
+    }
+    body
+    {
+      margin: 15mm 5mm; /* margin you want for the content */
+    }
+    .no-print{
+        display: none;
+    }
+    .print-only{
+        display: block;
+    }
+    h1{
+        font-size: 12pt;
+      text-align: center;
+    }
+}
