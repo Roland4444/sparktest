@@ -10,6 +10,8 @@ public class ClientFinder {
     public ClientFinder(String url, String login, String pass) throws SQLException {
         exec  = new Executor(url, login, pass) ;
     };
+    StringBuilder sb_series =  new StringBuilder();
+    StringBuilder sb_number = new StringBuilder();
     public String getCompanyID(String input){
         return "";
     };
@@ -21,15 +23,17 @@ public class ClientFinder {
         if (res.next())
             return res.getString(1);
 /////////process russian poassport
-        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;",processPassportField(input, 4, false));//, `number` LIKE ?
+        param = processPassportField(input, 4, false);
+        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;",param);//, `number` LIKE ?
         if (res.next())
             return res.getString("fname")+" "+res.getString("mname")+" "+res.getString("lname");
 ///////process another
-        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", processPassportField(input, 2, true));//, `number` LIKE ?
+        param = processPassportField(input, 2, true);
+        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", param);//, `number` LIKE ?
         if (res.next())
             return res.getString("fname")+" "+res.getString("mname")+" "+res.getString("lname");
-
-        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;",        processPassportField(input, 3, true));//, `number` LIKE ?
+        param = processPassportField(input, 3, true);
+        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", param       );//, `number` LIKE ?
         if (res.next())
             return res.getString("fname")+" "+res.getString("mname")+" "+res.getString("lname");
         return "";
@@ -37,12 +41,14 @@ public class ClientFinder {
 
     ArrayList processPassportField(String input, int seriesLength, boolean ignoreDigits){
         var res = new ArrayList<>();
-        var sb_series =  new StringBuilder();
-        var sb_number = new StringBuilder();
+        sb_series =  new StringBuilder();
+        sb_number = new StringBuilder();
         int seriescounter = 0;
         for (int i=1; i<=input.length(); i++){
-            if ((checkdigit(input.charAt(i-1))||ignoreDigits) && (seriescounter++ <seriesLength))
-                sb_series.append(input.charAt(i-1));
+            if ((checkdigit(input.charAt(i-1))||ignoreDigits) && (seriescounter <seriesLength)) {
+                seriescounter++;
+                sb_series.append(input.charAt(i - 1));
+            }
             else
                 sb_number.append(input.charAt(i-1));
         }
