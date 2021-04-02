@@ -86,8 +86,8 @@ public class ClientFinder {
     };
 
     void processPaasportField(String input, int seriesLength, boolean ignoreDigits){
-        series = new StringBuilder();
-        number =  new StringBuilder();
+        var series = new StringBuilder();
+        var number =  new StringBuilder();
         int seriescounter = 0;
         for (int i=1; i<=input.length(); i++){
             if ((checkdigit(input.charAt(i-1))||ignoreDigits) && (seriescounter <4))
