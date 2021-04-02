@@ -45,7 +45,7 @@ public class Spark {
         get("/psaproc", (req,res)-> {
             var reqs = req.queryParams("input");
             System.out.println(reqs);
-            return reqs;});
+            return deps.ClientFinder.getClientName(reqs);});
 
         get("/psapage", (req,res)-> {
             model.clear();
