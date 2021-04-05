@@ -7,7 +7,7 @@ import abstractions.RequestMessage;
 import org.json.simple.parser.ParseException;
 import servers.EchoWebSocket;
 import servers.ServerAktor;
-import util.DB.ClientFinder;
+import util.DB.PSAClient;
 import util.DB.DataBaseHelper;
 import util.DB.ProductionUPDATE;
 import util.DSLUtil.DSL;
@@ -43,7 +43,7 @@ public class Deps {
     public OutputResponceProcessor orp;
     public DataBaseHelper requests;
     public DataBaseHelper users;
-    public ClientFinder ClientFinder;
+    public PSAClient PSAClient;
     public ProductionUPDATE prod;
     public LoaderJSON LoaderJSON_;
     public ReactBlob react = new ReactBlob();
@@ -56,7 +56,7 @@ public class Deps {
             System.out.println("Binnary settings file not exist");
             return;
         }
-        ClientFinder = new ClientFinder("jdbc:mysql://192.168.0.121:3306/psa", "root", "123");
+        PSAClient = new PSAClient("jdbc:mysql://192.168.0.121:3306/psa", "root", "123");
         DSL = new DSL();
         setts = (abstractions.Settings) BinaryMessage.restored(BinaryMessage.readBytes(binprops));
         System.out.println(setts.AktorPORT+"\n:::\n"+setts.usersPostgresConnect+"\n:::\n"+ setts.requestsPOSTGRESConnect);

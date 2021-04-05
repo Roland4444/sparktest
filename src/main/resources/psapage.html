@@ -36,7 +36,7 @@
             <input align="center" id="googlesearch" onkeyup="search()" class="searchclient2">
             <div id="client"></div>
             <button id="confirm" type="button" class="btn btn-success" onclick="apply()" л><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                Установить контрагента</button><
+                Установить контрагента</button>
 </div>
 </div>
 </div>
@@ -48,10 +48,12 @@
    let initial = $initial
    alert(initial)
    let name =""
+   let key =""
+   let value =""
    let confirm = document.getElementById("confirm")
    confirm.style.visibility = 'hidden'
 
-   function update()
+
 
     function search(){
         function getXmlHttp()
@@ -86,7 +88,17 @@
             clearTimeout(xhrTimeout)
             if (xhr.status == 200) {
                 let elem = document.getElementById("client")
-                name = xhr.responseText
+                let resp = xhr.responseText
+                console.log("responce::\n"+resp)
+                name = resp.substring(0, resp.indexOf('::{')).replaceAll("#"," ")
+                console.log(name)
+                let data = resp.substring(resp.indexOf('::{')+3, resp.indexOf('}.'))
+                console.log("data\n"+data)
+                console.log('key::'+ getKey(data))
+                console.log('value::'+ getValue(data))
+
+                key = getKey(data)
+                value = getValue(data)
                 elem.innerHTML = "<h3>"+name.replaceAll("#"," ")+"</h3>"
                 if (xhr.responseText !="")
                     confirm.style.visibility = 'visible'
@@ -112,10 +124,58 @@
         }
 
       }
+   
       search()
 function apply(){
-    alert('success')
+
+
+   //     get("/psasetclient", (req,res)-> {
+   //         var name  = req.queryParams("name");
+   //         var psanumber  = req.queryParams("psanumber");
+   //         var idclient  = req.queryParams("idclient");
+   //         var type = req.queryParams("idclient");
+
+        var xhr = new XMLHttpRequest()
+        var request = "/psasetclient?name="+name+"&psanumber=$initial"+"&idclient="+value+"&type="+key;
+        const params = "name="+name+"&psanumber=$initial"+"&idclient="+value+"&type="+key;
+        var url = "psasetclient"
+        alert(request)
+        xhr.open("POST", url, true);
+//В заголовке говорим что тип передаваемых данных закодирован. 
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+ 
+        xhr.addEventListener("readystatechange", () => {
+
+        if(request.readyState === 4 && request.status === 200) {       
+		    console.log(request.responseText);
+        }
+        });
+ 
+//	Вот здесь мы и передаем строку с данными, которую формировали выше. И собственно выполняем запрос. 
+        xhr.send(params);
+
 }
+
+
+
+function getValue(input){
+    let index = input.indexOf(":")
+    return Atom(input.substring(index+1, input.length));
+}
+  
+
+function getKey(input___){
+    let index = input___.indexOf(":");
+    let key = input___.substring(0, index).replaceAll(" ","");
+    return Atom(key);
+}
+
+function Atom(input){
+    return (input.replaceAll("'",""));
+}
+
+
+
 </script>
 </body>
 </html>

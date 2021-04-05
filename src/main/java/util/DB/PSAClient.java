@@ -3,16 +3,54 @@ package util.DB;
 import abstractions.ClientType;
 import fr.roland.DB.Executor;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ClientFinder {
+public class PSAClient {
     public Executor exec;
     public final String delimiter = "#";
-    public ClientFinder(String url, String login, String pass) throws SQLException {
+    public final String info_start = "::{";
+    public final String info_finish = "}.";
+
+    public PSAClient(String url, String login, String pass) throws SQLException {
         System.out.println("CLIENT SEARCHER REFACTORED");
         exec  = new Executor(url, login, pass) ;
     };
+
+    public void updateclient(String name, String psanumber, String idclient, String type) throws SQLException {
+        System.out.println("name=="+name);
+        System.out.println("psanumber=="+psanumber);
+        System.out.println("idclient=="+idclient);
+        System.out.println("type=="+type);
+
+        switch (type){
+            case "P"-> updateClient(psanumber, name , idclient);
+            case "C"-> updateCompany(psanumber, name, idclient);
+        };
+        return;
+
+
+    }
+
+    private void updateCompany(String psanumber, String name , String idclient) throws SQLException {
+        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set company_id = ?, client = ?   WHERE id = ?");
+        stmt.setString(1, idclient);
+        stmt.setString(2, name);
+        stmt.setString(3, psanumber);
+        System.out.println(stmt);
+        stmt.executeUpdate();
+    }
+
+    private void updateClient(String psanumber, String name, String idclient) throws SQLException {
+        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set passport_id = ?, client = ?   WHERE id = ?");
+        stmt.setString(1, idclient);
+        stmt.setString(2, name);
+        stmt.setString(3, psanumber);
+        System.out.println(stmt);
+        stmt.executeUpdate();
+    }
 
     public ClientType getType(String input) throws SQLException {
         ArrayList param = new ArrayList();
@@ -22,13 +60,7 @@ public class ClientFinder {
             return ClientType.Company;
         return ClientType.Person;
     };
-    public void updateInfoPSAaboutClient(String input) throws SQLException {
-        switch (getType(input)){
-            case Person -> updatePerson(input);
-            case Company -> updateCompany(input);
-        }
 
-    }
 
     public String clientId(ClientType type, String name){
         ArrayList param = new ArrayList();
@@ -46,33 +78,32 @@ public class ClientFinder {
      //   var passportId =
     }
 
-    public void updateCompany(String input) {
-
-    }
-
-    public String getcompanyIDfrompartial(String input) throws SQLException {
-        ArrayList param = new ArrayList();
-        param.add("%"+input+"%");
-        var res = exec.executePreparedSelect("SELECT `id` FROM `psa`.`company` WHERE `inn` LIKE ?;",param);
-        if (res.next())
+    public String processCOmpanyRequest(ResultSet res) throws SQLException {
+        return res.getString("name")+info_start+"'C':"+"'"+res.getString("id")+"'"+info_finish;
 
     };
+
+    public String processPassportRequest(ResultSet res) throws SQLException {
+        return res.getString("fname")+delimiter+res.getString("mname")+delimiter+res.getString("lname")+info_start+"'P':"+"'"+res.getString("id")+"'"+info_finish;
+    };
+
+
 
     public String getClientNameAndID(String input) throws SQLException {
         ArrayList param = new ArrayList();
         param.add("%"+input+"%");
-        var res = exec.executePreparedSelect("SELECT `name` FROM `psa`.`company` WHERE `inn` LIKE ?;",param);
+        var res = exec.executePreparedSelect("SELECT * FROM `psa`.`company` WHERE `inn` LIKE ?;",param);
         if (res.next())
-            return res.getString(1);
-        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;",processPassportField(input, 4, false));   ///process russian passport
+            return processCOmpanyRequest(res);
+        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;",processPassportField(input, 4, false));
         if (res.next())
-            return res.getString("fname")+delimiter+res.getString("mname")+delimiter+res.getString("lname");
-        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", processPassportField(input, 2, true));    ///process another
+            return processPassportRequest(res);
+        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", processPassportField(input, 2, true));
         if (res.next())
-            return res.getString("fname")+delimiter+res.getString("mname")+delimiter+res.getString("lname");
+            return processPassportRequest(res);
         res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", processPassportField(input, 3, true));
         if (res.next())
-            return res.getString("fname")+delimiter+res.getString("mname")+delimiter+res.getString("lname");
+            return processPassportRequest(res);
         return "";
     };
 

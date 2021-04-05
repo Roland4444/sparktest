@@ -6,7 +6,6 @@ import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
 import spark.utils.IOUtils;
 import util.Deps;
-import util.JSON.LoaderJSON;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
@@ -45,13 +44,24 @@ public class Spark {
         get("/psaproc", (req,res)-> {
             var reqs = req.queryParams("input");
             System.out.println(reqs);
-            return deps.ClientFinder.getClientName(reqs);});
+            return deps.PSAClient.getClientNameAndID(reqs);});
 
         get("/psapage", (req,res)-> {
             var reqs = req.queryParams("psanumber");
             model.clear();
             model.put("psanumber", reqs);
             model.put("initial", reqs);
+
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "psapage.html"));});
+
+        post("/psasetclient", (req,res)-> {
+            var name  = req.queryParams("name");
+            var psanumber  = req.queryParams("psanumber");
+            var idclient  = req.queryParams("idclient");
+            var type = req.queryParams("type");
+
+            deps.PSAClient.updateclient(name, psanumber, idclient, type);
 
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psapage.html"));});
