@@ -8,8 +8,6 @@
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://use.fontawesome.com/a0f7b43176.js"></script>
-
-
     <!-- Не используйте это в production -->
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
@@ -87,6 +85,7 @@
 </div>
 <button onclick="openmodal()">Show modal</button>
 <button onclick="createdynamical()">Dinamical create</button>
+<button onclick="checkpassport()">
 
 <table  id="mTable" border="10" cellpadding="10"  align="center" valign="center" class="table">
     <th class="text-center">ID</th>
@@ -118,6 +117,27 @@
 </table>
 
 <script>
+function checkpassport(serianumber){
+        var xhr__ = new XMLHttpRequest()
+        const params = "name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
+        var url = "passport.avs.com.ru"
+        alert(request)
+        xhr.open("POST", url, true);
+//В заголовке говорим что тип передаваемых данных закодирован.
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhr.addEventListener("readystatechange", () => {
+
+        if(request.readyState === 4 && request.status === 200) {
+		    console.log(request.responseText);
+        }
+        });
+
+//	Вот здесь мы и передаем строку с данными, которую формировали выше. И собственно выполняем запрос.
+        xhr.send(params);
+}
+
+
 
     let json_ = '{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
     "metals":"БРОНЗА", "uuid":"126103"}';
@@ -252,24 +272,21 @@ initial =a
 
 <script>
 
-
-
-
-    function search(){
-        function getXmlHttp()
+function search(){
+    function getXmlHttp()
+    {
+        var xmlhttp;
+        try {
+        xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e)
         {
-            var xmlhttp;
-            try {
-                xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-            } catch (e)
-            {
-                try
-                {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } catch (E)
-                {
-                    xmlhttp = false;
-                }
+            try
+        {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (E)
+        {
+            xmlhttp = false;
+        }
             }
             if (!xmlhttp && typeof XMLHttpRequest!='undefined')
             {
