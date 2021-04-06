@@ -45,3 +45,17 @@
   width: 600px;
   /*whatever width you want*/
 }
+
+.wrapper {
+  height: 600px;
+}
+#jrange input {
+  width: 200px;
+}
+#jrange div {
+  font-size: 9pt;
+}
+.date-range-selected > .ui-state-active, .date-range-selected > .ui-state-default {
+  background: none;
+  background-color: lightsteelblue;
+}

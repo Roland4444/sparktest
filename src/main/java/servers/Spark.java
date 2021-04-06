@@ -55,6 +55,12 @@ public class Spark {
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psapage.html"));});
 
+        get("/psa", (req,res)-> {
+            model.clear();
+model.put("idbutton", 44);
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "psax.html"));});
+
         post("/psasetclient", (req,res)-> {
             var name  = req.queryParams("name");
             var psanumber  = req.queryParams("psanumber");
