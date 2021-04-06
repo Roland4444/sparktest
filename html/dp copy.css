@@ -1,0 +1,29 @@
+.daterangepicker .drp-calendar.right {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+}
+
+.daterangepicker .drp-calendar.right tbody {
+    display: none !important;
+}
+
+.daterangepicker .drp-calendar.right thead > tr:nth-child(2) {
+    display: none !important;
+}
+
+.daterangepicker .drp-calendar.right th.month {
+    display: none !important;
+}
+
+.daterangepicker .drp-calendar.right .calendar-table {
+    background: transparent !important;
+}
+
+.daterangepicker .daterangepicker.ltr .ranges, .daterangepicker.ltr .drp-calendar {
+    float: none !important;
+}
+
+.daterangepicker .drp-calendar.right .daterangepicker_input {
+    position: absolute !important;
+}

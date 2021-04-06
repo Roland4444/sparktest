@@ -1,0 +1,18 @@
+#!/bin/sh -
+[Unit]
+Description=VNC Unit
+
+[Service]
+
+WorkingDirectory=/home/romanx/IdeaProjects/spark
+ExecStart=/usr/bin/x11vnc -noxdamage -shared -dontdisconnect -many -noxfixes -rfbauth /etc/x11vnc.pass
+
+
+#ExecStart=-/RaspberryPi/ConsolaGrafica
+Restart=always
+
+#StandardOutput=syslogConsola               # Output to syslog
+#StandardError=syslogConsola                # Output to syslog
+
+[Install]
+WantedBy=multi-user.target

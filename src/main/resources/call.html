@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ECMAScript modules in the browser</title>
+</head>
+<body>
+<p id="el">The result is: </p>
+</body>
+<script type="module">
+    import { appendResult } from "./myModule.js";
+
+    const el = document.getElementById("el");
+    appendResult(el);
+</script>
+</html>
