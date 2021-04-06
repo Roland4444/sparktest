@@ -101,7 +101,6 @@
     <th class="text-center">Действия</th>
     <tbody id="tbody">
     <tr><td>fgfg-hjjhh</td>
-        <td></td>
         <td>12.03.2010</td>
         <td>#3</td>
         <td>12066</td>
@@ -119,21 +118,23 @@
 </table>
 
 <script>
-    function createdynamical(){
 
-        alert('tupple')
-        function createRow(a){
+    let json_ = '{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
+    "metals":"БРОНЗА", "uuid":"126103"}';
+    var obj = JSON.parse(json_);
+    let index____ = 0
+    function createRow(a){
         var table = document.getElementById("mTable");
         var row = table.insertRow(1);
         var tbdy = document.getElementById('tbody');
         var tr = document.createElement('tr');
-        tr.setAttribute("id", 60);
+        tr.setAttribute("id", index____);
         for (var j = 0; j < 9; j++)
         {
             var td = document.createElement('td');
             td.setAttribute("align", "center");
             var div = document.createElement("div");
-            var id = 'a'+j
+            var id = index____+'a'+j
             console.log(id)
             div.setAttribute("id", id);
             td.appendChild(div)
@@ -141,13 +142,68 @@
         }
         var td = document.createElement('td');
         var btn = document.createElement("button");
-        var id = 'f12'
-        btn.setAttribute("onclick", "setup("+a+")");
+        
+        var id = index____+'a9'
+        btn.setAttribute("id", id);
+        btn.setAttribute("class", "btn btn-success");
+        btn.innerHTML = '<i class="fa fa-hand-pointer-o" aria-hidden="true"></i>Установить контрагента'
         td.appendChild(btn)
         tr.appendChild(td)
         tbdy.prepend(tr);
+        alert('create row success!')
         }
-        createRow(55)
+
+    function applyusinguuid(a){
+        alert("UUID::"+a);
+    }
+
+
+    function fillRow(a)
+    {
+         ////   alert('in fillRow')
+
+       
+     ///////  alert(index____)
+       var id = document.getElementById(index____+'a'+0);
+       var datetime_ = document.getElementById(index____+'a'+1);
+       var department = document.getElementById(index____+'a'+2);
+       var psanumber = document.getElementById(index____+'a'+3);
+       var client = document.getElementById(index____+'a'+4);
+       var platenumber = document.getElementById(index____+'a'+5);
+       var metals = document.getElementById(index____+'a'+6);
+       var mass = document.getElementById(index____+'a'+7);
+       var summ = document.getElementById(index____+'a'+8);
+       var approvebutton = document.getElementById(index____+'a'+9);
+       id.innerHTML =a.id
+       datetime_.innerHTML =a.datetime
+       department.innerHTML =a.department
+       psanumber.innerHTML=a.psanumber
+       client.innerHTML=a.client
+       platenumber.innerHTML = a.platenumber
+       metals.innerHTML =a.metals
+       mass.innerHTML =''
+       summ.innerHTML = ''
+       approvebutton.setAttribute("onclick", "openmodal("+a.uuid+")")
+       alert('fill row success!')
+
+    }    
+    
+    function dinamicalloadJSON(q){
+        
+        var obj = JSON.parse(q)
+        for (var item in obj){
+            var id  = (obj[item].id);
+            createRow(obj[item])
+        }
+    }
+
+
+    function createdynamical(){
+
+        alert('tupple')
+        index____ = 500
+        createRow(obj)
+        fillRow(obj)
       
     };
 
@@ -182,8 +238,8 @@
 let divid = document.getElementById("dialog")
 
 divid.style.visibility = 'hidden'
-function openmodal(){
-initial =50
+function openmodal(a){
+initial =a
 ///$("#dialog").dialog({ width: 1000 });
     divid.style.visibility = 'visible'
  ///   alert('show modal')
