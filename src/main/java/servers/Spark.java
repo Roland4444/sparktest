@@ -1,5 +1,6 @@
 package servers;
 import DSLGuided.requestsx.PSA.PSADSLProcessor;
+import DSLGuided.requestsx.PSA.PSASearchProcessor;
 import org.jetbrains.annotations.NotNull;
 import spark.ModelAndView;
 import spark.Request;
@@ -57,10 +58,17 @@ public class Spark {
 
         get("/psa", (req,res)-> {
             model.clear();
-model.put("idbutton", 44);
+            model.put("idbutton", 44);
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psax.html"));});
 
+        post("/psasearch", (req,res)-> {
+            var reqs = req.queryParams("search");
+            System.out.println("REQS::"+reqs);
+            var result = PSASearchProcessor.Companion.search(reqs, deps.DSL.PSASearchProcessor);
+            System.out.println(result);
+            return result;
+        });
         post("/psasetclient", (req,res)-> {
             var name  = req.queryParams("name");
             var psanumber  = req.queryParams("psanumber");

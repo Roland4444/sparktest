@@ -85,8 +85,221 @@
 </div>
 <button onclick="openmodal()">Show modal</button>
 <button onclick="createdynamical()">Dinamical create</button>
-<button onclick="checkpassport()">
+<button onclick="createdynamicalX()">Dinamical create many</button>
+<button onclick="checkpassport()"></button>
+<button onclick="checktime()"></button>
+<script>
+    alert()
+//		'search'=>::sql('SELECT * FROM psa')
+//               ::numberpsa{[1900, 1902]},
+//               ::department('ПЗУ№1'),
+//               ::datarange('12.06.1940':'12.07.1940'),
+//               ::client('ООО Артемий'),
+//               ::typepayment('cash','bank'),
+//               ::platenumber('KAMAZ K582HB30').
+	var searchdsl ="'search'=>"
+    var platenumber_="";
+    var department_="";
+    var numberpsa_="";
+    var findFrom="";
+    var findTo="";
+    var client_="";
+    function checktime(){
+        alert(findFrom+";;;;"+findTo)
+    }
+</script>
+<script>
+  $( function() {
+    var dateFormat = "yy/mm/dd",
+      from = $( "#from" )
+        .datepicker({
+          defaultDate: "+1w",
+          changeMonth: true,
+          numberOfMonths: 1
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+          console.log(this.value)
+          findFrom = this.value
+          alert("FindFrom =>"+findFrom)
+        }),
+      to = $( "#to" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: false,
+        numberOfMonths: 1
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+        console.log(this.value)
+        findTo= this.value
+        alert("findTo =>"+findTo)
+      });
 
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+
+      return date;
+    }
+  } );
+
+
+
+
+  </script>
+
+
+<div>
+    <p>Параметры фильтра
+        <label for="from">С</label>
+        <input type="text" id="from" name="from">
+        <label for="to">По</label>
+        <input type="text" id="to" name="to" >
+        <label for="client">Имя клиента или наименование компании</label>
+        <input type="text" id="client" name="client" onkeyup="client_=this.value">
+        <label for="psanumber">Номер ПСА</label>
+        <input type="text" id="psanumber" name="psanumber" onkeyup="numberpsa_=this.value">
+        <label for="platenumber">Номер машины</label>
+        <input type="text" id="platenumber" name="platenumber" onkeyup="platenumber_=this.value">
+
+	<button onclick="clearfilter()">Сбросить фильтр</button>
+	<button onclick="applyfilter()">Отфильтровать</button>
+    
+    <script>
+    function recodedate(a){
+    //'12/34/2020
+    var mm = a.substring(0,2)
+    var dd = a.substring(3,5)
+    var yy = a.substring(6,10)
+    return yy+"-"+mm+"-"+dd
+}
+     recodedate("12/34/2020")
+    //'12/34/2020
+        alert(client.value)
+        var replyobj
+    function clearfilter(){
+	    from.value=""
+	    to.value=""
+	    client.value=""
+        platenumber.value=""
+        psanumber.value=""
+    }
+
+    function readdate(){
+        if ((from.value != "") && (from.value.length>1))
+            findFrom = recodedate(from.value)
+        if ((to.value != "") && (to.value.length>1))
+            findTo = recodedate(to.value)    
+        if ((client.value != "") && (client.value.length>1))
+            client_ = client.value 
+        if ((psanumber.value != "") && (psanumber.value.length>1))
+            numberpsa_ = psanumber.value     
+        if ((platenumber.value !="") && (platenumber.value.length>1))
+            platenumber_ = platenumber.value
+    }
+
+    function clearparams(){
+        searchdsl ="'search'=>"
+        platenumber_="";
+        department_="";
+        numberpsa_="";
+        findFrom="";
+        findTo="";
+        client_="";
+    }
+
+    function applyfilter(){
+        alert('dumb')
+    //     var platenumber_;
+    // var department_;
+    // var numberpsa_;
+    // var findFrom;
+    // var findTo;
+    // var client_;
+    clearparams()
+    readdate()
+
+
+        console.log('\n platenumber_=>'+ platenumber_)
+        console.log('\n department_=>'+ department_)
+        console.log('\n numberpsa_=>'+ numberpsa_)
+        console.log('\n findFrom=>'+ findFrom)
+        console.log('\n findTo=>'+ findTo)
+        console.log('\n client_=>'+ client_)
+
+        constructRequest()
+
+        var xhr = new XMLHttpRequest()
+        var url = "psasearch";
+        var params = "search="+searchdsl;
+        xhr.open("POST", url, true); // set true for async, false for sync request
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send(params); // or null, if no parameters are passed
+
+        xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+        try {
+            alert('rendering!')
+            loadBlock(xhr.responseText);
+
+           // do your work here
+
+       } catch (error) {
+           throw Error;
+       }
+            }
+        }
+
+    }
+
+    String.prototype.replaceAt = function(index, replacement) {
+        return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+    }
+
+    function constructRequest(){
+        searchdsl+="::sql{'SELECT * FROM psa '},"
+        if (platenumber_ !=""){
+            searchdsl += "::platenumber{'"+platenumber_+"'},"
+        }
+        if (numberpsa_ !=""){
+            searchdsl += "::numberpsa{'"+numberpsa_+"'},"
+        }
+        if (client_ !=""){
+            searchdsl += "::client{'"+client_+"'},"
+        }
+        if ((findTo !="") && (findFrom !="")){
+            searchdsl += "::datarange{'"+findFrom+"':'"+findTo+"'}"
+        }
+        searchdsl = searchdsl.replaceAt(searchdsl.length, ".")
+        searchdsl = searchdsl.replaceAll(",.",".")
+        
+        alert(searchdsl)
+
+//		'search'=>::sql('SELECT * FROM psa')
+//               ::numberpsa{[1900, 1902]},
+//               ::department('ПЗУ№1'),
+//               ::datarange('12.06.1940':'12.07.1940'),
+//               ::client('ООО Артемий'),
+//               ::typepayment('cash','bank'),
+//               ::platenumber('KAMAZ K582HB30').
+
+
+    }
+
+
+    </script>
+
+
+
+
+
+
+
+</div>
 <table  id="mTable" border="10" cellpadding="10"  align="center" valign="center" class="table">
     <th class="text-center">ID</th>
     <th class="text-center">Дата</th>
@@ -108,15 +321,17 @@
         <td>Золото</td>
         <td>20</td>
         <td>500000000</td>
-        <td><button id="confirm2" type="button" class="btn btn-success" onclick="setup($idbutton)" л><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+
+        <td><button id="confirm2" type="button" class="btn btn-success" onclick="setup($idbutton)" ><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
             Установить контрагента</button>
-    </div></td>
+    </td>
     </tr>    
 
     </tbody>
 </table>
 
 <script>
+
 function checkpassport(serianumber){
         var xhr__ = new XMLHttpRequest()
         const params = "name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
@@ -141,8 +356,24 @@ function checkpassport(serianumber){
 
     let json_ = '{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
     "metals":"БРОНЗА", "uuid":"126103"}';
+    let jsonpack_ = '[{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
+    "metals":"БРОНЗА", "uuid":"126103"},{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
+    "metals":"БРОНЗА", "uuid":"126103"}]';
     var obj = JSON.parse(json_);
     let index____ = 0
+    function createdynamicalX(){
+        loadBlock(jsonpack_)
+    }
+    function loadBlock(a){
+        var table = document.getElementById("tbody");
+        table.innerHTML=""
+        var obj = JSON.parse(a)
+        for (var item in obj){
+            var id  = (obj[item].id);
+            createRow(obj[item])
+            fillRow(obj[item])
+        }
+    }
     function createRow(a){
         var table = document.getElementById("mTable");
         var row = table.insertRow(1);
@@ -170,7 +401,7 @@ function checkpassport(serianumber){
         td.appendChild(btn)
         tr.appendChild(td)
         tbdy.prepend(tr);
-        alert('create row success!')
+    ///////    alert('create row success!')
         }
 
     function applyusinguuid(a){
@@ -204,7 +435,7 @@ function checkpassport(serianumber){
        mass.innerHTML =''
        summ.innerHTML = ''
        approvebutton.setAttribute("onclick", "openmodal("+a.uuid+")")
-       alert('fill row success!')
+     ///  alert('fill row success!')
 
     }    
     
@@ -237,17 +468,17 @@ function checkpassport(serianumber){
 
     </script>
 
-<div id="dialog" title="Basic dialog">
+<div id="dialog" title="Установка контрагента">
     <h3> Введите ИНН или Номер паспорта</h3>
     <input align="center" id="googlesearch" onkeyup="search()" class="searchclient2">
-    <div id="client"></div>
-    <button id="confirm" type="button" class="btn btn-success" onclick="apply()" л><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+    <div id="clientName"></div>
+    <button id="confirm" type="button" class="btn btn-success" onclick="apply()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
         Установить контрагента</button>
 </div>
 
 <script>
    let initial =20
-   alert(initial)
+//   alert(initial)
    let name =""
    let key =""
    let value =""
@@ -304,7 +535,7 @@ function search(){
             if (xhr.readyState != 4) return
             clearTimeout(xhrTimeout)
             if (xhr.status == 200) {
-                let elem = document.getElementById("client")
+                let elem = document.getElementById("clientName")
                 let resp = xhr.responseText
                 console.log("responce::\n"+resp)
                 name = resp.substring(0, resp.indexOf('::{')).replaceAll("#"," ")
@@ -389,6 +620,8 @@ function getKey(input___){
 function Atom(input){
     return (input.replaceAll("'",""));
 }
+
+
 
 
 

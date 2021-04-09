@@ -1,6 +1,8 @@
 package util.DSLUtil;
 
+import DSLGuided.requestsx.PSA.PSAConnector;
 import DSLGuided.requestsx.PSA.PSADSLProcessor;
+import DSLGuided.requestsx.PSA.PSASearchProcessor;
 import DSLGuided.requestsx.RequestsDSLProcessor;
 import DSLGuided.requestsx.SMS.SMSDSLProcessor;
 import Message.abstractions.BinaryMessage;
@@ -29,6 +31,8 @@ public class DSL {
     public RequestsDSLProcessor RequestsDSLProcessor;
     public PSADSLProcessor PSADSLProcessor;
     public SMSDSLProcessor SMSDSLProcessor;
+    public PSASearchProcessor PSASearchProcessor;
+    public PSAConnector PSAConnector;
     public HashMap<String, DSLGuided.requestsx.DSLProcessor> dslProcessors;
     public HashMap<String, String> urltoDSLProc;
     public RolesStorage rs;
@@ -37,10 +41,17 @@ public class DSL {
         RequestsDSLProcessor = new RequestsDSLProcessor();
         SMSDSLProcessor = new SMSDSLProcessor();
         PSADSLProcessor = new PSADSLProcessor();
+        PSAConnector = new PSAConnector();
+        PSASearchProcessor = new PSASearchProcessor();
+
         dslProcessors = new HashMap<>();
         dslProcessors.put("requests", RequestsDSLProcessor);
         dslProcessors.put("sms", SMSDSLProcessor);
         dslProcessors.put("psa", PSADSLProcessor);
+        dslProcessors.put("psaconnector", PSAConnector);
+        dslProcessors.put("psasearch", PSASearchProcessor);
+
+
     }
 
     public void prepareMap(){

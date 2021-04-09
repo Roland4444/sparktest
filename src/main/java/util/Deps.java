@@ -1,4 +1,6 @@
 package util;
+import DSLGuided.requestsx.PSA.PSAConnector;
+import DSLGuided.requestsx.PSA.PSASearchProcessor;
 import DSLGuided.requestsx.SMS.SMSDSLProcessor;
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
@@ -7,6 +9,8 @@ import abstractions.RequestMessage;
 import org.json.simple.parser.ParseException;
 import servers.EchoWebSocket;
 import servers.ServerAktor;
+import spark.ModelAndView;
+import spark.template.velocity.VelocityTemplateEngine;
 import util.DB.PSAClient;
 import util.DB.DataBaseHelper;
 import util.DB.ProductionUPDATE;
@@ -51,13 +55,21 @@ public class Deps {
 
     private abstractions.Settings setts;
 
+    public void initDSL() throws IOException {
+        DSL = new DSL();
+        DSL.dslProcessors.get("psaconnector").render(DSL.getDSLforObject("psaconnector", "server"));
+        PSASearchProcessor psearch = (PSASearchProcessor) DSL.dslProcessors.get("psasearch");
+        PSAConnector pconnector = (PSAConnector)DSL.dslProcessors.get("psaconnector");
+        psearch.executor = pconnector.executor;
+    }
+
     public Deps() throws InterruptedException, SQLException, IOException {
         if (!new File(binprops).exists()){
             System.out.println("Binnary settings file not exist");
             return;
         }
         PSAClient = new PSAClient("jdbc:mysql://192.168.0.121:3306/psa", "root", "123");
-        DSL = new DSL();
+        initDSL();
         setts = (abstractions.Settings) BinaryMessage.restored(BinaryMessage.readBytes(binprops));
         System.out.println(setts.AktorPORT+"\n:::\n"+setts.usersPostgresConnect+"\n:::\n"+ setts.requestsPOSTGRESConnect);
         prod = new ProductionUPDATE();
