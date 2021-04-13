@@ -35,7 +35,7 @@ public class PSAClient {
     }
 
     private void updateCompany(String psanumber, String name , String idclient) throws SQLException {
-        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set company_id = ?, client = ?   WHERE id = ?");
+        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set company_id = ?, client = ?   WHERE uuid = ?");
         stmt.setString(1, idclient);
         stmt.setString(2, name);
         stmt.setString(3, psanumber);
@@ -44,7 +44,7 @@ public class PSAClient {
     }
 
     private void updateClient(String psanumber, String name, String idclient) throws SQLException {
-        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set passport_id = ?, client = ?   WHERE id = ?");
+        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set passport_id = ?, client = ?   WHERE uuid = ?");
         stmt.setString(1, idclient);
         stmt.setString(2, name);
         stmt.setString(3, psanumber);
