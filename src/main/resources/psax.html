@@ -90,10 +90,10 @@
 <button onclick="openmodal()">Show modal</button>
 <button onclick="createdynamical()">Dinamical create</button>
 <button onclick="createdynamicalX()">Dinamical create many</button>
-<button onclick="checkpassport()"></button>
+<button onclick="checkpassport()">Проверить паспорт</button>
 <button onclick="checktime()"></button>
 <script>
-    alert()
+    // alert()
 //		'search'=>::sql('SELECT * FROM psa')
 //               ::numberpsa{[1900, 1902]},
 //               ::department('ПЗУ№1'),
@@ -111,7 +111,7 @@
     var startvaluedatapicker =""
     var finishvaluedatapicker =""
     function checktime(){
-        alert(findFrom+";;;;"+findTo)
+         alert(findFrom+";;;;"+findTo)
     }
 </script>
 <script>
@@ -169,15 +169,15 @@
 
 
 <div>
-    <div id="dialog2" title="Basic dialog" style="background-color: #333333;">
+    <!-- <div id="dialog2" title="Basic dialog" style="background-color: #333333;">
         <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the &apos;x&apos; icon.</p>
-      </div>
+      </div> -->
 
       <script>
-        $( function() {
-          $( "#dialog2" ).dialog();
-        } );
-        </script>
+        // $( function() {
+        //   $( "#dialog2" ).dialog();
+        // } );
+        // </script>
       </head>
 
     <p>Параметры фильтра
@@ -205,7 +205,7 @@
 }
      recodedate("12/34/2020")
     //'12/34/2020
-        alert(client.value)
+        // alert(client.value)
         var replyobj
     function clearfilter(){
 	    from.value=""
@@ -242,8 +242,8 @@
     }
 
     function applyfilter(){
-        alert('dumb')
-        alert("fromto"+fromto.value)
+        // alert('dumb')
+        // alert("fromto"+fromto.value)
 
     //     var platenumber_;
     // var department_;
@@ -274,7 +274,7 @@
         xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
         try {
-            alert('rendering!')
+            // alert('rendering!')
             loadBlock(xhr.responseText);
 
            // do your work here
@@ -308,7 +308,7 @@
         searchdsl = searchdsl.replaceAt(searchdsl.length, ".")
         searchdsl = searchdsl.replaceAll(",.",".")
         
-        alert(searchdsl)
+        // alert(searchdsl)
 
 //		'search'=>::sql('SELECT * FROM psa')
 //               ::numberpsa{[1900, 1902]},
@@ -331,7 +331,7 @@
 
 
 </div>
-<table  id="mTable" border="10" cellpadding="10"  align="center" valign="center" class="table">
+<table  id="mTable" border="5" cellpadding="10"  align="center" valign="center" class="table">
     <th class="text-center">ID</th>
     <th class="text-center">Дата</th>
     <th class="text-center">ПЗУ</th>
@@ -363,32 +363,43 @@
 
 <script>
 
-function checkpassport(serianumber){
+function checkpassport(){////serianumber
+        alert('create request')
         var xhr__ = new XMLHttpRequest()
-        const params = "name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
-        var url = "passport.avs.com.ru"
-        alert(request)
-        xhr.open("POST", url, true);
-//В заголовке говорим что тип передаваемых данных закодирован.
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        const params = "serie='"+1210+"'&number='"+322280+"'";
+        var url = "checkpost"  ////passport.avs.com.ru
+        // alert(request)
+        xhr__.open("POST", url, true);
+        //В заголовке говорим что тип передаваемых данных закодирован.
+        xhr__.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr__.onreadystatechange=function()
+        {
 
-        xhr.addEventListener("readystatechange", () => {
+            if (xhr__.status == 200) {
 
-        if(request.readyState === 4 && request.status === 200) {
-		    console.log(request.responseText);
-        }
-        });
+                let resp = xhr__.responseText
+                alert(resp)
 
-//	Вот здесь мы и передаем строку с данными, которую формировали выше. И собственно выполняем запрос.
-        xhr.send(params);
-}
+  /////////////              location.reload();
+            }
+
+
+   //     if(xhr__.readyState === 4 && xhr__.status === 200) {
+	//	    alert(xhr__.responseText);
+   //     }
+       
+
+        //	Вот здесь мы и передаем строку с данными, которую формировали выше. И собственно выполняем запрос.
+        xhr__.send(params);
+    }
+    }   
 
     let json_withnull = '{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"    ", "platenumber":"FF12RX",\
     "metals":"БРОНЗА", "uuid":"126103"}';
-    alert('parsing null')
+    // alert('parsing null')
     var obj_withnull = JSON.parse(json_withnull)
     console.log("parced" +obj_withnull.psanumber)
-    alert(obj_withnull.uuid)
+    // alert(obj_withnull.uuid)
 
     let json_ = '{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
     "metals":"БРОНЗА", "uuid":"126103"}';
@@ -404,9 +415,9 @@ function checkpassport(serianumber){
         console.log("received json=>" +a)
         var table = document.getElementById("tbody");
         table.innerHTML=""
-        alert('parsing......')
+        // alert('parsing......')
         var obj = JSON.parse(a)
-        alert('parse success!')
+        // alert('parse success!')
         for (var item in obj){
             var id  = (obj[item].id);
             createRow(obj[item])
@@ -444,7 +455,7 @@ function checkpassport(serianumber){
         }
 
     function applyusinguuid(a){
-        alert("UUID::"+a);
+        // alert("UUID::"+a);
     }
 
 
@@ -490,7 +501,7 @@ function checkpassport(serianumber){
 
     function createdynamical(){
 
-        alert('tupple')
+        // alert('tupple')
         index____ = 500
         createRow(obj)
         fillRow(obj)
@@ -498,7 +509,7 @@ function checkpassport(serianumber){
     };
 
     function setup(a){
-        alert("its worked!"+a)
+        // alert("its worked!"+a)
         var node = evt.target || evt.srcElement;
         if (node.name == 'edit') {
         node.value = "Modify";
@@ -532,7 +543,7 @@ function openmodal(a){
 initial =a
 $("#dialog").dialog({ width: 1000 });
 divid.style.visibility = 'visible'
-alert('show modal')
+// alert('show modal')
 //$( function() {
 //$( "#dialog" ).dialog({ width: 600 });
 
@@ -626,7 +637,7 @@ function apply(){
         var request = "/psasetclient?name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
         const params = "name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
         var url = "psasetclient"
-        alert(request)
+        // alert(request)
         xhr.open("POST", url, true);
 //В заголовке говорим что тип передаваемых данных закодирован.
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

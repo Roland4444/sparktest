@@ -47,6 +47,18 @@ public class Spark {
             System.out.println(reqs);
             return deps.PSAClient.getClientNameAndID(reqs);});
 
+        post("/checkpost", (req,res)-> {
+            var serie = req.queryParams("serie");
+            var number = req.queryParams("number");
+            System.out.println("SERIES::"+serie);
+            System.out.println("number::"+number);
+
+            return "OK";});
+
+        get("/passport", (req,res)-> {
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "passport.html"));});
+
         get("/psapage", (req,res)-> {
             var reqs = req.queryParams("psanumber");
             model.clear();
