@@ -6,6 +6,14 @@ import abstractions.OnRequest;
 import abstractions.RequestMessage;
 import abstractions.ResponceMessage;
 import impl.JAktor;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.simple.parser.ParseException;
 import servers.threadMessager.ThreadMessager;
 import util.JSON.Beatyfulizer;
@@ -13,7 +21,10 @@ import util.IDHelper;
 import util.processors.InputRequestProcessor;
 
 import java.io.*;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ServerAktor extends JAktor {
@@ -55,6 +66,21 @@ public class ServerAktor extends JAktor {
         //System.out.println("SENDING to>>"+address);
         return this.client.send(this.cypher.encrypt(message), address);
       //  return sendj11(message, address);
+    }
+
+    public static String sendPost(String serie, String number, String url) throws Exception {
+        HttpPost post = new HttpPost(url);
+        List<NameValuePair> urlParameters = new ArrayList<>();
+        urlParameters.add(new BasicNameValuePair("serie", serie));
+        urlParameters.add(new BasicNameValuePair("number", number));
+        String responce = "";
+        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(post)) {
+            responce = EntityUtils.toString(response.getEntity());
+            System.out.println(responce);
+        }
+        return responce;
     }
 
     @Override

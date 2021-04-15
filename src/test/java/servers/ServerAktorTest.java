@@ -33,4 +33,8 @@ public class ServerAktorTest {
         System.out.println(aktor.rollbackAdressURL());
     }
 
+    @Test
+    public void sendPost() throws Exception {
+        ServerAktor.sendPost("1203", "855467", "https://passport.avs.com.ru/");
+    }
 }

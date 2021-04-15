@@ -2,21 +2,37 @@ package util.DB;
 
 import abstractions.ClientType;
 import fr.roland.DB.Executor;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PSAClient {
     public Executor exec;
     public final String delimiter = "#";
     public final String info_start = "::{";
     public final String info_finish = "}.";
-
-    public PSAClient(String url, String login, String pass) throws SQLException {
+    public String passcheckurl_ ="";
+    public final String  effect_atom = "является действующим";
+    public final String uneffect_atom = "ЯВЛЯЕТСЯ НЕДЕЙСТВИТЕЛЬНЫМ";
+    public PSAClient(String url, String login, String pass, String passcheckurl_) throws SQLException {
         System.out.println("CLIENT SEARCHER REFACTORED");
         exec  = new Executor(url, login, pass) ;
+        this.passcheckurl_ = passcheckurl_;
     };
 
     public void updateclient(String name, String psanumber, String idclient, String type) throws SQLException {
@@ -126,6 +142,50 @@ public class PSAClient {
         System.out.println("number::>"+sb_number.toString());
         return res;
     };
+
+    public static String sendPost(String serie, String number, String url) throws IOException {
+        HttpPost post = new HttpPost(url);
+        List<NameValuePair> urlParameters = new ArrayList<>();
+        urlParameters.add(new BasicNameValuePair("serie", serie));
+        urlParameters.add(new BasicNameValuePair("number", number));
+        String resp = "";
+        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(post)) {
+            resp = EntityUtils.toString(response.getEntity());
+        }
+        return resp;
+    }
+
+    public String getStatusText(String input){
+        var first = "\"StatusText\":";
+        var index = input.indexOf(first);
+        if (index <1)
+            return "";
+        return input.substring(index+first.length()+1, input.length()-3 );
+    }
+
+    public Boolean checkpass(String passport) throws IOException {
+        var series = passport.substring(0,4);
+        var number = passport.substring(4, passport.length());
+        System.out.println("series "+series + "number"+ number);
+        var answer = sendPost(series  , number, passcheckurl_);
+        var status = getStatusText(answer);
+        System.out.println("STATUS "+status);
+        switch (status){
+            case effect_atom -> {
+                return true;
+            }
+            case uneffect_atom -> {
+                return false;
+            }
+        }
+        return false;
+    }
+
+
+
 
     boolean checkdigit(char input){
         var result = false;
