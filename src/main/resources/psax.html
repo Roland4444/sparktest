@@ -523,7 +523,7 @@ function checkpassport(){////serianumber
     <input align="center" id="googlesearch" onkeyup="search()" class="searchclient2">
     <div id="clientName"></div>
     <button id="confirm" type="button" class="btn btn-success" onclick="apply()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-        Установить контрагента</button>
+        Установить контрагента</button><div id="warning"></div>
 </div>
 
 <script>
@@ -575,7 +575,8 @@ function search(){
             }
             return xmlhttp;
         }
-
+        warning.innerHTML = ""
+        confirm.disabled = false
         var xhr = getXmlHttp()
         var request = "/psaproc?input="+googlesearch.value;
         console.log('sending  ' +googlesearch.value)
@@ -596,7 +597,13 @@ function search(){
                 console.log('value::'+ getValue(data))
 
                 key = getKey(data)
+                console.log('key>>>'+key)
                 value = getValue(data)
+                if (key == "B"){
+                    warning.innerHTML = "<p style='color: red; '>Паспорт недействителен!"
+                        confirm.disabled = true;
+
+                }
                 elem.innerHTML = "<h3>"+name.replaceAll("#"," ")+"</h3>"
                 if (xhr.responseText !="")
                     confirm.style.visibility = 'visible'

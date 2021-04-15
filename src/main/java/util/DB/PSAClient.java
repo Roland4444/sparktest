@@ -99,13 +99,22 @@ public class PSAClient {
 
     };
 
-    public String processPassportRequest(ResultSet res) throws SQLException {
-        return res.getString("fname")+delimiter+res.getString("mname")+delimiter+res.getString("lname")+info_start+"'P':"+"'"+res.getString("id")+"'"+info_finish;
+    public String processPassportRequest(ResultSet res) throws SQLException, IOException {
+        String pass_serie = res.getString("series");
+        String pass_number = res.getString("number");
+        String type = "P";
+        if (checkpass(pass_serie+pass_number))
+        {
+            type = "G";
+        }
+        else
+            type = "B";
+        return res.getString("fname")+delimiter+res.getString("mname")+delimiter+res.getString("lname")+info_start+"'"+type+"':"+"'"+res.getString("id")+"'"+info_finish;
     };
 
 
 
-    public String getClientNameAndID(String input) throws SQLException {
+    public String getClientNameAndID(String input) throws SQLException, IOException {
         ArrayList param = new ArrayList();
         param.add("%"+input+"%");
         var res = exec.executePreparedSelect("SELECT * FROM `psa`.`company` WHERE `inn` LIKE ?;",param);

@@ -3,6 +3,7 @@
 /home/romanx/IdeaProjects/spark/src/main/java/util/readfile/Readfile.java
 /home/romanx/IdeaProjects/spark/src/main/java/servers/Spark.java
 /home/romanx/IdeaProjects/spark/src/main/java/servers/EchoWebSocket.java
+/home/romanx/IdeaProjects/spark/src/main/java/util/DB/PSAClient.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/IDHelper.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/LoginProcessor.java
 /home/romanx/IdeaProjects/spark/src/main/java/abstractions/OnRequest.java
@@ -15,6 +16,7 @@
 /home/romanx/IdeaProjects/spark/src/main/java/abstractions/Condition.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/DSLUtil/DSL.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/react/ReactBlob.java
+/home/romanx/IdeaProjects/spark/src/main/java/abstractions/ClientType.java
 /home/romanx/IdeaProjects/spark/src/main/java/abstractions/Settings.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/DB/ProductionUPDATE.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/DB/DataBaseHelper.java
