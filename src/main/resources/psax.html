@@ -87,12 +87,52 @@
 
 
 </div>
-<button onclick="openmodal()">Show modal</button>
+<!-- <button onclick="openmodal()">Show modal</button>
 <button onclick="createdynamical()">Dinamical create</button>
 <button onclick="createdynamicalX()">Dinamical create many</button>
 <button onclick="checkpassport()">Проверить паспорт</button>
-<button onclick="checktime()"></button>
+<button onclick="checktime()"></button> -->
 <script>
+
+function constructInitialRequest(){
+        var today = new Date();
+var dd = String(today.getDate()-1).padStart(2, '0');
+console.log("dd"+dd)
+var mm = String(today.getMonth() ).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+var dd1 = String(today.getDate()+1).padStart(2, '0');
+console.log("dd1"+dd1)
+
+today = yyyy+ '-'+ mm + '-' + dd ;
+tomorr = yyyy+ '-'+ mm + '-' + dd1 ;
+document.write(today);
+searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+today+"':'"+tomorr+"'}"   
+alert(searchdsl)
+var xhr = new XMLHttpRequest()
+var url = "psasearch";
+var params = "search="+searchdsl;
+xhr.open("POST", url, true); // set true for async, false for sync request
+xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xhr.send(params); // or null, if no parameters are passed
+
+xhr.onreadystatechange = function () {
+if (xhr.readyState == 4 && xhr.status == 200) {
+try {
+    // alert('rendering!')
+    loadBlock(xhr.responseText);
+
+   // do your work here
+
+} catch (error) {
+   throw Error;
+}
+    }
+}
+
+
+}
+    constructInitialRequest()
     // alert()
 //		'search'=>::sql('SELECT * FROM psa')
 //               ::numberpsa{[1900, 1902]},
@@ -154,7 +194,7 @@
         ],
         "firstDay": 1
     },
-    "startDate" : moment().startOf('day').add(-14, 'day'),
+    "startDate" : moment().startOf('day').add(0, 'day'),////-14, 'day'),
     "endDate" : moment()
   }, function(start, end, label) {
     console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
@@ -290,6 +330,7 @@
     String.prototype.replaceAt = function(index, replacement) {
         return this.substr(0, index) + replacement + this.substr(index + replacement.length);
     }
+
 
     function constructRequest(){
         searchdsl+="::sql{'SELECT * FROM psa '},"
@@ -436,7 +477,7 @@ function checkpassport(){////serianumber
             td.setAttribute("align", "center");
             var div = document.createElement("div");
             var id = index____+'a'+j
-            console.log(id)
+        //    console.log(id)
             div.setAttribute("id", id);
             td.appendChild(div)
             tr.appendChild(td)
@@ -601,7 +642,7 @@ function search(){
                 value = getValue(data)
                 if (key == "B"){
                     warning.innerHTML = "<p style='color: red; '>Паспорт недействителен!"
-                        confirm.disabled = true;
+                    confirm.disabled = true;
 
                 }
                 elem.innerHTML = "<h3>"+name.replaceAll("#"," ")+"</h3>"
