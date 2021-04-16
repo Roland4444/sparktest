@@ -83,6 +83,22 @@ public class ServerAktor extends JAktor {
         return responce;
     }
 
+    public static String sendPosttest(String data, String uuid, String url) throws Exception {
+        HttpPost post = new HttpPost(url);
+        List<NameValuePair> urlParameters = new ArrayList<>();
+        urlParameters.add(new BasicNameValuePair("data", data));
+        urlParameters.add(new BasicNameValuePair("uuid", uuid));
+        urlParameters.add(new BasicNameValuePair("summery", "435543543543"));
+        String responce = "";
+        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(post)) {
+            responce = EntityUtils.toString(response.getEntity());
+            System.out.println(responce);
+        }
+        return responce;
+    }
+
     @Override
     public void receive(byte[] message_) throws IOException {
         System.out.println("Catched!!!");

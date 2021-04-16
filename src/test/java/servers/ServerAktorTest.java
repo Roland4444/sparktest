@@ -37,4 +37,10 @@ public class ServerAktorTest {
     public void sendPost() throws Exception {
         ServerAktor.sendPost("1203", "855467", "https://passport.avs.com.ru/");
     }
+
+    @Test
+    public void sendPosttest() throws Exception {
+        ServerAktor.sendPosttest("{}{}{}{}", "#^#%#$#", "http://192.168.0.126:4567/colorpsa");
+
+    }
 }

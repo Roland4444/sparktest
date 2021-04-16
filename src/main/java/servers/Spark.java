@@ -42,8 +42,10 @@ public class Spark {
 
         get("/hello", (req,res)-> {return deps.loginchecker.test();});
 
-        get("/psaproc", (req,res)-> {
+        get("/psaproc", (req,res)-> {   ///@ PSAX.html
             var reqs = req.queryParams("input");
+            var colorreq = req.queryParams("colorinput");
+            System.out.println("colorreq::\n\n\n"+colorreq);
             System.out.println(reqs);
             return deps.PSAClient.getClientNameAndID(reqs);});
 
@@ -52,6 +54,16 @@ public class Spark {
             var number = req.queryParams("number");
             System.out.println("SERIES::"+serie);
             System.out.println("number::"+number);
+
+            return "OK";});
+
+        post("/colorpsa", (req,res)-> {
+            var data = req.queryParams("data");
+            var uuid = req.queryParams("uuid");
+            var summary = req.queryParams("summary");
+            System.out.println("data::"+data);
+            System.out.println("uuid::"+uuid);
+            System.out.println("summary::"+summary);
 
             return "OK";});
 
