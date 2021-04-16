@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="dp.css">
 </head>
 <body style="margin:0; padding-left:20px; padding-right:20px">
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+<!-- <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <form class="form-inline">
 
     </form>
@@ -41,7 +41,7 @@
             <a class="dropdown-item" href="/logout">Выйти</a>
         </div>
     </div>
-</nav>
+</nav> -->
 
 <!--nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <div class="bd-example bd-example-padded-bottom">
@@ -111,8 +111,8 @@ function constructInitialRequest(){
 
     today = yyyy+ '-'+ mm + '-' + dd ;
     gårdagens = yyyy2+ '-'+ mm2 + '-' + dd2 ;
-    document.write(today);
-    document.write(today);
+    // document.write(today);
+    // document.write(today);
 
     searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'}"   
     var xhr = new XMLHttpRequest()
