@@ -95,39 +95,45 @@
 <script>
 
 function constructInitialRequest(){
-        var today = new Date();
-var dd = String(today.getDate()-1).padStart(2, '0');
-console.log("dd"+dd)
-var mm = String(today.getMonth() ).padStart(2, '0'); //January is 0!
-var yyyy = today.getFullYear();
+    var today = new Date();
+    var gårdagens = new Date();
+    gårdagens.setDate(gårdagens.getDate() - 1);
 
-var dd1 = String(today.getDate()+1).padStart(2, '0');
-console.log("dd1"+dd1)
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() +1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
 
-today = yyyy+ '-'+ mm + '-' + dd ;
-tomorr = yyyy+ '-'+ mm + '-' + dd1 ;
-document.write(today);
-searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+today+"':'"+tomorr+"'}"   
-alert(searchdsl)
-var xhr = new XMLHttpRequest()
-var url = "psasearch";
-var params = "search="+searchdsl;
-xhr.open("POST", url, true); // set true for async, false for sync request
-xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-xhr.send(params); // or null, if no parameters are passed
+    var dd2 = String(gårdagens.getDate()).padStart(2, '0');
+    var mm2 = String(gårdagens.getMonth()+1 ).padStart(2, '0'); //January is 0!
+    var yyyy2 = gårdagens.getFullYear();
 
-xhr.onreadystatechange = function () {
-if (xhr.readyState == 4 && xhr.status == 200) {
-try {
-    // alert('rendering!')
-    loadBlock(xhr.responseText);
 
-   // do your work here
 
-} catch (error) {
-   throw Error;
-}
+    today = yyyy+ '-'+ mm + '-' + dd ;
+    gårdagens = yyyy2+ '-'+ mm2 + '-' + dd2 ;
+    document.write(today);
+    document.write(today);
+
+    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'}"   
+    var xhr = new XMLHttpRequest()
+    var url = "psasearch";
+    var params = "search="+searchdsl;
+    xhr.open("POST", url, true); // set true for async, false for sync request
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(params); // or null, if no parameters are passed
+
+    xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+    try {
+        // alert('rendering!')
+        loadBlock(xhr.responseText);
+
+        // do your work here
+
+    } catch (error) {
+    throw Error;
     }
+        }
 }
 
 
@@ -372,7 +378,7 @@ try {
 
 
 </div>
-<table  id="mTable" border="5" cellpadding="10"  align="center" valign="center" class="table">
+<table  id="mTable" border="1" cellpadding="10"  align="center" valign="center" class="table">
     <th class="text-center">ID</th>
     <th class="text-center">Дата</th>
     <th class="text-center">ПЗУ</th>
@@ -384,7 +390,7 @@ try {
     <th class="text-center">Сумма, руб</th>
     <th class="text-center">Действия</th>
     <tbody id="tbody">
-    <tr><td>fgfg-hjjhh</td>
+    <!-- <tr><td>fgfg-hjjhh</td>
         <td>12.03.2010</td>
         <td>#3</td>
         <td>12066</td>
@@ -397,15 +403,32 @@ try {
         <td><button id="confirm2" type="button" class="btn btn-success" onclick="setup($idbutton)" ><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
             Установить контрагента</button>
     </td>
-    </tr>    
+    </tr>     -->
 
     </tbody>
 </table>
 
 <script>
 
+    function disablebutton(){
+        confirm2.disabled = true
+    }
+
+    function enablebutton(){
+        confirm2.disabled = false
+    }
+
+
+    function hidebutton(){
+        confirm2.style.visibility = 'hidden'
+    }
+
+    function showbutton(){
+        let confirm2 = document.getElementById("confirm")
+        confirm2.style.visibility = 'visible'
+    }
+
 function checkpassport(){////serianumber
-        alert('create request')
         var xhr__ = new XMLHttpRequest()
         const params = "serie="+1210+"&number="+322280;
         var url = "checkpost"  ////passport.avs.com.ru
@@ -419,7 +442,7 @@ function checkpassport(){////serianumber
             if (xhr__.status == 200) {
 
                 let resp = xhr__.responseText
-                alert(resp)
+
 
   /////////////              location.reload();
             }
@@ -526,6 +549,7 @@ function checkpassport(){////serianumber
        mass.innerHTML =''
        summ.innerHTML = ''
        approvebutton.setAttribute("onclick", "openmodal('"+a.uuid+"')")
+       
      ///  alert('fill row success!')
 
     }    
@@ -568,15 +592,15 @@ function checkpassport(){////serianumber
 </div>
 
 <script>
+    var confirm2 = document.getElementById("confirm")
+
    let initial =20
 //   alert(initial)
    let name =""
    let key =""
    let value =""
-   let confirm = document.getElementById("confirm")
-   confirm.style.visibility = 'hidden'
 
-
+hidebutton()
 let divid = document.getElementById("dialog")
 
 divid.style.visibility = 'hidden'
@@ -590,9 +614,6 @@ divid.style.visibility = 'visible'
 
 //  } );
 }
-</script>
-
-<script>
 
 function search(){
     function getXmlHttp()
@@ -624,9 +645,11 @@ function search(){
         xhr.open("GET", request, true);
         xhr.onreadystatechange=function()
         {
+
             if (xhr.readyState != 4) return
             clearTimeout(xhrTimeout)
             if (xhr.status == 200) {
+                enablebutton()
                 let elem = document.getElementById("clientName")
                 let resp = xhr.responseText
                 console.log("responce::\n"+resp)
@@ -642,14 +665,21 @@ function search(){
                 value = getValue(data)
                 if (key == "B"){
                     warning.innerHTML = "<p style='color: red; '>Паспорт недействителен!"
-                    confirm.disabled = true;
+                    disablebutton()
 
                 }
+
+                if (key != "B"){
+                    enablebutton()
+
+                }
+               
                 elem.innerHTML = "<h3>"+name.replaceAll("#"," ")+"</h3>"
+                hidebutton()
                 if (xhr.responseText !="")
-                    confirm.style.visibility = 'visible'
+                    showbutton()
                 else
-                    confirm.style.visibility = 'hidden'
+                    hidebutton()
 
                 console.log("responce::   "+xhr.responseText)
                //// alert('ответ отправлен');
@@ -667,11 +697,12 @@ function search(){
         function handleError(message)
         {
             alert("Ошибка: "+message)
+
         }
 
       }
 
-      search()
+    //  search()
 function apply(){
 
 
@@ -693,12 +724,17 @@ function apply(){
         xhr.addEventListener("readystatechange", () => {
 
         if(request.readyState === 4 && request.status === 200) {
+            alert('Успешно изменен!')
 		    console.log(request.responseText);
         }
         });
 
 //	Вот здесь мы и передаем строку с данными, которую формировали выше. И собственно выполняем запрос.
         xhr.send(params);
+        alert('Запрос отправлен')
+        $("#dialog").dialog("close");
+
+      ///'  alert('dialog hidden!')
 
 }
 

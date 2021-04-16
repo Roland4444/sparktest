@@ -105,7 +105,7 @@ public class PSAClient {
         String type = "P";
         if (checkpass(pass_serie+pass_number))
         {
-            type = "G";
+            type = "P";
         }
         else
             type = "B";
