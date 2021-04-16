@@ -25,7 +25,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="dp.css">
 </head>
-<body>
+<body style="margin:0; padding-left:20px; padding-right:20px">
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <form class="form-inline">
 
@@ -225,188 +225,189 @@ function constructInitialRequest(){
         // } );
         // </script>
       </head>
-
-    <p>Параметры фильтра
-        <label for="fromto">Диапазон дат</label>
-        <input type="text" name="daterange"  id="fromto" />
-        <label for="client">Имя клиента или наименование компании</label>
-        <input type="text" id="client" name="client" onkeyup="client_=this.value">
-        <label for="psanumber">Номер ПСА</label>
-        <input type="text" id="psanumber" name="psanumber" onkeyup="numberpsa_=this.value">
-        <label for="platenumber">Номер машины</label>
-        <input type="text" id="platenumber" name="platenumber" onkeyup="platenumber_=this.value">
-
-	<button onclick="clearfilter()">Сбросить фильтр</button>
-	<button onclick="applyfilter()">Отфильтровать</button>
+        <p>Параметры фильтра
+            <label for="fromto">Диапазон дат</label>
+            <input type="text" name="daterange"  id="fromto" />
+            <label for="client">Имя клиента или наименование компании</label>
+            <input type="text" id="client" name="client" onkeyup="client_=this.value">
+            <label for="psanumber">Номер ПСА</label>
+            <input type="text" id="psanumber" name="psanumber" onkeyup="numberpsa_=this.value">
+            <label for="platenumber">Номер машины</label>
+            <input type="text" id="platenumber" name="platenumber" onkeyup="platenumber_=this.value">
     
-    <script>
-
-
-    function recodedate(a){
-    //'12/34/2020
-    var mm = a.substring(0,2)
-    var dd = a.substring(3,5)
-    var yy = a.substring(6,10)
-    return yy+"-"+mm+"-"+dd
-}
-     recodedate("12/34/2020")
-    //'12/34/2020
-        // alert(client.value)
-        var replyobj
-    function clearfilter(){
-	    from.value=""
-	    to.value=""
-	    client.value=""
-        platenumber.value=""
-        psanumber.value=""
-    }
-
-    function readdate(){
-       if ((startvaluedatapicker != "") && (finishvaluedatapicker !="")){
-        findFrom = startvaluedatapicker
-        findTo = finishvaluedatapicker
-       }
-            
-  ///      if ((to.value != "") && (to.value.length>1))
-  ////          findTo = recodedate(to.value)    
-        if ((client.value != "") && (client.value.length>1))
-            client_ = client.value 
-        if ((psanumber.value != "") && (psanumber.value.length>1))
-            numberpsa_ = psanumber.value     
-        if ((platenumber.value !="") && (platenumber.value.length>1))
-            platenumber_ = platenumber.value
-    }
-
-    function clearparams(){
-        searchdsl ="'search'=>"
-        platenumber_="";
-        department_="";
-        numberpsa_="";
-        findFrom="";
-        findTo="";
-        client_="";
-    }
-
-    function applyfilter(){
-        // alert('dumb')
-        // alert("fromto"+fromto.value)
-
-    //     var platenumber_;
-    // var department_;
-    // var numberpsa_;
-    // var findFrom;
-    // var findTo;
-    // var client_;
-    clearparams()
-    readdate()
-
-
-        console.log('\n platenumber_=>'+ platenumber_)
-        console.log('\n department_=>'+ department_)
-        console.log('\n numberpsa_=>'+ numberpsa_)
-        console.log('\n findFrom=>'+ findFrom)
-        console.log('\n findTo=>'+ findTo)
-        console.log('\n client_=>'+ client_)
-
-        constructRequest()
-
-        var xhr = new XMLHttpRequest()
-        var url = "psasearch";
-        var params = "search="+searchdsl;
-        xhr.open("POST", url, true); // set true for async, false for sync request
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.send(params); // or null, if no parameters are passed
-
-        xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-        try {
-            // alert('rendering!')
-            loadBlock(xhr.responseText);
-
-           // do your work here
-
-       } catch (error) {
-           throw Error;
-       }
-            }
-        }
-
-    }
-
-    String.prototype.replaceAt = function(index, replacement) {
-        return this.substr(0, index) + replacement + this.substr(index + replacement.length);
-    }
-
-
-    function constructRequest(){
-        searchdsl+="::sql{'SELECT * FROM psa '},"
-        if (platenumber_ !=""){
-            searchdsl += "::platenumber{'"+platenumber_+"'},"
-        }
-        if (numberpsa_ !=""){
-            searchdsl += "::numberpsa{'"+numberpsa_+"'},"
-        }
-        if (client_ !=""){
-            searchdsl += "::client{'"+client_+"'},"
-        }
-        if ((findTo !="") && (findFrom !="")){
-            searchdsl += "::datarange{'"+findFrom+"':'"+findTo+"'}"
-        }
-        searchdsl = searchdsl.replaceAt(searchdsl.length, ".")
-        searchdsl = searchdsl.replaceAll(",.",".")
+        <button onclick="clearfilter()">Сбросить фильтр</button>
+        <button onclick="applyfilter()">Отфильтровать</button>
         
-        // alert(searchdsl)
-
-//		'search'=>::sql('SELECT * FROM psa')
-//               ::numberpsa{[1900, 1902]},
-//               ::department('ПЗУ№1'),
-//               ::datarange('12.06.1940':'12.07.1940'),
-//               ::client('ООО Артемий'),
-//               ::typepayment('cash','bank'),
-//               ::platenumber('KAMAZ K582HB30').
-
-
+        <script>
+    
+    
+        function recodedate(a){
+        //'12/34/2020
+        var mm = a.substring(0,2)
+        var dd = a.substring(3,5)
+        var yy = a.substring(6,10)
+        return yy+"-"+mm+"-"+dd
     }
-
-
-    </script>
-
-
-
-
-
-
-
-</div>
-<table  id="mTable" border="1" cellpadding="10"  align="center" valign="center" class="table">
-    <th class="text-center">ID</th>
-    <th class="text-center">Дата</th>
-    <th class="text-center">ПЗУ</th>
-    <th class="text-center">Номер ПСА</th>
-    <th class="text-center">Клиент</th>
-    <th class="text-center">Номер машины</th>
-    <th class="text-center">Металл</th>
-    <th class="text-center">Масса, кг</th>
-    <th class="text-center">Сумма, руб</th>
-    <th class="text-center">Действия</th>
-    <tbody id="tbody">
-    <!-- <tr><td>fgfg-hjjhh</td>
-        <td>12.03.2010</td>
-        <td>#3</td>
-        <td>12066</td>
-        <td>Конкин</td>
-        <td>!2ОСНЕХАЙ</td>
-        <td>Золото</td>
-        <td>20</td>
-        <td>500000000</td>
-
-        <td><button id="confirm2" type="button" class="btn btn-success" onclick="setup($idbutton)" ><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-            Установить контрагента</button>
-    </td>
-    </tr>     -->
-
-    </tbody>
-</table>
+         recodedate("12/34/2020")
+        //'12/34/2020
+            // alert(client.value)
+            var replyobj
+        function clearfilter(){
+            from.value=""
+            to.value=""
+            client.value=""
+            platenumber.value=""
+            psanumber.value=""
+        }
+    
+        function readdate(){
+           if ((startvaluedatapicker != "") && (finishvaluedatapicker !="")){
+            findFrom = startvaluedatapicker
+            findTo = finishvaluedatapicker
+           }
+                
+      ///      if ((to.value != "") && (to.value.length>1))
+      ////          findTo = recodedate(to.value)    
+            if ((client.value != "") && (client.value.length>1))
+                client_ = client.value 
+            if ((psanumber.value != "") && (psanumber.value.length>1))
+                numberpsa_ = psanumber.value     
+            if ((platenumber.value !="") && (platenumber.value.length>1))
+                platenumber_ = platenumber.value
+        }
+    
+        function clearparams(){
+            searchdsl ="'search'=>"
+            platenumber_="";
+            department_="";
+            numberpsa_="";
+            findFrom="";
+            findTo="";
+            client_="";
+        }
+    
+        function applyfilter(){
+            // alert('dumb')
+            // alert("fromto"+fromto.value)
+    
+        //     var platenumber_;
+        // var department_;
+        // var numberpsa_;
+        // var findFrom;
+        // var findTo;
+        // var client_;
+        clearparams()
+        readdate()
+    
+    
+            console.log('\n platenumber_=>'+ platenumber_)
+            console.log('\n department_=>'+ department_)
+            console.log('\n numberpsa_=>'+ numberpsa_)
+            console.log('\n findFrom=>'+ findFrom)
+            console.log('\n findTo=>'+ findTo)
+            console.log('\n client_=>'+ client_)
+    
+            constructRequest()
+    
+            var xhr = new XMLHttpRequest()
+            var url = "psasearch";
+            var params = "search="+searchdsl;
+            xhr.open("POST", url, true); // set true for async, false for sync request
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send(params); // or null, if no parameters are passed
+    
+            xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+            try {
+                // alert('rendering!')
+                loadBlock(xhr.responseText);
+    
+               // do your work here
+    
+           } catch (error) {
+               throw Error;
+           }
+                }
+            }
+    
+        }
+    
+        String.prototype.replaceAt = function(index, replacement) {
+            return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+        }
+    
+    
+        function constructRequest(){
+            searchdsl+="::sql{'SELECT * FROM psa '},"
+            if (platenumber_ !=""){
+                searchdsl += "::platenumber{'"+platenumber_+"'},"
+            }
+            if (numberpsa_ !=""){
+                searchdsl += "::numberpsa{'"+numberpsa_+"'},"
+            }
+            if (client_ !=""){
+                searchdsl += "::client{'"+client_+"'},"
+            }
+            if ((findTo !="") && (findFrom !="")){
+                searchdsl += "::datarange{'"+findFrom+"':'"+findTo+"'}"
+            }
+            searchdsl = searchdsl.replaceAt(searchdsl.length, ".")
+            searchdsl = searchdsl.replaceAll(",.",".")
+            
+            // alert(searchdsl)
+    
+    //		'search'=>::sql('SELECT * FROM psa')
+    //               ::numberpsa{[1900, 1902]},
+    //               ::department('ПЗУ№1'),
+    //               ::datarange('12.06.1940':'12.07.1940'),
+    //               ::client('ООО Артемий'),
+    //               ::typepayment('cash','bank'),
+    //               ::platenumber('KAMAZ K582HB30').
+    
+    
+        }
+    
+    
+        </script>
+    
+    
+    
+    
+    
+    
+    
+    </div>
+    <table  id="mTable" border="1" cellpadding="10"  align="center" valign="center" class="table">
+        <th class="text-center">ID</th>
+        <th class="text-center">Дата</th>
+        <th class="text-center">ПЗУ</th>
+        <th class="text-center">Номер ПСА</th>
+        <th class="text-center">Клиент</th>
+        <th class="text-center">Номер машины</th>
+        <th class="text-center">Металл</th>
+        <th class="text-center">Масса, кг</th>
+        <th class="text-center">Сумма, руб</th>
+        <th class="text-center">Действия</th>
+        <tbody id="tbody">
+        <!-- <tr><td>fgfg-hjjhh</td>
+            <td>12.03.2010</td>
+            <td>#3</td>
+            <td>12066</td>
+            <td>Конкин</td>
+            <td>!2ОСНЕХАЙ</td>
+            <td>Золото</td>
+            <td>20</td>
+            <td>500000000</td>
+    
+            <td><button id="confirm2" type="button" class="btn btn-success" onclick="setup($idbutton)" ><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                Установить контрагента</button>
+        </td>
+        </tr>     -->
+    
+        </tbody>
+    </table>
+    
+    
 
 <script>
 
@@ -624,7 +625,7 @@ function search(){
         } catch (e)
         {
             try
-        {И
+        {
             xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
             } catch (E)
         {
