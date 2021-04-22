@@ -304,6 +304,12 @@ public class Spark {
             return depid;
         });
 
+        get("psalogin", (req, res)->{
+            model.clear();
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "psalogin.html"));
+        });
+
 
         get("riot", (req, res) -> {
             model.clear();
