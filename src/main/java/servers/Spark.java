@@ -64,7 +64,9 @@ public class Spark {
             System.out.println("data::"+data);
             System.out.println("uuid::"+uuid);
             System.out.println("summary::"+summary);
-
+            var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
+            var reqs = deps.DSL.dslProcessors.get("psa");
+            PSADSLProcessor.Companion.processColorPSA(data, uuid, DSLforPSA, (PSADSLProcessor) reqs);
             return "OK";});
 
         get("/passport", (req,res)-> {
@@ -242,6 +244,10 @@ public class Spark {
             return deps.LoaderJSON_.loadAll2JSON();
         });
 
+        get("uuid", (req, res)->{
+           return deps.timeBasedUUID.generate();
+        });
+
         get("emptyajax", (req,res)->{
             model.clear();
             return new VelocityTemplateEngine().render(
@@ -292,6 +298,12 @@ public class Spark {
             String login = req.queryParams("value");
             return login;
         });
+
+        post("ps", (req, res)->{
+            String depid = req.queryParams("depid");
+            return depid;
+        });
+
 
         get("riot", (req, res) -> {
             model.clear();

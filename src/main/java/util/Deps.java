@@ -52,7 +52,7 @@ public class Deps {
     public LoaderJSON LoaderJSON_;
     public ReactBlob react = new ReactBlob();
     public ArrayList<String> subscribers;
-
+    public timeBasedUUID timeBasedUUID;
     private abstractions.Settings setts;
 
     public void initDSL() throws IOException {
@@ -68,6 +68,7 @@ public class Deps {
             System.out.println("Binnary settings file not exist");
             return;
         }
+        timeBasedUUID = new timeBasedUUID();
         PSAClient = new PSAClient("jdbc:mysql://192.168.0.121:3306/psa", "root", "123","https://passport.avs.com.ru/");
         initDSL();
         setts = (abstractions.Settings) BinaryMessage.restored(BinaryMessage.readBytes(binprops));

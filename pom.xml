@@ -44,7 +44,7 @@
         <dependency>
             <groupId>se.roland</groupId>
             <artifactId>Odin</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <version>1.5-SNAPSHOT</version>
         </dependency>
 
         <dependency>
