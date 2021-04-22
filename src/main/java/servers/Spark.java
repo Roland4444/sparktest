@@ -32,7 +32,7 @@ public class Spark {
 
     public static void main(String[] args) throws InterruptedException, SQLException, IOException, ClassNotFoundException {
         System.out.println("production RF Version with PSA DSL MODULE");
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         Class.forName("org.postgresql.Driver");
         staticFiles.location("/public");
         Deps deps = new Deps();
