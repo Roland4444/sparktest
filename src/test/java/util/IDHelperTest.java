@@ -15,7 +15,7 @@ public class IDHelperTest {
     public IDHelperTest() throws SQLException {
     }
 
-//    @Test
+  //  @Test
     public void getIDusingsimpleID() throws SQLException {
         String etalon ="2020-11-0213:43:42татьяна";
         String input = "1";

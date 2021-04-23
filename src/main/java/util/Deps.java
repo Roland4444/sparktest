@@ -1,12 +1,20 @@
 package util;
-
-import DSL.DSLMap;
+import DSLGuided.requestsx.PSA.PSAConnector;
+import DSLGuided.requestsx.PSA.PSASearchProcessor;
+import DSLGuided.requestsx.SMS.SMSDSLProcessor;
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
+import abstractions.OnRequest;
+import abstractions.RequestMessage;
+import org.json.simple.parser.ParseException;
 import servers.EchoWebSocket;
 import servers.ServerAktor;
+import spark.ModelAndView;
+import spark.template.velocity.VelocityTemplateEngine;
+import util.DB.PSAClient;
 import util.DB.DataBaseHelper;
 import util.DB.ProductionUPDATE;
+import util.DSLUtil.DSL;
 import util.JSON.LoaderJSON;
 import util.processors.InputRequestProcessor;
 import util.processors.OutputResponceProcessor;
@@ -16,11 +24,13 @@ import util.readfile.Readfile;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Deps {
-    public DSLMap dslmap;
-    public Resolver resolver;
+    public util.DSLUtil.DSL DSL;
+
     public final String lockProd = "prod.bin";
+    public final String DSLRules = "rules.bin";
     public static String PendingResponcesFile = "rendresp.bin";
     public LoginProcessor loginchecker;
     public DataBaseHelper dbhelper;
@@ -37,18 +47,30 @@ public class Deps {
     public OutputResponceProcessor orp;
     public DataBaseHelper requests;
     public DataBaseHelper users;
+    public PSAClient PSAClient;
     public ProductionUPDATE prod;
-    public LoaderJSON LoaderJSON;
+    public LoaderJSON LoaderJSON_;
     public ReactBlob react = new ReactBlob();
+    public ArrayList<String> subscribers;
+    public timeBasedUUID timeBasedUUID;
     private abstractions.Settings setts;
 
+    public void initDSL() throws IOException {
+        DSL = new DSL();
+        DSL.dslProcessors.get("psaconnector").render(DSL.getDSLforObject("psaconnector", "server"));
+        PSASearchProcessor psearch = (PSASearchProcessor) DSL.dslProcessors.get("psasearch");
+        PSAConnector pconnector = (PSAConnector)DSL.dslProcessors.get("psaconnector");
+        psearch.executor = pconnector.executor;
+    }
+
     public Deps() throws InterruptedException, SQLException, IOException {
-        dslmap =  new DSLMap();
-        resolver = new Resolver();
         if (!new File(binprops).exists()){
             System.out.println("Binnary settings file not exist");
             return;
         }
+        timeBasedUUID = new timeBasedUUID();
+        PSAClient = new PSAClient("jdbc:mysql://192.168.0.121:3306/psa", "root", "123","https://passport.avs.com.ru/");
+        initDSL();
         setts = (abstractions.Settings) BinaryMessage.restored(BinaryMessage.readBytes(binprops));
         System.out.println(setts.AktorPORT+"\n:::\n"+setts.usersPostgresConnect+"\n:::\n"+ setts.requestsPOSTGRESConnect);
         prod = new ProductionUPDATE();
@@ -57,13 +79,14 @@ public class Deps {
             prod.init();
         }
         requests = new DataBaseHelper(setts.requestsPOSTGRESConnect, true);//requests = new DataBaseHelper("requests");
-        LoaderJSON =  new LoaderJSON(requests.executor);
+        LoaderJSON_ =  new LoaderJSON(requests.executor);
         users = new DataBaseHelper(setts.usersPostgresConnect, true);
        // Settings = new Readfile(fileprops);
 
         Incomming = new Readfile(incomingFolder);
         try {
             this.loginchecker = new LoginProcessor( users.executor);
+            this.loginchecker.PSAConnector = DSL.PSAConnector;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -71,9 +94,18 @@ public class Deps {
         idh = new IDHelper(requests.executor);
         irp = new InputRequestProcessor(requests.executor);
         irp.prod=prod;
-        irp.loader=LoaderJSON;
+        irp.loader= LoaderJSON_;
         this.cypher = new CypherImpl();
         aktor = new ServerAktor();
+        aktor.onRequest = new OnRequest() {
+            @Override
+            public void action(RequestMessage req) throws IOException, ParseException {
+                String msg = "Новый запрос от @"+LoaderJSON.loadPzu(req);
+                var DSLforSMS = DSL.getDSLforObject("sms", "server");
+                var reqs = DSL.dslProcessors.get("sms");
+                SMSDSLProcessor.Companion.sendSMS(msg, DSLforSMS, (SMSDSLProcessor) reqs);
+            }
+        };
         aktor.irp=irp;
         aktor.incomingFolder = incomingFolder;
         aktor.setAddress(setts.AktorPORT);

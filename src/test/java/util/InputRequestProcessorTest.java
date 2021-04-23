@@ -80,7 +80,7 @@ public class InputRequestProcessorTest {
 
 
 
-  //  @Test
+   // @Test
     public void lengthextract() throws SQLException {
         ArrayList data = new ArrayList();
         data.add(67);

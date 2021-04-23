@@ -1,8 +1,7 @@
 package servers;
-
+import DSLGuided.requestsx.PSA.PSADSLProcessor;
+import DSLGuided.requestsx.PSA.PSASearchProcessor;
 import org.jetbrains.annotations.NotNull;
-import DSL.DSLProcessor.Temp;
-import DSL.DSLProcessor.Login;
 import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
@@ -15,42 +14,172 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import static spark.Spark.*;
-
 public class Spark {
     public static Map map_ = new HashMap<>();
     public static VelocityTemplateEngine eng =  new VelocityTemplateEngine();
     public static ModelAndView OK = new ModelAndView(map_, "OK.html");
     public static ModelAndView BAD = new ModelAndView(map_, "Bad.html");
     public static ModelAndView SOCKET = new ModelAndView(map_, "websocket.html");
-    public static Deps deps;
-
-    static {
-        try {
-            deps = new Deps();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static Map<String, Object> model = new HashMap<>();
+
     public static void main(String[] args) throws InterruptedException, SQLException, IOException, ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
+        System.out.println("production RF Version with PSA DSL MODULE");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         Class.forName("org.postgresql.Driver");
         staticFiles.location("/public");
+        Deps deps = new Deps();
         deps.echoWebSocket =  EchoWebSocket.class;
-
+        var template =  new VelocityTemplateEngine();
         webSocket("/echo", EchoWebSocket.class);
 
+        get("/hello", (req,res)-> {return deps.loginchecker.test();});
+
+        get("/psaproc", (req,res)-> {   ///@ PSAX.html
+            var reqs = req.queryParams("input");
+            var colorreq = req.queryParams("colorinput");
+            System.out.println("colorreq::\n\n\n"+colorreq);
+            System.out.println(reqs);
+            return deps.PSAClient.getClientNameAndID(reqs);});
+
+        post("/checkpost", (req,res)-> {
+            var serie = req.queryParams("serie");
+            var number = req.queryParams("number");
+            System.out.println("SERIES::"+serie);
+            System.out.println("number::"+number);
+
+            return "OK";});
+
+        post("/colorpsa", (req,res)-> {
+            var data = req.queryParams("data");
+            var uuid = req.queryParams("uuid");
+            var summary = req.queryParams("summary");
+            System.out.println("data::"+data);
+            System.out.println("uuid::"+uuid);
+            System.out.println("summary::"+summary);
+            var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
+            var reqs = deps.DSL.dslProcessors.get("psa");
+            PSADSLProcessor.Companion.processColorPSA(data, uuid, DSLforPSA, (PSADSLProcessor) reqs);
+            return "OK";});
+
+        get("/passport", (req,res)-> {
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "passport.html"));});
+
+        get("/psapage", (req,res)-> {
+            var reqs = req.queryParams("psanumber");
+            model.clear();
+            model.put("psanumber", reqs);
+            model.put("initial", reqs);
+
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "psapage.html"));});
+
+        post("/loginpsa", (req,res)->{
+            var login = req.queryParams("login");
+            var password = req.queryParams("password");
+            System.out.println("login:: "+login+"\npassword::"+password);
+            if (deps.loginchecker.checkpsalogin(login, password)){
+                res.cookie("depid", deps.loginchecker.getpsadepid(login));
+                res.cookie("userpsa", login);
+                res.redirect("/psa");
+            }
+            res.redirect("/psalogin");
+            return "OK";
+        });
+
+        get("/psa", (req,res)-> {
+            System.out.println(req.cookies());
+            var se = req.cookie("userpsa");
+            var depid = req.cookie("depid");
+            if (depid == null){
+                System.out.println("DEPID NULL!!!");
+            }
+            if (depid.equals("")){
+                System.out.println("DEPID EQUALS '''''!!!");
+            }
+          if (true)
+          //  if (se == null)
+                res.redirect("/psalogin");
+            System.out.println(se);
+            model.clear();
+            model.put("idbutton", 44);
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "psax.html"));});
+
+        post("/psasearch", (req,res)-> {
+            var reqs = req.queryParams("search");
+            var se = req.cookie("userpsa");
+            var depid = deps.loginchecker.getpsadepid(se);
+            System.out.println("depid::"+depid);
+            if (( depid == null) ) {
+                System.out.println("UNRESTRICTED!!!");
+                return PSASearchProcessor.Companion.search(reqs, deps.DSL.PSASearchProcessor);
+            }
+            else {
+                System.out.println("Restricting deps!!!");
+                return PSASearchProcessor.Companion.search(reqs, deps.DSL.PSASearchProcessor,depid);
+            }
+        });
+        post("/psasetclient", (req,res)-> {
+            var name  = req.queryParams("name");
+            var psanumber  = req.queryParams("psanumber");
+            var idclient  = req.queryParams("idclient");
+            var type = req.queryParams("type");
+
+            deps.PSAClient.updateclient(name, psanumber, idclient, type);
+
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "psapage.html"));});
+
+        post("/draftpsa", (req, res)->{
+            System.out.println("RECEIVED draft psa request");
+            HashMap<String, String> params = new HashMap<>();
+            System.out.println("PARAMS!!!!!");
+            System.out.println(req.queryParams("Brutto"));
+            System.out.println(req.queryParams("Sor"));
+            System.out.println(req.queryParams("Metal"));
+            System.out.println(req.queryParams("DepId"));
+            System.out.println(req.queryParams("PlateNumber"));
+            System.out.println(req.queryParams("UUID"));
+            System.out.println(req.queryParams("Type"));
+
+            params.put("Brutto", req.queryParams("Brutto"));
+            params.put("Sor", req.queryParams("Sor"));
+            params.put("Metal", req.queryParams("Metal"));
+            params.put("DepId", req.queryParams("DepId"));
+            params.put("PlateNumber", req.queryParams("PlateNumber"));
+            params.put("UUID", req.queryParams("UUID"));
+            params.put("Type", req.queryParams("Type"));
+            var DSLforSMS = deps.DSL.getDSLforObject("psa", "server");
+            var reqs = deps.DSL.dslProcessors.get("psa");
+            PSADSLProcessor.Companion.createdraftPSA(params, DSLforSMS, (PSADSLProcessor) reqs);
+            return "OK";
+        });
+
+        post("/completepsa", (req, res)->{
+            System.out.println("RECEIVED complete psa request");
+            HashMap<String, String> params = new HashMap<>();
+            params.put("Sor", req.queryParams("Sor"));
+            params.put("Tara", req.queryParams("Tara"));
+            params.put("UUID", req.queryParams("UUID"));
+            var DSLforSMS = deps.DSL.getDSLforObject("psa", "server");
+            var reqs = deps.DSL.dslProcessors.get("psa");
+            PSADSLProcessor.Companion.completePSA(params, DSLforSMS, (PSADSLProcessor) reqs);
+            return "OK";
+        });
+
+
+        post("/psa", (req, res)->{
+            return "OK";
+        });
 
         get("upload", (req, res) -> {
             model.clear();
@@ -58,21 +187,16 @@ public class Spark {
                     new ModelAndView(model, "upload.html"));
         });
 
-
         post("/api/upload", (req, res) -> {
             req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("D:/tmp"));
             Part filePart = req.raw().getPart("myfile");
-
             try (InputStream inputStream = ((Part) filePart).getInputStream()) {
                 OutputStream outputStream = new FileOutputStream("./" + filePart.getSubmittedFileName());
                 IOUtils.copy(inputStream, outputStream);
                 outputStream.close();
             }
-
             return "File uploaded and saved.";
         });
-
-
 
         get("todo", (req, res) -> {
             model.clear();
@@ -121,9 +245,8 @@ public class Spark {
         get("ajson", (req,res)->{
             model.clear();
             String params = req.queryParams("params");
-
            // System.out.println("AJAX called get");
-            return deps.LoaderJSON.loadAll2JSON();
+            return deps.LoaderJSON_.loadAll2JSON();
         });
 
 
@@ -151,7 +274,11 @@ public class Spark {
             String params = req.queryParams("params");
 
             System.out.println("AJAX called get");
-            return deps.LoaderJSON.loadAll2JSON();
+            return deps.LoaderJSON_.loadAll2JSON();
+        });
+
+        get("uuid", (req, res)->{
+           return deps.timeBasedUUID.generate();
         });
 
         get("emptyajax", (req,res)->{
@@ -200,14 +327,86 @@ public class Spark {
                     new ModelAndView(model, "timer.html"));
         });
 
-
-
-
-        get("temp", (req, res) -> {
-            var user = req.queryParams("login");
-           return   new Temp().process(req, "");
+        get("getriot", (req, res)->{
+            String login = req.queryParams("value");
+            return login;
         });
 
+        post("ps", (req, res)->{
+            String depid = req.queryParams("depid");
+            return depid;
+        });
+
+        get("psalogin", (req, res)->{
+            System.out.println(req.cookies());
+            res.cookie("user", "lohness");
+            var user = req.cookie("userpsa");
+            var se = req.cookie("se");
+            if (se == null)
+                System.out.println("se is null");
+            System.out.println(user);
+            System.out.println(se);
+
+            model.clear();
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "psalogin.html"));
+        });
+
+
+        get("riot", (req, res) -> {
+            model.clear();
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "riot.html"));
+        });
+
+        get("riotsocket", (req, res) -> {
+            model.clear();
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "riotsocket.html"));
+        });
+
+
+        get("requests8", (req, res) -> {
+            model.clear();
+            model.put("requests", deps.irp.DumpRequestToHTMLTable8());
+            System.out.println(deps.irp.DumpRequestToHTMLTable8());
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "requests.html"));
+        });
+
+        get("requestsx", (req, res) -> {
+            String dsl = new String(Files.readAllBytes(Path.of("rules")));
+            var  reqs =  deps.DSL.dslProcessors.get("requests");
+            model.clear();
+            model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
+            reqs.setOuttemplate( new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "requestsx.html")));
+            System.out.println("DSL::>>"+dsl);
+            return reqs.render(dsl);
+           /* model.clear();
+            model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "requestsx.html")); */
+        });
+
+        get("dsl", (req, res) -> {
+            String dsl = new String(Files.readAllBytes(Path.of("rules")));
+            var  reqs =  deps.DSL.dslProcessors.get("requests");
+            model.clear();
+            model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
+            reqs.setOuttemplate( new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "requestsx.html")));
+            System.out.println("DSL::>>"+dsl);
+            return reqs.render(dsl);
+        });
+
+
+        get("emptyws", (req, res) -> {
+            model.clear();
+            model.put("requests", "");
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "emptyws.html"));
+        });
 
         get("dump", (req, res) -> {
             model.clear();
@@ -216,12 +415,24 @@ public class Spark {
                     new ModelAndView(model, "dump.html"));
         });
 
+        get("requests", (req, res) -> {
+            model.clear();
+            model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "requests.html"));
+        });
+
+        get("zzz", (req, res) -> {
+            model.clear();
+            model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "call.html"));
+        });
 
         get("websocket", (req, res) -> eng.render(SOCKET));
 
         redirect.get("/", "login.area");
         get("/hello", (req, res) -> "Hello World");
-        get("/redirect", (req, res) ->{ res.redirect("login.area"); return "";});
         get("login.area", (req, res) -> {
             boolean authenticated=true;
             // ... check if authenticated
@@ -280,11 +491,13 @@ public class Spark {
             }
             return eng.render(BAD);
         });
-        post("login", (req, res) -> {
-        ///    String login = req.queryParams("login");
-        ///    String pass = req.queryParams("password");
-         ////   return deps.dslmap.MapProcessor().get("login").process(req, deps.resolver.resolveDSL("login", login));
-        //   System.out.println("Call from scala"+Functor.sum(5,7));
+        get("/android", (req,res)->{
+            System.out.println("ANDROID GET!");
+            return "responce";
+        });
+
+        post("/login", (req, res) -> {
+            System.out.println(req.pathInfo());
             System.out.println("IN LOGIN AREA");
             String login = req.queryParams("login");
             String pass = req.queryParams("password");
@@ -292,14 +505,30 @@ public class Spark {
                 req.session().attribute("logined", true);
                 req.session().attribute("user", login);
                 System.out.println((String) req.session().attribute("user"));
-
+          //////////      model.clear();
             ///    model.put("requests", deps.irp.DumpRequestToHTMLTable8());
             ///    System.out.println(deps.irp.DumpRequestToHTMLTable8());
-              //  return AccesserRequests.Companion.access(login, deps);
-
-                model.put("requestsx", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
-                return new VelocityTemplateEngine().render(
-                        new ModelAndView(model, "requestsx.html"));
+                model.clear();
+         //////////////       model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
+       ////////////////         char first = Character.toUpperCase(login.charAt(0));
+        ///////////////        String uppercasedUser =  first + login.substring(1);
+        ///////////////        model.put("user", uppercasedUser);
+          ////////////////      return new VelocityTemplateEngine().render(
+           //////////////             new ModelAndView(model, "requestsx.html"));
+                String pseudoProc = deps.DSL.urltoDSLProc.get(req.pathInfo());
+                var reqs = deps.DSL.dslProcessors.get(pseudoProc);
+                String dsl = deps.DSL.getDSLforObject(pseudoProc, login);   ///// new String(Files.readAllBytes(Path.of("rules")));
+                model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
+                char first = Character.toUpperCase(login.charAt(0));
+                String uppercasedUser =  first + login.substring(1);
+                model.put("user", uppercasedUser);
+                reqs.setOuttemplate( new VelocityTemplateEngine().render(
+                        new ModelAndView(model, "requestsx.html")));
+                System.out.println("DSL::>>"+dsl);
+                return reqs.render(dsl).toString();
+           //     model.put("requests", deps.irp.DumpRequestToHTMLTable8usingmatrixhardcoded());
+           //     return new VelocityTemplateEngine().render(
+           //             new ModelAndView(model, "requests.html"));
             }
             else
                 req.session().attribute("logined", false);
@@ -389,11 +618,6 @@ public class Spark {
 */
 
 }
-
-
-
-
-
     public static boolean check(Request req){
         Set<String> attr = req.session().attributes();
         attr.forEach(a -> {System.out.println(a);});
@@ -402,9 +626,6 @@ public class Spark {
         if (req.session().attribute("logined").equals(true))
             return true;
         return false;
-    }
-    public static String result(String foo, String bar, String f){
-        return f;
     }
 
     public static void flushsession(@NotNull Request req){

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Таблица ПСА</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="style2.css">
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://use.fontawesome.com/a0f7b43176.js"></script>
+
+
+    <!-- Не используйте это в production -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+    <!-- jQuery and JS bundle w/ Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="dp.css">
+</head>
+<body style="margin:0; padding-left:20px; padding-right:20px">
+<!-- <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <form class="form-inline">
+
+    </form>
+
+    <div class="btn-group  mr-sm-2">
+        <button type="button" class="btn btn-sq-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-user fa-2x">$user</i><br>
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item"   data-toggle="modal"  data-target="#gridSystemModal">Сменить пароль</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/logout">Выйти</a>
+        </div>
+    </div>
+</nav> -->
+
+<!--nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <div class="bd-example bd-example-padded-bottom">
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"  data-target="#gridSystemModal">
+            Сменить пароль
+        </button>
+    </div>
+</nav-->
+
+
+
+<!--div id="loginform" class="logindiv">
+    <form action="approve" >
+        <h5>ID</h5><input name="id" id="inputid"> </input><br>
+        <button type="submit" onclick="alert('Запрос одобрен')" >Одобрить запрос</button>
+    </form>
+</div-->
+
+<div id="gridSystemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменение пароля</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+
+                    <p>Введите новый пароль<input type="password" class="float-right" id="pass1">     <br>
+                    <p>Повторите пароль<input type="password" class="float-right" id="pass2">     <br><br>
+                        <button  class="btn btn-secondary" align="center" onclick="changepass()">Изменить пароль</button><button type="button" class="btn btn-secondary float-right" data-dismiss="modal">Закрыть</button>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<!-- <button onclick="openmodal()">Show modal</button>
+<button onclick="createdynamical()">Dinamical create</button>
+<button onclick="createdynamicalX()">Dinamical create many</button>
+<button onclick="checkpassport()">Проверить паспорт</button>
+<button onclick="checktime()"></button> -->
+<script>
+        alert(localStorage.getItem('user_____'));
+
+function constructInitialRequest(){
+    var today = new Date();
+    var gårdagens = new Date();
+    gårdagens.setDate(gårdagens.getDate() - 1);
+
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() +1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    var dd2 = String(gårdagens.getDate()).padStart(2, '0');
+    var mm2 = String(gårdagens.getMonth()+1 ).padStart(2, '0'); //January is 0!
+    var yyyy2 = gårdagens.getFullYear();
+
+
+
+    today = yyyy+ '-'+ mm + '-' + dd ;
+    gårdagens = yyyy2+ '-'+ mm2 + '-' + dd2 ;
+    // document.write(today);
+    // document.write(today);
+
+    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'}"   
+    var xhr = new XMLHttpRequest()
+    var url = "psasearch";
+    var params = "search="+searchdsl;
+    xhr.open("POST", url, true); // set true for async, false for sync request
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(params); // or null, if no parameters are passed
+
+    xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+    try {
+        // alert('rendering!')
+        loadBlock(xhr.responseText);
+
+        // do your work here
+
+    } catch (error) {
+    throw Error;
+    }
+        }
+}
+
+
+}
+    constructInitialRequest()
+    // alert()
+//		'search'=>::sql('SELECT * FROM psa')
+//               ::numberpsa{[1900, 1902]},
+//               ::department('ПЗУ№1'),
+//               ::datarange('12.06.1940':'12.07.1940'),
+//               ::client('ООО Артемий'),
+//               ::typepayment('cash','bank'),
+//               ::platenumber('KAMAZ K582HB30').
+	var searchdsl ="'search'=>"
+    var platenumber_="";
+    var department_="";
+    var numberpsa_="";
+    var findFrom="";
+    var findTo="";
+    var client_="";
+    var startvaluedatapicker =""
+    var finishvaluedatapicker =""
+    function checktime(){
+         alert(findFrom+";;;;"+findTo)
+    }
+</script>
+<script>
+  $(function() {
+  $('input[name="daterange"]').daterangepicker({
+    opens: 'left',
+    "autoApply": true,
+    "showDropdowns": true,
+ "locale": {
+        "format": "YYYY-MM-DD",
+        "separator": " - ",
+        "applyLabel": "Применить",
+        "cancelLabel": "Отменить",
+        "fromLabel": "От",
+        "toLabel": "Дo",
+        "customRangeLabel": "Произвольно",
+        "weekLabel": "Н",
+        "daysOfWeek": [
+            "Вс",
+            "Пн",
+            "Вт",
+            "Ср",
+            "Чт",
+            "Пт",
+            "Сб"
+        ],
+        "monthNames": [
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь"
+        ],
+        "firstDay": 1
+    },
+    "startDate" : moment().startOf('day').add(0, 'day'),////-14, 'day'),
+    "endDate" : moment()
+  }, function(start, end, label) {
+    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    startvaluedatapicker = start.format('YYYY-MM-DD')
+    finishvaluedatapicker = end.format('YYYY-MM-DD')
+  });
+});
+
+
+
+  </script>
+
+
+<div>
+    <!-- <div id="dialog2" title="Basic dialog" style="background-color: #333333;">
+        <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the &apos;x&apos; icon.</p>
+      </div> -->
+
+      <script>
+        // $( function() {
+        //   $( "#dialog2" ).dialog();
+        // } );
+        // </script>
+      </head>
+        <p>Параметры фильтра
+            <label for="fromto">Диапазон дат</label>
+            <input type="text" name="daterange"  id="fromto" />
+            <label for="client">Имя клиента или наименование компании</label>
+            <input type="text" id="client" name="client" onkeyup="client_=this.value">
+            <label for="psanumber">Номер ПСА</label>
+            <input type="text" id="psanumber" name="psanumber" onkeyup="numberpsa_=this.value">
+            <label for="platenumber">Номер машины</label>
+            <input type="text" id="platenumber" name="platenumber" onkeyup="platenumber_=this.value">
+    
+        <button onclick="clearfilter()">Сбросить фильтр</button>
+        <button onclick="applyfilter()">Отфильтровать</button>
+        
+        <script>
+    
+    
+        function recodedate(a){
+        //'12/34/2020
+        var mm = a.substring(0,2)
+        var dd = a.substring(3,5)
+        var yy = a.substring(6,10)
+        return yy+"-"+mm+"-"+dd
+    }
+         recodedate("12/34/2020")
+        //'12/34/2020
+            // alert(client.value)
+            var replyobj
+        function clearfilter(){
+            from.value=""
+            to.value=""
+            client.value=""
+            platenumber.value=""
+            psanumber.value=""
+        }
+    
+        function readdate(){
+           if ((startvaluedatapicker != "") && (finishvaluedatapicker !="")){
+            findFrom = startvaluedatapicker
+            findTo = finishvaluedatapicker
+           }
+                
+      ///      if ((to.value != "") && (to.value.length>1))
+      ////          findTo = recodedate(to.value)    
+            if ((client.value != "") && (client.value.length>1))
+                client_ = client.value 
+            if ((psanumber.value != "") && (psanumber.value.length>1))
+                numberpsa_ = psanumber.value     
+            if ((platenumber.value !="") && (platenumber.value.length>1))
+                platenumber_ = platenumber.value
+        }
+    
+        function clearparams(){
+            searchdsl ="'search'=>"
+            platenumber_="";
+            department_="";
+            numberpsa_="";
+            findFrom="";
+            findTo="";
+            client_="";
+        }
+    
+        function applyfilter(){
+            // alert('dumb')
+            // alert("fromto"+fromto.value)
+    
+        //     var platenumber_;
+        // var department_;
+        // var numberpsa_;
+        // var findFrom;
+        // var findTo;
+        // var client_;
+        clearparams()
+        readdate()
+    
+    
+            console.log('\n platenumber_=>'+ platenumber_)
+            console.log('\n department_=>'+ department_)
+            console.log('\n numberpsa_=>'+ numberpsa_)
+            console.log('\n findFrom=>'+ findFrom)
+            console.log('\n findTo=>'+ findTo)
+            console.log('\n client_=>'+ client_)
+    
+            constructRequest()
+    
+            var xhr = new XMLHttpRequest()
+            var url = "psasearch";
+            var params = "search="+searchdsl;
+            xhr.open("POST", url, true); // set true for async, false for sync request
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send(params); // or null, if no parameters are passed
+    
+            xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+            try {
+                // alert('rendering!')
+                loadBlock(xhr.responseText);
+    
+               // do your work here
+    
+           } catch (error) {
+               throw Error;
+           }
+                }
+            }
+    
+        }
+    
+        String.prototype.replaceAt = function(index, replacement) {
+            return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+        }
+    
+    
+        function constructRequest(){
+            searchdsl+="::sql{'SELECT * FROM psa '},"
+            if (platenumber_ !=""){
+                searchdsl += "::platenumber{'"+platenumber_+"'},"
+            }
+            if (numberpsa_ !=""){
+                searchdsl += "::numberpsa{'"+numberpsa_+"'},"
+            }
+            if (client_ !=""){
+                searchdsl += "::client{'"+client_+"'},"
+            }
+            if ((findTo !="") && (findFrom !="")){
+                searchdsl += "::datarange{'"+findFrom+"':'"+findTo+"'}"
+            }
+            searchdsl = searchdsl.replaceAt(searchdsl.length, ".")
+            searchdsl = searchdsl.replaceAll(",.",".")
+            
+            // alert(searchdsl)
+    
+    //		'search'=>::sql('SELECT * FROM psa')
+    //               ::numberpsa{[1900, 1902]},
+    //               ::department('ПЗУ№1'),
+    //               ::datarange('12.06.1940':'12.07.1940'),
+    //               ::client('ООО Артемий'),
+    //               ::typepayment('cash','bank'),
+    //               ::platenumber('KAMAZ K582HB30').
+    
+    
+        }
+    
+    
+        </script>
+    
+    
+    
+    
+    
+    
+    
+    </div>
+    <table  id="mTable" border="1" cellpadding="10"  align="center" valign="center" class="table">
+        <th class="text-center">ID</th>
+        <th class="text-center">Дата</th>
+        <th class="text-center">ПЗУ</th>
+        <th class="text-center">Номер ПСА</th>
+        <th class="text-center">Клиент</th>
+        <th class="text-center">Номер машины</th>
+        <th class="text-center">Металл</th>
+        <th class="text-center">Масса, кг</th>
+        <th class="text-center">Сумма, руб</th>
+        <th class="text-center">Действия</th>
+        <tbody id="tbody">
+        <!-- <tr><td>fgfg-hjjhh</td>
+            <td>12.03.2010</td>
+            <td>#3</td>
+            <td>12066</td>
+            <td>Конкин</td>
+            <td>!2ОСНЕХАЙ</td>
+            <td>Золото</td>
+            <td>20</td>
+            <td>500000000</td>
+    
+            <td><button id="confirm2" type="button" class="btn btn-success" onclick="setup($idbutton)" ><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                Установить контрагента</button>
+        </td>
+        </tr>     -->
+    
+        </tbody>
+    </table>
+    
+    
+
+<script>
+
+    function disablebutton(){
+        confirm2.disabled = true
+    }
+
+    function enablebutton(){
+        confirm2.disabled = false
+    }
+
+
+    function hidebutton(){
+        confirm2.style.visibility = 'hidden'
+    }
+
+    function showbutton(){
+        let confirm2 = document.getElementById("confirm")
+        confirm2.style.visibility = 'visible'
+    }
+
+function checkpassport(){////serianumber
+        var xhr__ = new XMLHttpRequest()
+        const params = "serie="+1210+"&number="+322280;
+        var url = "checkpost"  ////passport.avs.com.ru
+        // alert(request)
+        xhr__.open("POST", url, true);
+        //В заголовке говорим что тип передаваемых данных закодирован.
+        xhr__.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr__.onreadystatechange=function()
+        {
+
+            if (xhr__.status == 200) {
+
+                let resp = xhr__.responseText
+
+
+  /////////////              location.reload();
+            }
+
+
+   //     if(xhr__.readyState === 4 && xhr__.status === 200) {
+	//	    alert(xhr__.responseText);
+   //     }
+       
+
+        //	Вот здесь мы и передаем строку с данными, которую формировали выше. И собственно выполняем запрос.
+        xhr__.send(params);
+    }
+    }   
+
+    let json_withnull = '{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"    ", "platenumber":"FF12RX",\
+    "metals":"БРОНЗА", "uuid":"126103"}';
+    // alert('parsing null')
+    var obj_withnull = JSON.parse(json_withnull)
+    console.log("parced" +obj_withnull.psanumber)
+    // alert(obj_withnull.uuid)
+
+    let json_ = '{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
+    "metals":"БРОНЗА", "uuid":"126103"}';
+    let jsonpack_ = '[{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
+    "metals":"БРОНЗА", "uuid":"126103"},{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
+    "metals":"БРОНЗА", "uuid":"126103"}]';
+    var obj = JSON.parse(json_);
+    let index____ = 0
+    function createdynamicalX(){
+        loadBlock(jsonpack_)
+    }
+    function loadBlock(a){
+        console.log("received json=>" +a)
+        var table = document.getElementById("tbody");
+        table.innerHTML=""
+        // alert('parsing......')
+        var obj = JSON.parse(a)
+        // alert('parse success!')
+        for (var item in obj){
+            var id  = (obj[item].id);
+            createRow(obj[item])
+            fillRow(obj[item])
+        }
+    }
+    function createRow(a){
+        var table = document.getElementById("mTable");
+        var row = table.insertRow(1);
+        var tbdy = document.getElementById('tbody');
+        var tr = document.createElement('tr');
+        tr.setAttribute("id", index____);
+        for (var j = 0; j < 9; j++)
+        {
+            var td = document.createElement('td');
+            td.setAttribute("align", "center");
+            var div = document.createElement("div");
+            var id = index____+'a'+j
+        //    console.log(id)
+            div.setAttribute("id", id);
+            td.appendChild(div)
+            tr.appendChild(td)
+        }
+        var td = document.createElement('td');
+        var btn = document.createElement("button");
+        
+        var id = index____+'a9'
+        btn.setAttribute("id", id);
+        btn.setAttribute("class", "btn btn-success");
+        btn.innerHTML = '<i class="fa fa-hand-pointer-o" aria-hidden="true"></i>Установить контрагента'
+        td.appendChild(btn)
+        tr.appendChild(td)
+        tbdy.prepend(tr);
+    ///////    alert('create row success!')
+        }
+
+    function applyusinguuid(a){
+        // alert("UUID::"+a);
+    }
+
+
+    function fillRow(a)
+    {
+         ////   alert('in fillRow')
+
+       
+     ///////  alert(index____)
+       var id = document.getElementById(index____+'a'+0);
+       var datetime_ = document.getElementById(index____+'a'+1);
+       var department = document.getElementById(index____+'a'+2);
+       var psanumber = document.getElementById(index____+'a'+3);
+       var client = document.getElementById(index____+'a'+4);
+       var platenumber = document.getElementById(index____+'a'+5);
+       var metals = document.getElementById(index____+'a'+6);
+       var mass = document.getElementById(index____+'a'+7);
+       var summ = document.getElementById(index____+'a'+8);
+       var approvebutton = document.getElementById(index____+'a'+9);
+       id.innerHTML =a.id
+       datetime_.innerHTML =a.datetime
+       department.innerHTML =a.department
+       psanumber.innerHTML=a.psanumber
+       client.innerHTML=a.client
+       platenumber.innerHTML = a.platenumber
+       metals.innerHTML =a.metals
+       mass.innerHTML =''
+       summ.innerHTML = ''
+       approvebutton.setAttribute("onclick", "openmodal('"+a.uuid+"')")
+       
+     ///  alert('fill row success!')
+
+    }    
+    
+    function dinamicalloadJSON(q){
+        
+        var obj = JSON.parse(q)
+        for (var item in obj){
+            var id  = (obj[item].id);
+            createRow(obj[item])
+        }
+    }
+
+
+    function createdynamical(){
+
+        // alert('tupple')
+        index____ = 500
+        createRow(obj)
+        fillRow(obj)
+      
+    };
+
+    function setup(a){
+        // alert("its worked!"+a)
+        var node = evt.target || evt.srcElement;
+        if (node.name == 'edit') {
+        node.value = "Modify";
+    }
+    }
+
+    </script>
+
+<div id="dialog" title="Установка контрагента">
+    <h3> Введите ИНН или Номер паспорта</h3>
+    <input align="center" id="googlesearch" onkeyup="search()" class="searchclient2">
+    <div id="clientName"></div>
+    <button id="confirm" type="button" class="btn btn-success" onclick="apply()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+        Установить контрагента</button><div id="warning"></div>
+</div>
+
+<script>
+    var confirm2 = document.getElementById("confirm")
+
+   let initial =20
+//   alert(initial)
+   let name =""
+   let key =""
+   let value =""
+
+hidebutton()
+let divid = document.getElementById("dialog")
+
+divid.style.visibility = 'hidden'
+function openmodal(a){
+initial =a
+$("#dialog").dialog({ width: 1000 });
+divid.style.visibility = 'visible'
+// alert('show modal')
+//$( function() {
+//$( "#dialog" ).dialog({ width: 600 });
+
+//  } );
+}
+
+function search(){
+    function getXmlHttp()
+    {
+        var xmlhttp;
+        try {
+        xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e)
+        {
+            try
+        {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (E)
+        {
+            xmlhttp = false;
+        }
+            }
+            if (!xmlhttp && typeof XMLHttpRequest!='undefined')
+            {
+                xmlhttp = new XMLHttpRequest();
+            }
+            return xmlhttp;
+        }
+        warning.innerHTML = ""
+        confirm.disabled = false
+        var xhr = getXmlHttp()
+        var request = "/psaproc?input="+googlesearch.value;
+        console.log('sending  ' +googlesearch.value)
+        xhr.open("GET", request, true);
+        xhr.onreadystatechange=function()
+        {
+
+            if (xhr.readyState != 4) return
+            clearTimeout(xhrTimeout)
+            if (xhr.status == 200) {
+                enablebutton()
+                let elem = document.getElementById("clientName")
+                let resp = xhr.responseText
+                console.log("responce::\n"+resp)
+                name = resp.substring(0, resp.indexOf('::{')).replaceAll("#"," ")
+                console.log(name)
+                let data = resp.substring(resp.indexOf('::{')+3, resp.indexOf('}.'))
+                console.log("data\n"+data)
+                console.log('key::'+ getKey(data))
+                console.log('value::'+ getValue(data))
+
+                key = getKey(data)
+                console.log('key>>>'+key)
+                value = getValue(data)
+                if (key == "B"){
+                    warning.innerHTML = "<p style='color: red; '>Паспорт недействителен!"
+                    disablebutton()
+
+                }
+
+                if (key != "B"){
+                    enablebutton()
+
+                }
+               
+                elem.innerHTML = "<h3>"+name.replaceAll("#"," ")+"</h3>"
+                hidebutton()
+                if (xhr.responseText !="")
+                    showbutton()
+                else
+                    hidebutton()
+
+                console.log("responce::   "+xhr.responseText)
+               //// alert('ответ отправлен');
+  /////////////              location.reload();
+            }
+            if (xhr.status == 500) {
+           //////     alert('ответ отправлен');
+ ////////////               location.reload();
+            }
+        }
+
+        xhr.send("a=5&b=4");
+        var xhrTimeout = setTimeout( function(){ xhr.abort(); handleError("Timeout") }, 10000);
+
+        function handleError(message)
+        {
+            alert("Ошибка: "+message)
+
+        }
+
+      }
+
+    //  search()
+function apply(){
+
+
+   //     get("/psasetclient", (req,res)-> {
+   //         var name  = req.queryParams("name");
+   //         var psanumber  = req.queryParams("psanumber"И);
+   //         var idclient  = req.queryParams("idclient");
+   //         var type = req.queryParams("idclient");
+
+        var xhr = new XMLHttpRequest()
+        var request = "/psasetclient?name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
+        const params = "name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
+        var url = "psasetclient"
+        // alert(request)
+        xhr.open("POST", url, true);
+//В заголовке говорим что тип передаваемых данных закодирован.
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhr.addEventListener("readystatechange", () => {
+
+        if(request.readyState === 4 && request.status === 200) {
+            alert('Успешно изменен!')
+		    console.log(request.responseText);
+        }
+        });
+
+//	Вот здесь мы и передаем строку с данными, которую формировали выше. И собственно выполняем запрос.
+        xhr.send(params);
+        alert('Запрос отправлен')
+        $("#dialog").dialog("close");
+
+      ///'  alert('dialog hidden!')
+
+}
+
+
+function getValue(input){
+    let index = input.indexOf(":")
+    return Atom(input.substring(index+1, input.length));
+}
+
+
+function getKey(input___){
+    let index = input___.indexOf(":");
+    let key = input___.substring(0, index).replaceAll(" ","");
+    return Atom(key);
+}
+
+function Atom(input){
+    return (input.replaceAll("'",""));
+}
+
+
+
+</script>
+</body>
+</html>

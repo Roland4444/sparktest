@@ -2,20 +2,30 @@ package servers;
 
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
+import abstractions.OnRequest;
 import abstractions.RequestMessage;
 import abstractions.ResponceMessage;
-//import client.J11Client;
 import impl.JAktor;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.simple.parser.ParseException;
 import servers.threadMessager.ThreadMessager;
 import util.JSON.Beatyfulizer;
 import util.IDHelper;
-import util.JSON.ParcedJSON;
 import util.processors.InputRequestProcessor;
 
 import java.io.*;
-import java.net.ConnectException;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ServerAktor extends JAktor {
     public String incomingFolder;
@@ -27,6 +37,7 @@ public class ServerAktor extends JAktor {
         this.cypher = cypher;
     }
     public ThreadMessager msg ;
+    public OnRequest onRequest;
     public AsyncSend async = new AsyncSend() {
         @Override
         public void asyncSend(ResponceMessage resp) throws IOException {
@@ -57,6 +68,37 @@ public class ServerAktor extends JAktor {
       //  return sendj11(message, address);
     }
 
+    public static String sendPost(String serie, String number, String url) throws Exception {
+        HttpPost post = new HttpPost(url);
+        List<NameValuePair> urlParameters = new ArrayList<>();
+        urlParameters.add(new BasicNameValuePair("serie", serie));
+        urlParameters.add(new BasicNameValuePair("number", number));
+        String responce = "";
+        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(post)) {
+            responce = EntityUtils.toString(response.getEntity());
+            System.out.println(responce);
+        }
+        return responce;
+    }
+
+    public static String sendPosttest(String data, String uuid, String url) throws Exception {
+        HttpPost post = new HttpPost(url);
+        List<NameValuePair> urlParameters = new ArrayList<>();
+        urlParameters.add(new BasicNameValuePair("data", data));
+        urlParameters.add(new BasicNameValuePair("uuid", uuid));
+        urlParameters.add(new BasicNameValuePair("summery", "435543543543"));
+        String responce = "";
+        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(post)) {
+            responce = EntityUtils.toString(response.getEntity());
+            System.out.println(responce);
+        }
+        return responce;
+    }
+
     @Override
     public void receive(byte[] message_) throws IOException {
         System.out.println("Catched!!!");
@@ -69,10 +111,14 @@ public class ServerAktor extends JAktor {
 
         if (req.type.equals(RequestMessage.Type.request)) {
             saveRequest(req);
-
+            try {
+                onRequest.action(req);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             try {
                 saveinDB(req);
-            } catch (SQLException throwables) {
+            } catch (SQLException | ParseException throwables) {
                 throwables.printStackTrace();
             }
             try {
@@ -84,7 +130,7 @@ public class ServerAktor extends JAktor {
         }
         if (req.type.equals(RequestMessage.Type.update)) {
             try {
-                irp.saveUpdatingRequestinDB(req);
+               irp.saveUpdatingRequestinDB(req);
             } catch (SQLException | ParseException throwables) {
                 throwables.printStackTrace();
             }
@@ -106,8 +152,6 @@ public class ServerAktor extends JAktor {
     private void sendWebsocketAlerts(String id) throws SQLException {
         EchoWebSocket.sendall(id);
     }
-
-
 
     public void saveRequest(RequestMessage req) throws IOException {
         System.out.println("Save request");
@@ -138,7 +182,7 @@ public class ServerAktor extends JAktor {
     };
 
 
-    public void saveinDB(RequestMessage requestMessage) throws SQLException {
+    public void saveinDB(RequestMessage requestMessage) throws SQLException, ParseException {
         irp.saveRequestinDB(requestMessage);
 
     };

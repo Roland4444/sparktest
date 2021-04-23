@@ -18,6 +18,8 @@ public class Beatyfulizer {
         String styleinject = "  style=\"background-color: yellow;\"";
         if ((input==null) || (compare==null) )
             return schoneJSON(input);
+        if (input.Brutto.equals("0.00"))
+            return ("<p class=\"declined\">Позиция удалена</p>");
         StringBuilder result = new StringBuilder();
         if ((input.Date ==null) || input.Date.equals(compare.Date))
             result.append("<p>Дата: "+ input.Date +   "<br>");

@@ -1,8 +1,11 @@
 package util.JSON;
 
+import abstractions.RequestMessage;
 import fr.roland.DB.Executor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,7 +48,12 @@ public class LoaderJSON {
             ;
         }
         return list.toJSONString();
+    };
 
+    public static  String loadPzu(RequestMessage req) throws ParseException {
+        Object obj = new JSONParser().parse(req.JSONed);
+        JSONObject jo = (JSONObject) obj;
+        return (String) jo.get("pzu");
     };
     public String LoadResult2JSON(String result) throws SQLException {
         ArrayList param = new ArrayList();

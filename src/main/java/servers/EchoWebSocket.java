@@ -1,19 +1,14 @@
 package servers;
-
 import Message.abstractions.BinaryMessage;
 import org.eclipse.jetty.websocket.api.*;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import util.DB.DataBaseHelper;
 import util.JSON.LoaderJSON;
-
 import java.io.*;
-
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.*;
-
-
-@WebSocket(maxIdleTime=500000000)
+@WebSocket(maxIdleTime=50000000)
 public class EchoWebSocket {
     // Store sessions if you want to, for example, broadcast a message to all users
     private static final Queue<Session> sessions = new ConcurrentLinkedQueue<>();
