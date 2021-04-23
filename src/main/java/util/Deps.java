@@ -86,6 +86,7 @@ public class Deps {
         Incomming = new Readfile(incomingFolder);
         try {
             this.loginchecker = new LoginProcessor( users.executor);
+            this.loginchecker.PSAConnector = DSL.PSAConnector;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

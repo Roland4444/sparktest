@@ -1,4 +1,6 @@
 package util;
+import DSLGuided.requestsx.PSA.PSAConnector;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import fr.roland.DB.Executor;
 
 import java.sql.PreparedStatement;
@@ -6,8 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+
 public class LoginProcessor {
     private Executor executor;
+    public PSAConnector PSAConnector;
     public LoginProcessor(Executor executor) throws SQLException {
         this.executor = executor;
     }
@@ -42,11 +46,41 @@ public class LoginProcessor {
             return true;
         return false;
     }
-    public boolean check(String password, String encoded){
-  ///      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-  ///      return encoder.matches(password, encoded);
-        return true;
 
+
+    public boolean checkpsalogin(String user, String password) throws SQLException {
+        var list = new ArrayList<>();
+        list.add(user);
+        var hash = "";
+        ResultSet  res = PSAConnector.executor.executePreparedSelect("SELECT * from users where username = ?", list);
+        if (res.next())
+            hash =res.getString("password");
+        if ((hash.length()<5) || (user.length()<1))
+            return false;
+       return checkbcryptpass(password,hash );
+    };
+
+    public String getpsadepid(String user) throws SQLException {
+        var list = new ArrayList<>();
+        list.add(user);
+        ResultSet  res = PSAConnector.executor.executePreparedSelect("SELECT * from users where username = ?", list);
+        if (res.next())
+            return res.getString("department_id");
+        return null;
+    };
+
+    public boolean checkbcryptpass(String password, String encoded){
+        BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), encoded);
+        return result.verified;
     }
+
+
+
+
+
+
+
+
+
 
 }

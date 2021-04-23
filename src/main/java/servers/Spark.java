@@ -82,7 +82,33 @@ public class Spark {
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psapage.html"));});
 
+        post("/loginpsa", (req,res)->{
+            var login = req.queryParams("login");
+            var password = req.queryParams("password");
+            System.out.println("login:: "+login+"\npassword::"+password);
+            if (deps.loginchecker.checkpsalogin(login, password)){
+                res.cookie("depid", deps.loginchecker.getpsadepid(login));
+                res.cookie("userpsa", login);
+                res.redirect("/psa");
+            }
+            res.redirect("/psalogin");
+            return "OK";
+        });
+
         get("/psa", (req,res)-> {
+            System.out.println(req.cookies());
+            var se = req.cookie("userpsa");
+            var depid = req.cookie("depid");
+            if (depid == null){
+                System.out.println("DEPID NULL!!!");
+            }
+            if (depid.equals("")){
+                System.out.println("DEPID EQUALS '''''!!!");
+            }
+          if (true)
+          //  if (se == null)
+                res.redirect("/psalogin");
+            System.out.println(se);
             model.clear();
             model.put("idbutton", 44);
             return new VelocityTemplateEngine().render(
@@ -90,10 +116,17 @@ public class Spark {
 
         post("/psasearch", (req,res)-> {
             var reqs = req.queryParams("search");
-            System.out.println("REQS::"+reqs);
-            var result = PSASearchProcessor.Companion.search(reqs, deps.DSL.PSASearchProcessor);
-            System.out.println(result);
-            return result;
+            var se = req.cookie("userpsa");
+            var depid = deps.loginchecker.getpsadepid(se);
+            System.out.println("depid::"+depid);
+            if (( depid == null) ) {
+                System.out.println("UNRESTRICTED!!!");
+                return PSASearchProcessor.Companion.search(reqs, deps.DSL.PSASearchProcessor);
+            }
+            else {
+                System.out.println("Restricting deps!!!");
+                return PSASearchProcessor.Companion.search(reqs, deps.DSL.PSASearchProcessor,depid);
+            }
         });
         post("/psasetclient", (req,res)-> {
             var name  = req.queryParams("name");
@@ -305,6 +338,15 @@ public class Spark {
         });
 
         get("psalogin", (req, res)->{
+            System.out.println(req.cookies());
+            res.cookie("user", "lohness");
+            var user = req.cookie("userpsa");
+            var se = req.cookie("se");
+            if (se == null)
+                System.out.println("se is null");
+            System.out.println(user);
+            System.out.println(se);
+
             model.clear();
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psalogin.html"));
