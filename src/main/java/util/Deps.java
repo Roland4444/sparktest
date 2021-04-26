@@ -61,6 +61,7 @@ public class Deps {
         PSASearchProcessor psearch = (PSASearchProcessor) DSL.dslProcessors.get("psasearch");
         PSAConnector pconnector = (PSAConnector)DSL.dslProcessors.get("psaconnector");
         psearch.executor = pconnector.executor;
+        DSL.PSADSLProcessor.executor = pconnector.executor;
     }
 
     public Deps() throws InterruptedException, SQLException, IOException {
