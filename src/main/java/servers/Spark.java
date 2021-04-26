@@ -40,7 +40,7 @@ public class Spark {
         var template =  new VelocityTemplateEngine();
         webSocket("/echo", EchoWebSocket.class);
 
-        get("/hello", (req,res)-> {
+        get("/getpsanumber", (req,res)-> {
             var reqs = req.queryParams("depid");
             return deps.DSL.PSADSLProcessor.getPSANumberviaDSL(reqs);
         });
