@@ -111,8 +111,7 @@ public class Spark {
             if (depid.equals("")){
                 System.out.println("DEPID EQUALS '''''!!!");
             }
-          if (true)
-          //  if (se == null)
+            if (se == null)
                 res.redirect("/psalogin");
             System.out.println(se);
             model.clear();
