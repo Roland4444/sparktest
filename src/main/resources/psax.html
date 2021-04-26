@@ -115,7 +115,7 @@ function constructInitialRequest(){
     // document.write(today);
     // document.write(today);
 
-    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"',::client('Необходимо выбрать')}"   
+    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'},::client{'Необходимо выбрать'}."   
     var xhr = new XMLHttpRequest()
     var url = "psasearch";
     var params = "search="+searchdsl;
