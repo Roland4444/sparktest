@@ -115,7 +115,7 @@ function constructInitialRequest(){
     // document.write(today);
     // document.write(today);
 
-    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'}"   
+    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"',::client('Необходимо выбрать')}"   
     var xhr = new XMLHttpRequest()
     var url = "psasearch";
     var params = "search="+searchdsl;
@@ -230,7 +230,7 @@ function constructInitialRequest(){
             <label for="fromto">Диапазон дат</label>
             <input type="text" name="daterange"  id="fromto" />
             <label for="client">Имя клиента или наименование компании</label>
-            <input type="text" id="client" name="client" onkeyup="client_=this.value" value="Необходимо выбрать">
+            <input type="text" id="client" name="client" onkeyup="client_=this.value" >
             <label for="psanumber">Номер ПСА</label>
             <input type="text" id="psanumber" name="psanumber" onkeyup="numberpsa_=this.value">
             <label for="platenumber">Номер машины</label>
@@ -240,7 +240,7 @@ function constructInitialRequest(){
         <button onclick="applyfilter()">Отфильтровать</button>
         
         <script>
-        client.value = "Необходимо выбрать"
+
     
         function recodedate(a){
         //'12/34/2020
@@ -297,7 +297,7 @@ function constructInitialRequest(){
         // var findFrom;
         // var findTo;
         // var client_;
-        clearparams()
+    //    clearparams()
         readdate()
     
     
