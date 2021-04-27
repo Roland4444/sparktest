@@ -32,6 +32,10 @@ public class PSAClient {
         this.passcheckurl_ = passcheckurl_;
     };
 
+    public PSAClient(String passcheckurl_) throws SQLException {
+        this.passcheckurl_ = passcheckurl_;
+    };
+
     public void updateclient(String name, String psanumber, String idclient, String type) throws SQLException {
         System.out.println("name=="+name);
         System.out.println("psanumber=="+psanumber);

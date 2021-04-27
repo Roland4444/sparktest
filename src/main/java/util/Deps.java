@@ -71,8 +71,9 @@ public class Deps {
             return;
         }
         timeBasedUUID = new timeBasedUUID();
-        PSAClient = new PSAClient("jdbc:mysql://192.168.0.121:3306/psa", "root", "123","https://passport.avs.com.ru/");
+        PSAClient = new PSAClient("https://passport.avs.com.ru/");
         initDSL();
+        PSAClient.exec = DSL.PSAConnector.executor;
         setts = (abstractions.Settings) BinaryMessage.restored(BinaryMessage.readBytes(binprops));
         System.out.println(setts.AktorPORT+"\n:::\n"+setts.usersPostgresConnect+"\n:::\n"+ setts.requestsPOSTGRESConnect);
         prod = new ProductionUPDATE();
