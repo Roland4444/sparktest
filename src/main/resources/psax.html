@@ -592,9 +592,136 @@ function checkpassport(){////serianumber
     <div id="clientName"></div>
     <button id="confirm" type="button" class="btn btn-success" onclick="apply()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
         Установить контрагента</button><div id="warning"></div>
+        <button id="confirm" type="button" class="btn btn-warning" onclick="createpsa()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+            Создать ПСА</button><div id="warning"></div>
 </div>
 
+
+
+<div id="position" title="Добавление позиции">
+    <table>
+        <!-- <thead> -->
+            <th class="text-center">Для АВС</th>
+    <th class="text-center">Для клиента </th>
+    <!-- </thead> -->
+        <tr>
+<td>
+    <label for="fromto">Брутто</label><br>
+    <input type="text" name="daterange__"   /><br>
+    <label for="client">Тара</label><br>
+    <input type="text"  name="client" onkeyup="client_=this.value" ><br>
+    <label for="psanumber">Засор</label><br>
+    <input type="text"  name="psanumber" onkeyup="numberpsa_=this.value"><br>
+    <label for="platenumber">Цена</label><br>
+    <input type="text"  name="platenumber" onkeyup="platenumber_=this.value"><br>
+    <label for="platenumber">Металл</label><br>
+    <select size="1" >
+        <option disabled>Выберите металл</option>
+        <option value="Чебурашка">Алюминий</option>
+        <option selected value="Крокодил Гена">Медь</option>
+        <option value="Шапокляк">Чугун</option>
+        <option value="Крыса Лариса">Титан</option>
+    </select>
+
+    </td>
+
+
+    <td>
+        <label for="fromto">Брутто</label><br>
+        <input type="text" name="daterange__"   /><br>
+        <label for="client">Тара</label><br>
+        <input type="text" name="client" onkeyup="client_=this.value" ><br>
+        <label for="psanumber">Засор</label><br>
+        <input type="text" name="psanumber" onkeyup="numberpsa_=this.value"><br>
+        <label for="platenumber">Цена</label><br>
+        <input type="text"  name="platenumber" onkeyup="platenumber_=this.value"><br>
+        <label for="metalclient" id="labelsel1">Металл</label><br>
+    <select size="1" id="sel1">
+        <option disabled>Выберите металл</option>
+        <option value="Чебурашка">Алюминий</option>
+        <option selected value="Крокодил Гена">Медь</option>
+        <option value="Шапокляк">Чугун</option>
+        <option value="Крыса Лариса">Титан</option>
+    </select>
+
+    <script>
+        var elem__ = document.getElementById("sel1")
+        var div__ = document.getElementById("labelsel1")
+        elem__.style.visibility = 'hidden'
+        div__.style.visibility = 'hidden'
+
+
+    </script>
+       
+</td>
+
+        </tr>
+
+    </table><br>
+    <button class = "btn btn-danger">Добавить </button>
+
+
+</div>
+
+
+<div id="dialogcreatepsa" title="Создание ПСА ">
+    <button class="btn btn-primary" onclick="addPosition()">Добавить взвешивание</button>
+    <table  id="psaTable" border="1" cellpadding="10"  align="center" valign="center" class="table">
+        <th class="text-center">Металл</th>
+        <th class="text-center">Брутто</th>
+        <th class="text-center">Тара</th>
+        <th class="text-center">Засор</th>
+        <th class="text-center">Нетто</th>
+        <th class="text-center">Цена</th>
+        <th class="text-center">Сумма</th>
+
+        <tbody id="psaTableищвн">
+        <!-- <tr><td>fgfg-hjjhh</td>
+            <td>12.03.2010</td>
+            <td>#3</td>
+            <td>12066</td>
+            <td>Конкин</td>
+            <td>!2ОСНЕХАЙ</td>
+            <td>Золото</td>
+            <td>20</td>
+            <td>500000000</td>
+    
+            <td><button id="confirm2" type="button" class="btn btn-success" onclick="setup($idbutton)" ><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                Установить контрагента</button>
+        </td>
+        </tr>     -->
+    
+        </tbody>
+    </table>
+</div>
+
+
+
 <script>
+
+function addPosition(){
+$("#position").dialog({ width: 500, height:1000 });
+var div__ = document.getElementById("position")
+div__.style.visibility = 'visible'
+// alert('show modal')
+//$( function() {
+//$( "#dialog" ).dialog({ width: 600 });
+
+//  } );
+}
+
+
+function createpsa(){
+$("#dialogcreatepsa").dialog({ width: 1000 });
+var div__ = document.getElementById("dialogcreatepsa")
+div__.style.visibility = 'visible'
+// alert('show modal')
+//$( function() {
+//$( "#dialog" ).dialog({ width: 600 });
+
+//  } );
+}
+
     var confirm2 = document.getElementById("confirm")
 
    let initial =20
