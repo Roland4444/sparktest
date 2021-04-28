@@ -1,3 +1,0 @@
-'sms'=>::login{'avs'},::pass{'7BBAP7nkTCA4L3r'},::sendto{'89608607763',''},::enabled{'false'}.  в sendto должно быть минимум два отправителя '', ''
-'psa'=>::psa{'login':'deprecated','pass':'deprecated'},::db{deprecated},::getPsaNumberfrom{deprecated},::keyparam{department_id},::enabled{'true'}.
-'psaconnector'=>::psa{'login':'root','pass':'123'},::db{jdbc:mysql://192.168.0.121:3306/psa},::enabled{'true'}.
