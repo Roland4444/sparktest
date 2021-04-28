@@ -115,7 +115,7 @@ function constructInitialRequest(){
     // document.write(today);
     // document.write(today);
 
-    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'},::client{'Необходимо выбрать'}."   
+    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'},::client{'Необходимо выбрать'},::limit{200}."   
     var xhr = new XMLHttpRequest()
     var url = "psasearch";
     var params = "search="+searchdsl;
@@ -350,8 +350,9 @@ function constructInitialRequest(){
                 searchdsl += "::client{'"+client_+"'},"
             }
             if ((findTo !="") && (findFrom !="")){
-                searchdsl += "::datarange{'"+findFrom+"':'"+findTo+"'}"
+                searchdsl += "::datarange{'"+findFrom+"':'"+findTo+"'},"
             }
+            searchdsl +="::limit{200}."
             searchdsl = searchdsl.replaceAt(searchdsl.length, ".")
             searchdsl = searchdsl.replaceAll(",.",".")
             
