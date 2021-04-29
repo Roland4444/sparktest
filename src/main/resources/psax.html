@@ -353,8 +353,8 @@ function constructInitialRequest(){
                 searchdsl += "::datarange{'"+findFrom+"':'"+findTo+"'},"
             }
             searchdsl +="::limit{200}."
-            searchdsl = searchdsl.replaceAt(searchdsl.length, ".")
-            searchdsl = searchdsl.replaceAll(",.",".")
+            // searchdsl = searchdsl.replaceAt(searchdsl.length, ".")
+            // searchdsl = searchdsl.replaceAll(",.",".")
             
             // alert(searchdsl)
     
