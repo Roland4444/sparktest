@@ -104,13 +104,13 @@ public class Spark {
         get("/psa", (req,res)-> {
             System.out.println(req.cookies());
             var se = req.cookie("userpsa");
-            var depid = req.cookie("depid");
-            if (depid == null){
-                System.out.println("DEPID NULL!!!");
-            }
-            if (depid.equals("")){
-                System.out.println("DEPID EQUALS '''''!!!");
-            }
+//            var depid = req.cookie("depid");
+//            if (depid == null){
+//                System.out.println("DEPID NULL!!!");
+//            }
+//            if (depid.equals("")){
+//                System.out.println("DEPID EQUALS '''''!!!");
+//            }
             if (se == null)
                 res.redirect("/psalogin");
             System.out.println(se);
