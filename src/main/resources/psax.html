@@ -339,7 +339,7 @@ function constructInitialRequest(){
     
     
         function constructRequest(){
-            searchdsl+="::sql{'SELECT * FROM psa '},"
+            searchdsl="::sql{'SELECT * FROM psa '},"
             if (platenumber_ !=""){
                 searchdsl += "::platenumber{'"+platenumber_+"'},"
             }
