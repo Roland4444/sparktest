@@ -2,6 +2,9 @@ package util.JSON;
 
 import Message.abstractions.BinaryMessage;
 import org.eclipse.jetty.util.Loader;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.Test;
 import util.DB.DataBaseHelper;
 
@@ -42,5 +45,16 @@ public class LoaderJSONTest {
         FileOutputStream fos = new FileOutputStream("JSON.DUMP.DECLINED");
         fos.write(loader.LoadResult2JSON(declinedid).getBytes());
         fos.close();
+    }
+
+    @Test
+    public void loaderJSON() throws ParseException {
+        var json = """
+                {"id":37116,"waybill":33,"date":"2021-04-27","time":"17:33:16","comment":"\\u0413\\u043b\\u0430\\u0434\\u043a\\u043e\\u0432","exportId":33,"department":{"id":16,"name":"\\u041f\\u0417\\u0423 1 \\u0410\\u0426\\u041a\\u041a \\u0426\\/\\u041c","value":16,"text":"\\u041f\\u0417\\u0423 1 \\u0410\\u0426\\u041a\\u041a \\u0426\\/\\u041c"},"departmentId":16,"totalMass":17.77,"totalPrice":319.86,"weighings":[{"id":83101,"trash":0,"clogging":6,"tare":0,"brutto":18.9,"metal":{"id":16,"name":"3\\u0410","def":true,"psaid":3},"metalId":16,"mass":17.77,"price":"18.00","totalPrice":319.86,"newPrice":"18.00","calculatedMass":"319.86"}],"customer":48,"totalPaidAmount":319.86,"hasBeenPaid":true,"oldCustomer":48,"uuid":"98a6963b608a4471d1234130d89b301e","summary":{"3":{"weight":17.77,"cost":319.86,"median":18,"psaid":3}}}
+                """;
+        var parser = new JSONParser();
+        var parced = (JSONObject)parser.parse(json);
+        assertNotEquals(null, parced);
+        System.out.println(parced.get("comment"));
     }
 }
