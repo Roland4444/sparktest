@@ -8,6 +8,7 @@
 /home/romanx/IdeaProjects/spark/src/test/java/util/OutputResponceProcessorTest.java
 /home/romanx/IdeaProjects/spark/src/test/java/util/DSLUtil/DSLTest.java
 /home/romanx/IdeaProjects/spark/src/test/java/util/DB/ProductionUPDATETest.java
+/home/romanx/IdeaProjects/spark/src/test/java/util/JSON/BeatyfulizerTest.java
 /home/romanx/IdeaProjects/spark/src/test/java/util/IDHelperTest.java
 /home/romanx/IdeaProjects/spark/src/test/java/util/LoginProcessorTest.java
 /home/romanx/IdeaProjects/spark/src/test/java/util/processors/OutputResponceProcessorTest.java
@@ -15,6 +16,7 @@
 /home/romanx/IdeaProjects/spark/src/test/java/util/BeatyfulizerTest.java
 /home/romanx/IdeaProjects/spark/src/test/java/util/JSON/ParcedJSONTest.java
 /home/romanx/IdeaProjects/spark/src/test/java/abstractions/SettingsTest.java
+/home/romanx/IdeaProjects/spark/src/test/java/test/TestClassTest.java
 /home/romanx/IdeaProjects/spark/src/test/java/util/DB/MapDBTest.java
 /home/romanx/IdeaProjects/spark/src/test/java/util/InputRequestProcessorTest.java
 /home/romanx/IdeaProjects/spark/src/test/java/servers/ServerAktorTest.java

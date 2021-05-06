@@ -1,6 +1,9 @@
 util/processors/OutputResponceProcessorTest.class
+util/DB/PSAClientTest.class
+test/TestClassTest.class
 util/ParcedJSONTest.class
 util/DB/MapDBTest.class
+util/LoginProcessorTest.class
 abstractions/SettingsTest.class
 DSLGuided/requestsx/requestsTest.class
 util/DataBaseHelperTest.class
@@ -14,6 +17,7 @@ util/LoaderJSONTest.class
 util/JSON/LoaderJSONTest.class
 servers/ServerAktorTest.class
 servers/SparkTest.class
+util/JSON/BeatyfulizerTest.class
 util/DB/ProductionUPDATETest.class
 util/processors/InputRequestProcessorTest.class
 util/BeatyfulizerTest.class

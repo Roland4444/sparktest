@@ -9,6 +9,7 @@
 /home/romanx/IdeaProjects/spark/src/main/java/util/LoginProcessor.java
 /home/romanx/IdeaProjects/spark/src/main/java/abstractions/OnRequest.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/JSON/LoaderJSON.java
+/home/romanx/IdeaProjects/spark/src/main/java/util/Resolver.java
 /home/romanx/IdeaProjects/spark/src/main/java/util/Deps.java
 /home/romanx/IdeaProjects/spark/src/main/java/servers/AsyncSend.java
 /home/romanx/IdeaProjects/spark/src/main/java/servers/ServerAktor.java
