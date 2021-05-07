@@ -184,7 +184,12 @@ function constructInitialRequest(){
             "Чт",
             "Пт",
             "Сб"
-        ],client
+        ],  
+        "monthNames": [
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
             "Май",
             "Июнь",
             "Июль",
@@ -254,6 +259,7 @@ function constructInitialRequest(){
             client.value=""
             platenumber.value=""
             psanumber.value=""
+            alert(Fromto.value+":"+platenumber.value+":"+client.value+":"+psanumber.value)
         }
     
         function readdate(){
