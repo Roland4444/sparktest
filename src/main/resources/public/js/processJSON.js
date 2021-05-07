@@ -180,8 +180,9 @@
        datetimeupdate.innerHTML =''
        id.innerHTML =flow( a.id)
        datetimerequest.innerHTML =flow( a.datetimerequest)
-       comment.innerHTML =flow(transformlongStri{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
-       "metals":"БРОНЗА", "uuid":"126103"}meapprove)
+       comment.innerHTML =flow(transformlongString(a.comment,60))
+       initialdata.innerHTML = schoneJSON((a.initialdata))
+       datetimeapprove.innerHTML =flow( a.datetimeapprove)
        compareundschoneJSON((a.updateddata), (a.initialdata), a.id)
        datetimeupdate.innerHTML =flow( a.datetimeupdate)
     }
