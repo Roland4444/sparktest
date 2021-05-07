@@ -115,7 +115,7 @@ function constructInitialRequest(){
     // document.write(today);
     // document.write(today);
 
-    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'},::client{'Необходимо выбрать'},::limit{200}."   
+    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'},::client{'Не выбран'},::limit{200}."
     var xhr = new XMLHttpRequest()
     var url = "psasearch";
     var params = "search="+searchdsl;
@@ -230,7 +230,7 @@ function constructInitialRequest(){
             <label for="fromto">Диапазон дат</label>
             <input type="text" name="daterange"  id="fromto" />
             <label for="client">Имя клиента или наименование компании</label>
-            <input type="text" id="client" name="client" onkeyup="client_=this.value"  value ="Необходимо выбрать">
+            <input type="text" id="client" name="client" onkeyup="client_=this.value"  value ="Не выбран">
             <label for="psanumber">Номер ПСА</label>
             <input type="text" id="psanumber" name="psanumber" onkeyup="numberpsa_=this.value">
             <label for="platenumber">Номер машины</label>
@@ -511,6 +511,7 @@ function checkpassport(){////serianumber
             tr.appendChild(td)
         }
         var td = document.createElement('td');
+    
         var btn = document.createElement("button");
         
         var id = index____+'a9'
@@ -518,6 +519,7 @@ function checkpassport(){////serianumber
         btn.setAttribute("class", "btn btn-success");
         btn.innerHTML = '<i class="fa fa-hand-pointer-o" aria-hidden="true"></i>Установить контрагента'
         td.appendChild(btn)
+        var btn2 = document.createElement("button")
         tr.appendChild(td)
         tbdy.prepend(tr);
     ///////    alert('create row success!')
