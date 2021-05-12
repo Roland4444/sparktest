@@ -226,6 +226,14 @@ function constructInitialRequest(){
         // } );
         // </script>
       </head>
+      <button id="1" onClick="reply_click(this.id, 2)">B1</button>
+      <script type="text/javascript">
+        function reply_click(clicked_id, a)
+        {
+            alert(clicked_id);
+            alert('a='+a)
+        }
+      </script>
         <p>Параметры фильтра
             <label for="fromto">Диапазон дат</label>
             <input type="text" name="daterange"  id="fromto" />
@@ -481,6 +489,7 @@ function checkpassport(){////serianumber
         loadBlock(jsonpack_)
     }
     function loadBlock(a){
+        index____ = 0
         console.log("received json=>" +a)
         var table = document.getElementById("tbody");
         table.innerHTML=""
@@ -491,6 +500,7 @@ function checkpassport(){////serianumber
             var id  = (obj[item].id);
             createRow(obj[item])
             fillRow(obj[item])
+            index____++
         }
     }
     function createRow(a){
@@ -555,7 +565,8 @@ function checkpassport(){////serianumber
        metals.innerHTML =a.metals
        mass.innerHTML =''
        summ.innerHTML = ''
-       approvebutton.setAttribute("onclick", "openmodal('"+a.uuid+"')")
+       var uuid_index = a.uuid+"::"+index____
+       approvebutton.setAttribute("onclick", "openmodal('"+uuid_index+"')")
        
      ///  alert('fill row success!')
 
@@ -729,6 +740,7 @@ div__.style.visibility = 'visible'
     var confirm2 = document.getElementById("confirm")
 
    let initial =20
+   let rowid=20
 //   alert(initial)
    let name =""
    let key =""
@@ -738,10 +750,19 @@ hidebutton()
 let divid = document.getElementById("dialog")
 
 divid.style.visibility = 'hidden'
+
 function openmodal(a){
-initial =a
-$("#dialog").dialog({ width: 1000 });
-divid.style.visibility = 'visible'
+    console.log("input::"+a)
+    console.log("uuid=>"+uuid)
+    var uuid = a.substring(0, a.indexOf("::"))
+    console.log("uuid=>"+uuid)
+    var id = a.substring(a.indexOf("::")+2)
+    console.log("id=>"+id)
+
+    initial =uuid
+    rowid = id
+    $("#dialog").dialog({ width: 1000 });
+    divid.style.visibility = 'visible'
 // alert('show modal')
 //$( function() {
 //$( "#dialog" ).dialog({ width: 600 });
@@ -848,6 +869,7 @@ function apply(){
 
         var xhr = new XMLHttpRequest()
         var request = "/psasetclient?name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
+        console.log("\n\nNAME::"+name+"\n\n")
         const params = "name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
         var url = "psasetclient"
         // alert(request)
@@ -867,6 +889,9 @@ function apply(){
         xhr.send(params);
         alert('Запрос отправлен')
         $("#dialog").dialog("close");
+        console.log("\N\N\Nfinding=>"+rowid+'a4')
+        var changeclient = document.getElementById(rowid+'a4')
+        changeclient.innerHTML = '<h5>'+name+'</h5>'
 
       ///'  alert('dialog hidden!')
 
