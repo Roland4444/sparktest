@@ -93,7 +93,45 @@
 <button onclick="checkpassport()">Проверить паспорт</button>
 <button onclick="checktime()"></button> -->
 <script>
-      ////  alert(localStorage.getItem('user_____'));
+
+let passcheckurl =  "https://passport.avs.com.ru/"
+let effect_atom = "является действующим";
+let uneffect_atom = "ЯВЛЯЕТСЯ НЕДЕЙСТВИТЕЛЬНЫМ";
+
+function checkpass(passport){
+    var series = passport.substring(0,4);
+    var number = passport.substring(4, passport.length);
+    console.log("series "+series + "number"+ number);
+    var status = checkrequest(series  , number);
+    console.log("STATUS "+status);
+    switch (status){
+        case effect_atom :  return true;
+        case uneffect_atom :  return false;
+    }
+    return false;
+}
+
+function checkrequest(a1,b1){
+    var xhr = new XMLHttpRequest()
+    var params = "series="+a1 + "&number="+ b1;
+    xhr.open("POST", upasscheckurlrl, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(params);
+
+    xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+    try {
+        // alert('rendering!')
+        return xhr.responseText;
+
+        // do your work here
+
+    } catch (error) {
+    return error;
+    }
+        }
+}
+}
 
 function constructInitialRequest(){
     var today = new Date();
@@ -298,16 +336,6 @@ function constructInitialRequest(){
         }
     
         function applyfilter(){
-            // alert('dumb')
-            // alert("fromto"+fromto.value)
-    
-        //     var platenumber_;
-        // var department_;
-        // var numberpsa_;
-        // var findFrom;
-        // var findTo;
-        // var client_;
-    //    clearparams()
         readdate()
     
     
@@ -363,18 +391,6 @@ function constructInitialRequest(){
                 searchdsl += "::datarange{'"+findFrom+"':'"+findTo+"'},"
             }
             searchdsl +="::limit{200}."
-            // searchdsl = searchdsl.replaceAt(searchdsl.length, ".")
-            // searchdsl = searchdsl.replaceAll(",.",".")
-            
-            // alert(searchdsl)
-    
-    //		'search'=>::sql('SELECT * FROM psa')
-    //               ::numberpsa{[1900, 1902]},
-    //               ::department('ПЗУ№1'),
-    //               ::datarange('12.06.1940':'12.07.1940'),
-    //               ::client('ООО Артемий'),
-    //               ::typepayment('cash','bank'),
-    //               ::platenumber('KAMAZ K582HB30').
     
     
         }
