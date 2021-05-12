@@ -47,6 +47,11 @@ public class Spark {
 
         get("/getpsanumber", (req,res)-> {return deps.loginchecker.test();});
 
+        get("/checkpassport", (req,res)->{
+            var pass = req.queryParams("pass");
+            return deps.PSAClient.checkpass(pass);
+        });
+
 
         get("/psaproc", (req,res)-> {   ///@ PSAX.html
             var reqs = req.queryParams("input");
