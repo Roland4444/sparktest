@@ -107,37 +107,7 @@ function getStatusText(zzz1){
         return input.substring(index+first.length+1, zzz.length-3 );
     }
 
-function checkpass(passport_){
-    var passport = passport_+""
-    var series = passport.substring(0, 4);
-    var number = passport.substring(4, passport.length);
-    console.log('checking passport::'+passport)
-    var xhr = new XMLHttpRequest()
-    var params = "series="+series + "&number="+ number;
-    console.log('params::'+params)
-    xhr.open("POST", passcheckurl, true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.send(params);
 
-    xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-    try {
-        // alert('rendering!')
-        var answer = xhr.responseText
-        console.log('answer=>'+answer);
-        var f__ = getStatusText(answer)
-    //    alert('statuspass::'+f__)
-
-        console.log('ok')
-        // do your work here
-
-    } catch (error) {
-    throw Error;
-    }
-        }
-}
-
-}
 
 
 function constructInitialRequest(){
@@ -271,7 +241,7 @@ function constructInitialRequest(){
         // } );
         // </script>
       </head>
-      <button onclick="checkpass(1210255555)">Check pass</button>
+      <button onclick="checkpass(1203855467)">Check pass</button>
       <button id="1" onClick="reply_click(this.id, 2)">B1</button>
       <script type="text/javascript">
         function reply_click(clicked_id, a)
@@ -290,8 +260,8 @@ function constructInitialRequest(){
             <label for="platenumber">Номер машины</label>
             <input type="text" id="platenumber" name="platenumber" onkeyup="platenumber_=this.value">
     
-        <button onclick="clearfilter()">Сбросить фильтр</button>
-        <button onclick="applyfilter()">Отфильтровать</button>
+        <button class="btn btn-secondary" onclick="clearfilter()">Сбросить фильтр</button>
+        <button class="btn btn-dark" onclick="applyfilter()">Отфильтровать</button>
         
         <script>
 
@@ -627,13 +597,90 @@ function checkpassport(){////serianumber
 
 <div id="dialog" title="Установка контрагента">
     <h3> Введите ИНН или Номер паспорта</h3>
-    <input align="center" id="googlesearch" onkeyup="search()" class="searchclient2">
+    <input align="center" id="googlesearch" onkeyup="search()" class="searchclient2"><button class="btn btn-warning" onclick="checkpass()">Проверить паспорт</button>
     <div id="clientName"></div>
-    <button id="confirm" type="button" class="btn btn-success" onclick="apply()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-        Установить контрагента</button><div id="warning"></div>
+
+            <button id="confirm" type="button" class="btn btn-success" onclick="apply()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                Установить контрагента</button><div id="warning"></div>
+
+
         <!-- <button id="confirm" type="button" class="btn btn-warning" onclick="createpsa()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+
             Создать ПСА</button><div id="warning"></div> -->
+
 </div>
+
+<script>
+
+function checkpass(){
+    warning.innerHTML = ""
+    console.log('into checkpass')
+    var passport = googlesearch.value////passport_+""
+    console.log('checking passport::'+passport)
+    function getXmlHttp()
+    {
+        var xmlhttp;
+        try {
+        xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e)
+        {
+            try
+        {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (E)
+        {
+            xmlhttp = false;
+        }
+            }
+            if (!xmlhttp && typeof XMLHttpRequest!='undefined')
+            {
+                xmlhttp = new XMLHttpRequest();
+            }
+            return xmlhttp;
+    }
+    var xhr = getXmlHttp()
+    var request = "/checkpassport?pass="+passport;
+    console.log('sending  request::' +request)
+    xhr.open("GET", request, true);
+    xhr.onreadystatechange=function()
+    {
+        if (xhr.readyState != 4) return
+        clearTimeout(xhrTimeout)
+        if (xhr.status == 200) 
+        {
+            let resp = xhr.responseText
+            console.log('responce =>'+resp)
+            switch (resp){
+                case 'true':{
+                    warning.innerHTML = "<p style='color: green; '>Паспорт действителен!"
+                   // disablebutton()
+                   break;
+
+                }
+
+                case 'false':{
+                    warning.innerHTML = "<p style='color: red; '>Паспорт недействителен!"
+                   // disablebutton()
+                   break;         
+                }
+            }
+            console.log("responce::\n"+resp)
+
+        }
+    }
+    xhr.send("a=5&b=4");
+    var xhrTimeout = setTimeout( function(){ xhr.abort(); handleError("Timeout") }, 10000);
+
+    function handleError(message)
+    {
+        alert("Ошибка: "+message)
+
+    }
+}
+
+
+</script>
+
 
 <!-- 
 

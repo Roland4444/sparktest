@@ -104,12 +104,12 @@ public class PSAClient {
         String pass_serie = res.getString("series");
         String pass_number = res.getString("number");
         String type = "P";
-        if (checkpass(pass_serie+pass_number))
-        {
-            type = "P";
-        }
-        else
-            type = "B";
+   ////     if (checkpass(pass_serie+pass_number))
+   ////     {
+   /////         type = "P";
+   ////     }
+    ////    else
+    ////        type = "B";
         return res.getString("fname")+delimiter+res.getString("mname")+delimiter+res.getString("lname")+info_start+"'"+type+"':"+"'"+res.getString("id")+"'"+info_finish;
     };
 
