@@ -48,3 +48,5 @@ send SMS:: https://smsc.ru/sys/send.php?login=avs&psw=7BBAP7nkTCA4L3r&phones=896
 Black , brach beta работает с микросервисом LOADscales
 
 Login page to psa with check salt using DSL
+
+need test Odin dsl throw Groovy language; spark add groovy support
