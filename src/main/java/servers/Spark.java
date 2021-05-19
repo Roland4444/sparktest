@@ -93,6 +93,12 @@ public class Spark {
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psapage.html"));});
 
+        post("/loadw", (req,res)->{
+            byte[] msg = req.bodyAsBytes();
+            System.out.println("RECEIVED::"+new String(msg));
+            return "ok";
+        });
+
         post("/loginpsa", (req,res)->{
             var login = req.queryParams("login");
             var password = req.queryParams("password");
@@ -160,6 +166,9 @@ public class Spark {
             System.out.println(req.queryParams("PlateNumber"));
             System.out.println(req.queryParams("UUID"));
             System.out.println(req.queryParams("Type"));
+            System.out.println("\n\n\n\n\nCUSTOMER::"+req.queryParams("Customer"));
+            System.out.println("\n\n\n\n\nPrice::"+req.queryParams("Price"));
+
 
             params.put("Brutto", req.queryParams("Brutto"));
             params.put("Sor", req.queryParams("Sor"));
