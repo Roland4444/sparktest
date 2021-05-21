@@ -1,12 +1,14 @@
 package servers;
 import DSLGuided.requestsx.PSA.PSADSLProcessor;
 import DSLGuided.requestsx.PSA.PSASearchProcessor;
+import Message.abstractions.BinaryMessage;
 import org.jetbrains.annotations.NotNull;
 import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
 import spark.utils.IOUtils;
 import util.Deps;
+import util.Saver;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
@@ -18,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -95,7 +98,11 @@ public class Spark {
 
         post("/loadw", (req,res)->{
             byte[] msg = req.bodyAsBytes();
-            System.out.println("RECEIVED::"+new String(msg));
+            HashMap data = (HashMap) Saver.Companion.restored(msg);
+            String[] Arr = (String[]) data.get("HELP::");
+            Arrays.stream(Arr).sorted().forEach(System.out::println);
+            System.out.println("DATA::\n\n");
+            data.entrySet().stream().forEach(System.out::println);
             return "ok";
         });
 
@@ -109,6 +116,19 @@ public class Spark {
                 res.redirect("/psa");
             }
             res.redirect("/psalogin");
+            return "OK";
+        });
+
+        post("/testresend", (req,res) ->{
+            var T1 = req.queryParams("t1");
+            var T2 = req.queryParams("t2");
+            var T3 = req.queryParams("t3");
+
+            System.out.println("TEST1::"+T1);
+            System.out.println("TEST2::"+T2);
+            System.out.println("TEST3::"+T3);
+
+
             return "OK";
         });
 
