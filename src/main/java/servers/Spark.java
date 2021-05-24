@@ -1,8 +1,10 @@
 package servers;
 import DSLGuided.requestsx.PSA.PSADSLProcessor;
 import DSLGuided.requestsx.PSA.PSASearchProcessor;
+import DSLGuided.requestsx.WProcessor.WProcessor;
 import Message.abstractions.BinaryMessage;
 import org.jetbrains.annotations.NotNull;
+import se.roland.util.HTTPForm;
 import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
@@ -99,10 +101,24 @@ public class Spark {
         post("/loadw", (req,res)->{
             byte[] msg = req.bodyAsBytes();
             HashMap data = (HashMap) Saver.Companion.restored(msg);
-            String[] Arr = (String[]) data.get("HELP::");
-            Arrays.stream(Arr).sorted().forEach(System.out::println);
             System.out.println("DATA::\n\n");
-            data.entrySet().stream().forEach(System.out::println);
+            var name = "wprocessor";
+            var proc = (WProcessor) deps.DSL.dslProcessors.get(name);
+            var dsl = deps.DSL.getDSLforObject(name, "server");
+            System.out.println("extracted DSL::"+dsl);
+            WProcessor.Companion.resend(dsl, proc, data);
+            if ((data.get("FIRST_SNAPSHOT")!=null)&&(data.get("SECOND_SNAPSHOT")!=null)){
+                System.out.println("EXTRACTED PARAMS!!!");
+                WProcessor.Companion.saveImages(
+                        dsl,
+                        proc,
+                        (byte[]) data.get("FIRST_SNAPSHOT") ,
+                        (byte[]) data.get("SECOND_SNAPSHOT"),
+                        String.valueOf(data.get("DEPART_ID")),
+                        String.valueOf(data.get("DATE")),
+                        String.valueOf(data.get("WAYBILL"))
+                );
+            }
             return "ok";
         });
 
@@ -124,9 +140,15 @@ public class Spark {
             var T2 = req.queryParams("t2");
             var T3 = req.queryParams("t3");
 
+            var PLATE_NUMBER = req.queryParams("PLATE_NUMBER");
+            var PRICEPER_KG = req.queryParams("PRICEPER_KG");
+
             System.out.println("TEST1::"+T1);
             System.out.println("TEST2::"+T2);
             System.out.println("TEST3::"+T3);
+
+            System.out.println("PLATE_NUMBER::"+PLATE_NUMBER);
+            System.out.println("PRICEPER_KG::"+PRICEPER_KG);
 
 
             return "OK";

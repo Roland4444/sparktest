@@ -5,6 +5,7 @@ import DSLGuided.requestsx.PSA.PSADSLProcessor;
 import DSLGuided.requestsx.PSA.PSASearchProcessor;
 import DSLGuided.requestsx.RequestsDSLProcessor;
 import DSLGuided.requestsx.SMS.SMSDSLProcessor;
+import DSLGuided.requestsx.WProcessor.WProcessor;
 import Message.abstractions.BinaryMessage;
 import se.roland.abstractions.RolesStorage;
 
@@ -35,6 +36,7 @@ public class DSL {
     public PSAConnector PSAConnector;
     public HashMap<String, DSLGuided.requestsx.DSLProcessor> dslProcessors;
     public HashMap<String, String> urltoDSLProc;
+    public WProcessor WProcessor;
     public RolesStorage rs;
 
     public void prepareDSLProcessors(){
@@ -43,6 +45,7 @@ public class DSL {
         PSADSLProcessor = new PSADSLProcessor();
         PSAConnector = new PSAConnector();
         PSASearchProcessor = new PSASearchProcessor();
+        WProcessor = new WProcessor();
 
         dslProcessors = new HashMap<>();
         dslProcessors.put("requests", RequestsDSLProcessor);
@@ -50,6 +53,7 @@ public class DSL {
         dslProcessors.put("psa", PSADSLProcessor);
         dslProcessors.put("psaconnector", PSAConnector);
         dslProcessors.put("psasearch", PSASearchProcessor);
+        dslProcessors.put("wprocessor", WProcessor);
 
 
     }
