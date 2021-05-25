@@ -14,10 +14,7 @@ import util.Saver;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.ResultSet;
@@ -98,8 +95,33 @@ public class Spark {
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psapage.html"));});
 
+        get("/launchtest", (req,res)->{
+            byte[] msg = Files.readAllBytes(new File("w.bin.temp").toPath());
+            HashMap data = (HashMap) Saver.Companion.restored(msg);
+            System.out.println("DATA::\n\n");
+            var name = "wprocessor";
+            var proc = (WProcessor) deps.DSL.dslProcessors.get(name);
+            var dsl = deps.DSL.getDSLforObject(name, "server");
+            System.out.println("extracted DSL::"+dsl);
+            WProcessor.Companion.resend(dsl, proc, data);
+            if ((data.get("FIRST_SNAPSHOT")!=null)&&(data.get("SECOND_SNAPSHOT")!=null)){
+                System.out.println("EXTRACTED PARAMS!!!");
+                WProcessor.Companion.saveImages(
+                        dsl,
+                        proc,
+                        (byte[]) data.get("FIRST_SNAPSHOT") ,
+                        (byte[]) data.get("SECOND_SNAPSHOT"),
+                        String.valueOf(data.get("DEPART_ID")),
+                        String.valueOf(data.get("DATE")),
+                        String.valueOf(data.get("WAYBILL"))
+                );
+            }
+            return "ok";
+        });
+
         post("/loadw", (req,res)->{
             byte[] msg = req.bodyAsBytes();
+            Saver.Companion.write(msg, "w.bin.temp");
             HashMap data = (HashMap) Saver.Companion.restored(msg);
             System.out.println("DATA::\n\n");
             var name = "wprocessor";

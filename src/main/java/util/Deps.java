@@ -2,15 +2,18 @@ package util;
 import DSLGuided.requestsx.PSA.PSAConnector;
 import DSLGuided.requestsx.PSA.PSASearchProcessor;
 import DSLGuided.requestsx.SMS.SMSDSLProcessor;
+import DSLGuided.requestsx.WProcessor.WProcessor;
 import Message.abstractions.BinaryMessage;
 import abstractions.Cypher;
 import abstractions.OnRequest;
 import abstractions.RequestMessage;
+import abstractions.TestAction;
 import org.json.simple.parser.ParseException;
 import servers.EchoWebSocket;
 import servers.ServerAktor;
 import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
+import test.TestThread;
 import util.DB.PSAClient;
 import util.DB.DataBaseHelper;
 import util.DB.ProductionUPDATE;
@@ -23,8 +26,10 @@ import util.readfile.Readfile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Deps {
     public util.DSLUtil.DSL DSL;
@@ -54,6 +59,41 @@ public class Deps {
     public ArrayList<String> subscribers;
     public timeBasedUUID timeBasedUUID;
     private abstractions.Settings setts;
+    public TestThread TestThread;
+
+    public void initTestThread(){
+        System.out.println("****************************\nSTARTING TEST THREAD!!!\n****************************");
+        TestThread = new TestThread(60);
+        TestThread.testAaction = new TestAction() {
+            @Override
+            public void action() throws IOException {
+                System.out.println("""
+                ****************************TEST ACTION!!!!""");
+
+                byte[] msg = Files.readAllBytes(new File("w.bin.temp").toPath());
+                HashMap data = (HashMap) Saver.Companion.restored(msg);
+                System.out.println("DATA::\n\n");
+                var name = "wprocessor";
+                var proc = (WProcessor) DSL.dslProcessors.get(name);
+                var dsl = DSL.getDSLforObject(name, "server");
+                System.out.println("extracted DSL::"+dsl);
+                WProcessor.Companion.resend(dsl, proc, data);
+                if ((data.get("FIRST_SNAPSHOT")!=null)&&(data.get("SECOND_SNAPSHOT")!=null)){
+                    System.out.println("EXTRACTED PARAMS!!!");
+                    WProcessor.Companion.saveImages(
+                            dsl,
+                            proc,
+                            (byte[]) data.get("FIRST_SNAPSHOT") ,
+                            (byte[]) data.get("SECOND_SNAPSHOT"),
+                            String.valueOf(data.get("DEPART_ID")),
+                            String.valueOf(data.get("DATE")),
+                            String.valueOf(data.get("WAYBILL"))
+                    );
+                }
+            }
+        };
+        TestThread.start();
+    }
 
     public void initDSL() throws IOException {
         DSL = new DSL();
@@ -124,6 +164,8 @@ public class Deps {
         orp.executor=requests.executor;
         orp.incomingFolder = incomingFolder;
         irp.jaktor=aktor;
+
+        initTestThread();
     }
 
 
