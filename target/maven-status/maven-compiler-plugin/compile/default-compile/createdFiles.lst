@@ -1,3 +1,4 @@
+util/Deps$2.class
 util/LoginProcessor.class
 servers/AsyncSend.class
 abstractions/Cypher.class
@@ -18,6 +19,7 @@ servers/ServerAktor.class
 abstractions/Settings.class
 abstractions/Condition.class
 util/JSON/ParcedJSON.class
+abstractions/TestAction.class
 util/DB/MapDB.class
 util/JSON/LoaderJSON.class
 abstractions/ClientType.class
@@ -28,7 +30,7 @@ util/ColorPSAProcessor.class
 util/IDHelper.class
 util/processors/OutputResponceProcessor.class
 util/react/ReactBlob.class
-util/DSLUtil/DSL.class
 test/TestClass.class
 util/LoginProcessor$1.class
+test/TestThread.class
 util/DB/DataBaseHelper.class

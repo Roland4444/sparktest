@@ -97,7 +97,7 @@ public class Deps {
         DSL = new DSL();
         timeBasedUUID = new timeBasedUUID();
         PSAClient = new PSAClient("https://passport.avs.com.ru/");
-        PSAClient.exec = DSL.getPSAConnector().executor;
+        PSAClient.exec = DSL.getPSAConnector().getExecutor();
         setts = (abstractions.Settings) BinaryMessage.restored(BinaryMessage.readBytes(binprops));
         System.out.println(setts.AktorPORT+"\n:::\n"+setts.usersPostgresConnect+"\n:::\n"+ setts.requestsPOSTGRESConnect);
         prod = new ProductionUPDATE();
@@ -148,7 +148,6 @@ public class Deps {
         orp.executor=requests.executor;
         orp.incomingFolder = incomingFolder;
         irp.jaktor=aktor;
-
     }
 
 

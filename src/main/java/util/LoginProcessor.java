@@ -52,7 +52,7 @@ public class LoginProcessor {
         var list = new ArrayList<>();
         list.add(user);
         var hash = "";
-        ResultSet  res = PSAConnector.executor.executePreparedSelect("SELECT * from users where username = ?", list);
+        ResultSet  res = PSAConnector.getExecutor().executePreparedSelect("SELECT * from users where username = ?", list);
         if (res.next())
             hash =res.getString("password");
         if ((hash.length()<5) || (user.length()<1))
@@ -63,7 +63,7 @@ public class LoginProcessor {
     public String getpsadepid(String user) throws SQLException {
         var list = new ArrayList<>();
         list.add(user);
-        ResultSet  res = PSAConnector.executor.executePreparedSelect("SELECT * from users where username = ?", list);
+        ResultSet  res = PSAConnector.getExecutor().executePreparedSelect("SELECT * from users where username = ?", list);
         if (res.next())
             return res.getString("department_id");
         return null;
