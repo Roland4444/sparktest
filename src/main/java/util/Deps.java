@@ -1,6 +1,6 @@
 package util;
-import DSLGuided.requestsx.PSA.PSAConnector;
-import DSLGuided.requestsx.PSA.PSASearchProcessor;
+
+import DSLGuided.requestsx.DSL;
 import DSLGuided.requestsx.SMS.SMSDSLProcessor;
 import DSLGuided.requestsx.WProcessor.WProcessor;
 import Message.abstractions.BinaryMessage;
@@ -15,7 +15,6 @@ import test.TestThread;
 import util.DB.PSAClient;
 import util.DB.DataBaseHelper;
 import util.DB.ProductionUPDATE;
-import util.DSLUtil.DSL;
 import util.JSON.LoaderJSON;
 import util.processors.InputRequestProcessor;
 import util.processors.OutputResponceProcessor;
@@ -30,8 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Deps {
-    public util.DSLUtil.DSL DSL;
-
     public final String lockProd = "prod.bin";
     public final String DSLRules = "rules.bin";
     public static String PendingResponcesFile = "rendresp.bin";
@@ -57,6 +54,7 @@ public class Deps {
     public timeBasedUUID timeBasedUUID;
     private abstractions.Settings setts;
     public TestThread TestThread;
+    public DSLGuided.requestsx.DSL DSL;
 
     public void initTestThread(){
         System.out.println("****************************\nSTARTING TEST THREAD!!!\n****************************");
@@ -71,7 +69,7 @@ public class Deps {
                 HashMap data = (HashMap) Saver.Companion.restored(msg);
                 System.out.println("DATA::\n\n");
                 var name = "wprocessor";
-                var proc = (WProcessor) DSL.dslProcessors.get(name);
+                var proc = (WProcessor) DSL.getDslProcessors().get(name);
                 var dsl = DSL.getDSLforObject(name, "server");
                 System.out.println("extracted DSL::"+dsl);
                 WProcessor.Companion.resend(dsl, proc, data);
@@ -91,26 +89,15 @@ public class Deps {
         };
         TestThread.start();
     }
-
-    public void initDSL() throws IOException {
-        DSL = new DSL();
-        DSL.dslProcessors.get("psaconnector").render(DSL.getDSLforObject("psaconnector", "server"));
-        PSASearchProcessor psearch = (PSASearchProcessor) DSL.dslProcessors.get("psasearch");
-        PSAConnector pconnector = (PSAConnector)DSL.dslProcessors.get("psaconnector");
-        psearch.executor = pconnector.executor;
-        DSL.PSADSLProcessor.executor = pconnector.executor;
-        DSL.PSADSLProcessor.psearch = DSL.PSASearchProcessor;
-    }
-
     public Deps() throws InterruptedException, SQLException, IOException {
         if (!new File(binprops).exists()){
             System.out.println("Binnary settings file not exist");
             return;
         }
+        DSL = new DSL();
         timeBasedUUID = new timeBasedUUID();
         PSAClient = new PSAClient("https://passport.avs.com.ru/");
-        initDSL();
-        PSAClient.exec = DSL.PSAConnector.executor;
+        PSAClient.exec = DSL.getPSAConnector().executor;
         setts = (abstractions.Settings) BinaryMessage.restored(BinaryMessage.readBytes(binprops));
         System.out.println(setts.AktorPORT+"\n:::\n"+setts.usersPostgresConnect+"\n:::\n"+ setts.requestsPOSTGRESConnect);
         prod = new ProductionUPDATE();
@@ -126,7 +113,7 @@ public class Deps {
         Incomming = new Readfile(incomingFolder);
         try {
             this.loginchecker = new LoginProcessor( users.executor);
-            this.loginchecker.PSAConnector = DSL.PSAConnector;
+            this.loginchecker.PSAConnector = DSL.getPSAConnector();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -142,7 +129,7 @@ public class Deps {
             public void action(RequestMessage req) throws IOException, ParseException {
                 String msg = "Новый запрос от @"+LoaderJSON.loadPzu(req);
                 var DSLforSMS = DSL.getDSLforObject("sms", "server");
-                var reqs = DSL.dslProcessors.get("sms");
+                var reqs = DSL.getSMSDSLProcessor();
                 SMSDSLProcessor.Companion.sendSMS(msg, DSLforSMS, (SMSDSLProcessor) reqs);
             }
         };

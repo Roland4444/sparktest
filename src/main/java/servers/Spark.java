@@ -44,7 +44,7 @@ public class Spark {
 
         get("/getpsanumber", (req,res)-> {
             var reqs = req.queryParams("depid");
-            return deps.DSL.PSADSLProcessor.getPSANumberviaDSL(reqs);
+            return deps.DSL.getPSADSLProcessor().getPSANumberviaDSL(reqs);
         });
 
         get("/getpsanumber", (req,res)-> {return deps.loginchecker.test();});
@@ -78,7 +78,7 @@ public class Spark {
             System.out.println("uuid::"+uuid);
             System.out.println("summary::"+summary);
             var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
-            var reqs = deps.DSL.dslProcessors.get("psa");
+            var reqs = deps.DSL.getDslProcessors().get("psa");
             PSADSLProcessor.Companion.processColorPSA(data, uuid, DSLforPSA, (PSADSLProcessor) reqs);
             return "OK";});
 
@@ -99,9 +99,8 @@ public class Spark {
             byte[] msg = Files.readAllBytes(new File("w.bin.temp").toPath());
             HashMap data = (HashMap) Saver.Companion.restored(msg);
             System.out.println("DATA::\n\n");
-            var name = "wprocessor";
-            var proc = (WProcessor) deps.DSL.dslProcessors.get(name);
-            var dsl = deps.DSL.getDSLforObject(name, "server");
+            var proc = (WProcessor) deps.DSL.getDslProcessors().get("wprocessor");
+            var dsl = deps.DSL.getDSLforObject("wprocessor", "server");
             System.out.println("extracted DSL::"+dsl);
             WProcessor.Companion.resend(dsl, proc, data);
             if ((data.get("FIRST_SNAPSHOT")!=null)&&(data.get("SECOND_SNAPSHOT")!=null)){
@@ -124,9 +123,8 @@ public class Spark {
             Saver.Companion.write(msg, "w.bin.temp");
             HashMap data = (HashMap) Saver.Companion.restored(msg);
             System.out.println("DATA::\n\n");
-            var name = "wprocessor";
-            var proc = (WProcessor) deps.DSL.dslProcessors.get(name);
-            var dsl = deps.DSL.getDSLforObject(name, "server");
+            var proc = (WProcessor) deps.DSL.getDslProcessors().get("wprocessor");
+            var dsl = deps.DSL.getDSLforObject("wprocessor", "server");
             System.out.println("extracted DSL::"+dsl);
             WProcessor.Companion.resend(dsl, proc, data);
             if ((data.get("FIRST_SNAPSHOT")!=null)&&(data.get("SECOND_SNAPSHOT")!=null)){
@@ -201,11 +199,11 @@ public class Spark {
             System.out.println("depid::"+depid);
             if (( depid == null) ) {
                 System.out.println("UNRESTRICTED!!!");
-                return PSASearchProcessor.Companion.search(reqs, deps.DSL.PSASearchProcessor);
+                return PSASearchProcessor.Companion.search(reqs, deps.DSL.getPSASearchProcessor());
             }
             else {
                 System.out.println("Restricting deps!!!");
-                return PSASearchProcessor.Companion.search(reqs, deps.DSL.PSASearchProcessor,depid);
+                return PSASearchProcessor.Companion.search(reqs, deps.DSL.getPSASearchProcessor(),depid);
             }
         });
         post("/psasetclient", (req,res)-> {
@@ -242,7 +240,7 @@ public class Spark {
             params.put("UUID", req.queryParams("UUID"));
             params.put("Type", req.queryParams("Type"));
             var DSLforSMS = deps.DSL.getDSLforObject("psa", "server");
-            var reqs = deps.DSL.dslProcessors.get("psa");
+            var reqs = deps.DSL.getDslProcessors().get("psa");
             PSADSLProcessor.Companion.createdraftPSA(params, DSLforSMS, (PSADSLProcessor) reqs);
             return "OK";
         });
@@ -254,7 +252,7 @@ public class Spark {
             params.put("Tara", req.queryParams("Tara"));
             params.put("UUID", req.queryParams("UUID"));
             var DSLforSMS = deps.DSL.getDSLforObject("psa", "server");
-            var reqs = deps.DSL.dslProcessors.get("psa");
+            var reqs = deps.DSL.getDslProcessors().get("psa");
             PSADSLProcessor.Companion.completePSA(params, DSLforSMS, (PSADSLProcessor) reqs);
             return "OK";
         });
@@ -459,7 +457,7 @@ public class Spark {
 
         get("requestsx", (req, res) -> {
             String dsl = new String(Files.readAllBytes(Path.of("rules")));
-            var  reqs =  deps.DSL.dslProcessors.get("requests");
+            var  reqs =  deps.DSL.getDslProcessors().get("requests");
             model.clear();
             model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
             reqs.setOuttemplate( new VelocityTemplateEngine().render(
@@ -474,7 +472,7 @@ public class Spark {
 
         get("dsl", (req, res) -> {
             String dsl = new String(Files.readAllBytes(Path.of("rules")));
-            var  reqs =  deps.DSL.dslProcessors.get("requests");
+            var  reqs =  deps.DSL.getDslProcessors().get("requests");
             model.clear();
             model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
             reqs.setOuttemplate( new VelocityTemplateEngine().render(
@@ -598,8 +596,8 @@ public class Spark {
         ///////////////        model.put("user", uppercasedUser);
           ////////////////      return new VelocityTemplateEngine().render(
            //////////////             new ModelAndView(model, "requestsx.html"));
-                String pseudoProc = deps.DSL.urltoDSLProc.get(req.pathInfo());
-                var reqs = deps.DSL.dslProcessors.get(pseudoProc);
+                String pseudoProc = deps.DSL.getUrltoDSLProc().get(req.pathInfo());
+                var reqs = deps.DSL.getDslProcessors().get(pseudoProc);
                 String dsl = deps.DSL.getDSLforObject(pseudoProc, login);   ///// new String(Files.readAllBytes(Path.of("rules")));
                 model.put("requests", deps.irp.DumpRequestToHTMLTableReact());
                 char first = Character.toUpperCase(login.charAt(0));

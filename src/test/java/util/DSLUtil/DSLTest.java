@@ -1,5 +1,6 @@
 package util.DSLUtil;
 
+import DSLGuided.requestsx.DSL;
 import org.junit.Test;
 
 import java.io.IOException;
