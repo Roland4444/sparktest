@@ -11,8 +11,6 @@ import abstractions.TestAction;
 import org.json.simple.parser.ParseException;
 import servers.EchoWebSocket;
 import servers.ServerAktor;
-import spark.ModelAndView;
-import spark.template.velocity.VelocityTemplateEngine;
 import test.TestThread;
 import util.DB.PSAClient;
 import util.DB.DataBaseHelper;
@@ -45,7 +43,6 @@ public class Deps {
     public String fileprops = "setts.ini";
     public String binprops = "setts.bin";
     public String incomingFolder = "requests";
-  //  private Readfile Settings;
     private Readfile Incomming;
     public IDHelper idh;
     public Class<EchoWebSocket> echoWebSocket;
@@ -63,7 +60,7 @@ public class Deps {
 
     public void initTestThread(){
         System.out.println("****************************\nSTARTING TEST THREAD!!!\n****************************");
-        TestThread = new TestThread(60);
+        TestThread = new TestThread(20);
         TestThread.testAaction = new TestAction() {
             @Override
             public void action() throws IOException {
@@ -165,7 +162,6 @@ public class Deps {
         orp.incomingFolder = incomingFolder;
         irp.jaktor=aktor;
 
-        initTestThread();
     }
 
 
