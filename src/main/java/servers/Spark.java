@@ -257,6 +257,14 @@ public class Spark {
             return "OK";
         });
 
+        post("/transfer", (req, res)->{
+            var DSL = deps.DSL.getDSLforObject("wprocessor", "server");
+            String id = req.queryParams("depid");
+            WProcessor  reqs = (WProcessor) deps.DSL.getDslProcessors().get("wprocessor");
+            return Saver.Companion.savedToBLOB(WProcessor.Companion.getTransfers(DSL, reqs, id));
+        });
+
+
 
         post("/psa", (req, res)->{
             return "OK";
@@ -543,6 +551,7 @@ public class Spark {
             }
             return eng.render(BAD);
         });
+
 
         get("/react", (req,res)->{
             if (check(req)){
