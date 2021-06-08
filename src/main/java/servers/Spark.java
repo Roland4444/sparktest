@@ -2,9 +2,7 @@ package servers;
 import DSLGuided.requestsx.PSA.PSADSLProcessor;
 import DSLGuided.requestsx.PSA.PSASearchProcessor;
 import DSLGuided.requestsx.WProcessor.WProcessor;
-import Message.abstractions.BinaryMessage;
 import org.jetbrains.annotations.NotNull;
-import se.roland.util.HTTPForm;
 import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
@@ -19,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -47,6 +44,8 @@ public class Spark {
             return deps.DSL.getPSADSLProcessor().getPSANumberviaDSL(reqs);
         });
 
+
+
         get("/getpsanumber", (req,res)-> {return deps.loginchecker.test();});
 
         get("/checkpassport", (req,res)->{
@@ -67,6 +66,14 @@ public class Spark {
             var number = req.queryParams("number");
             System.out.println("SERIES::"+serie);
             System.out.println("number::"+number);
+
+            return "OK";});
+
+        post("/paystatus", (req,res)-> {
+            var cardNumber = req.queryParams("cardNumber");
+            var psaId = req.queryParams("psaId");
+            System.out.println("cardNumber::"+cardNumber);
+            System.out.println("psaId::"+psaId);
 
             return "OK";});
 
@@ -245,6 +252,18 @@ public class Spark {
             return "OK";
         });
 
+        get("/echo2", (req,res)->{
+            var header = req.headers("Authorization");
+            System.out.println("HEADER::"+header);
+            return "echo";
+        });
+
+        post("/echo2", (req,res)->{
+            var header = req.headers("Authorization");
+            System.out.println("HEADER::"+header);
+            return "echo";
+        });
+
         post("/completepsa", (req, res)->{
             System.out.println("RECEIVED complete psa request");
             HashMap<String, String> params = new HashMap<>();
@@ -262,6 +281,14 @@ public class Spark {
             String id = req.queryParams("depid");
             WProcessor  reqs = (WProcessor) deps.DSL.getDslProcessors().get("wprocessor");
             return Saver.Companion.savedToBLOB(WProcessor.Companion.getTransfers(DSL, reqs, id));
+        });
+
+        post("/transferprocess", (req, res)->{
+            String uuidTransfer = req.queryParams("UUIDTransfer");
+            System.out.println("CATCHED TRANSFER DATA");
+            System.out.println("uuidTransfer");
+            System.out.println(uuidTransfer);
+            return "OK";
         });
 
 
