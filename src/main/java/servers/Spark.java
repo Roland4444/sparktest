@@ -293,7 +293,7 @@ public class Spark {
 
 
 
-        post("/psa", (req, res)->{
+        post("/psatransferprocess", (req, res)->{
             return "OK";
         });
 
