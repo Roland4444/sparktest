@@ -40,13 +40,11 @@ create user2;
 TODO:: dynamical update files depends current server IP!:
 BUG:: Approve id must be id table
 Need transform long decsription to <br> blocks
-
 Return to client how much record must deleted
-
 send SMS:: https://smsc.ru/sys/send.php?login=avs&psw=7BBAP7nkTCA4L3r&phones=89608607763&mes=1212
-
 Black , brach beta работает с микросервисом LOADscales
-
 Login page to psa with check salt using DSL
-
 need test Odin dsl throw Groovy language; spark add groovy support
+
+TODO::
+Add DSL Process to update production; refactor module; remove file production lolck
