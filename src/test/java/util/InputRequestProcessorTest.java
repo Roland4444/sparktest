@@ -6,6 +6,7 @@ import org.junit.Test;
 import util.DB.DataBaseHelper;
 import util.processors.InputRequestProcessor;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -44,7 +45,7 @@ public class InputRequestProcessorTest {
     }
 
     @Test
-    public void saveUpdatingRequestinDB() throws SQLException, ParseException {
+    public void saveUpdatingRequestinDB() throws SQLException, ParseException, IOException {
         RequestMessage req = new RequestMessage("555" , "must done", "{\"name\": \"roland\"}");
         //    irp.saveRequestinDB(req);
         irp.saveUpdatingRequestinDB(req);

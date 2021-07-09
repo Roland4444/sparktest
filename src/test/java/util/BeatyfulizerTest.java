@@ -2,8 +2,8 @@ package util;
 
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
+import se.roland.JSON.ParcedJSON;
 import util.JSON.Beatyfulizer;
-import util.JSON.ParcedJSON;
 
 import static org.junit.Assert.*;
 

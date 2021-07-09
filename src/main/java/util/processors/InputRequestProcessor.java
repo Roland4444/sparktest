@@ -1,5 +1,6 @@
 package util.processors;
 
+import DSLGuided.requestsx.HelperDBUpdate.HelperDBUpdate;
 import Message.abstractions.BinaryMessage;
 import abstractions.Condition;
 import abstractions.PendingResponces;
@@ -9,12 +10,12 @@ import fr.roland.DB.Executor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import se.roland.JSON.ParcedJSON;
 import servers.ServerAktor;
-import util.DB.ProductionUPDATE;
 import util.Deps;
 import util.JSON.Beatyfulizer;
 import util.JSON.LoaderJSON;
-import util.JSON.ParcedJSON;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -27,7 +28,7 @@ import java.util.Date;
 public class InputRequestProcessor {
     public ServerAktor jaktor;
     private Executor executor;
-    public ProductionUPDATE prod;
+    public DSLGuided.requestsx.DSL DSL;
     public LoaderJSON loader;
     public int numberApprovetag;
 
@@ -37,7 +38,7 @@ public class InputRequestProcessor {
     public InputRequestProcessor(Executor executor){
         this.executor = executor;
     }
-    public void saveUpdatingRequestinDB(RequestMessage req) throws SQLException, ParseException {
+    public void saveUpdatingRequestinDB(RequestMessage req) throws SQLException, ParseException, IOException {
         PreparedStatement stmt = executor.getConn().prepareStatement("UPDATE requests SET updateddata = ?::jsonb, datetimeupdate = ? WHERE id = ?");
         System.out.println("JSON::>"+req.JSONed);
         stmt.setObject(1, req.JSONed);
@@ -58,7 +59,9 @@ public class InputRequestProcessor {
             System.out.println("\n\n\nproduction update impossible\n\n\n");
             return;
         }
-         prod.fullupdate(ParcedJSON.parse(req.JSONed), ParcedJSON.parse(json));
+        HelperDBUpdate helper = DSL.getHelperDBUpdate();
+        var dsl = DSL.getDSLforObject("dbhelper", "server");
+        HelperDBUpdate.Companion.fullupdate(helper, dsl, ParcedJSON.parse(req.JSONed), ParcedJSON.parse(json));
 
     }
 

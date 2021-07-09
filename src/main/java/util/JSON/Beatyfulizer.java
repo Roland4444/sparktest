@@ -1,5 +1,7 @@
 package util.JSON;
 
+import se.roland.JSON.ParcedJSON;
+
 public class Beatyfulizer {
     public Beatyfulizer(){
 

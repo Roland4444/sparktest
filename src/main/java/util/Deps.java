@@ -14,7 +14,6 @@ import servers.ServerAktor;
 import test.TestThread;
 import util.DB.PSAClient;
 import util.DB.DataBaseHelper;
-import util.DB.ProductionUPDATE;
 import util.JSON.LoaderJSON;
 import util.processors.InputRequestProcessor;
 import util.processors.OutputResponceProcessor;
@@ -47,7 +46,6 @@ public class Deps {
     public DataBaseHelper requests;
     public DataBaseHelper users;
     public PSAClient PSAClient;
-    public ProductionUPDATE prod;
     public LoaderJSON LoaderJSON_;
     public ReactBlob react = new ReactBlob();
     public ArrayList<String> subscribers;
@@ -100,11 +98,6 @@ public class Deps {
         PSAClient.exec = DSL.getPSAConnector().getExecutor();
         setts = (abstractions.Settings) BinaryMessage.restored(BinaryMessage.readBytes(binprops));
         System.out.println(setts.AktorPORT+"\n:::\n"+setts.usersPostgresConnect+"\n:::\n"+ setts.requestsPOSTGRESConnect);
-        prod = new ProductionUPDATE();
-        if (new File(lockProd).exists()){
-            prod.Production=true;
-            prod.init();
-        }
         requests = new DataBaseHelper(setts.requestsPOSTGRESConnect, true);//requests = new DataBaseHelper("requests");
         LoaderJSON_ =  new LoaderJSON(requests.executor);
         users = new DataBaseHelper(setts.usersPostgresConnect, true);
@@ -120,7 +113,7 @@ public class Deps {
 
         idh = new IDHelper(requests.executor);
         irp = new InputRequestProcessor(requests.executor);
-        irp.prod=prod;
+        irp.DSL=DSL;
         irp.loader= LoaderJSON_;
         this.cypher = new CypherImpl();
         aktor = new ServerAktor();

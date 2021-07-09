@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
-import util.JSON.ParcedJSON;
+import se.roland.JSON.ParcedJSON;
 
 import static org.junit.Assert.*;
 
