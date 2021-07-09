@@ -55,7 +55,6 @@
             <artifactId>Odin</artifactId>
             <version>2.0.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>fr.roland</groupId>
             <artifactId>Executor</artifactId>
