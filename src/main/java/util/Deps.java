@@ -100,6 +100,7 @@ public class Deps {
         System.out.println(setts.AktorPORT+"\n:::\n"+setts.usersPostgresConnect+"\n:::\n"+ setts.requestsPOSTGRESConnect);
         requests = new DataBaseHelper(setts.requestsPOSTGRESConnect, true);//requests = new DataBaseHelper("requests");
         LoaderJSON_ =  new LoaderJSON(requests.executor);
+        System.out.println("\n\n\n\n\n\n\n\n\n\nSETTS::"+setts.usersPostgresConnect);
         users = new DataBaseHelper(setts.usersPostgresConnect, true);
        // Settings = new Readfile(fileprops);
 
