@@ -26,7 +26,7 @@ public class PSAClient {
     public String passcheckurl_ ="";
     public final String  effect_atom = "является действующим";
     public final String uneffect_atom = "ЯВЛЯЕТСЯ НЕДЕЙСТВИТЕЛЬНЫМ";
-    public PSAClient(String url, String login, String pass, String passcheckurl_) throws SQLException {
+    public PSAClient(String url, String login, String pass, String passcheckurl_) throws SQLException, ClassNotFoundException {
         System.out.println("CLIENT SEARCHER REFACTORED");
         exec  = new Executor(url, login, pass) ;
         this.passcheckurl_ = passcheckurl_;
