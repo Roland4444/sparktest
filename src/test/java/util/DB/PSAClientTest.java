@@ -16,13 +16,13 @@ public class PSAClientTest {
     }
 
     @Test
-    public void checkpass() throws SQLException, IOException {
+    public void checkpass() throws SQLException, IOException, ClassNotFoundException {
         var PSAClient = new PSAClient("jdbc:mysql://192.168.0.121:3306/psa", "root", "123", "https://passport.avs.com.ru/");
         PSAClient.checkpass("1203855467");
     }
 
     @Test
-    public void testGetStatusText() throws SQLException {
+    public void testGetStatusText() throws SQLException, ClassNotFoundException {
         var input = "{\"Id\":\"\",\"Serie\":\"1210\",\"Number\":\"322280\",\"Status\":1,\"StatusText\":\"является действующим.\"}\n";
         var input2 = "{\"Id\":\"\",\"Serie\":\"1203\",\"Number\":\"855467\",\"Status\":0,\"StatusText\":\"ЯВЛЯЕТСЯ НЕДЕЙСТВИТЕЛЬНЫМ!\"}\n";
         var psasearch =  new PSAClient("jdbc:mysql://192.168.0.121:3306/psa", "root", "123", "https://passport.avs.com.ru/");
@@ -33,7 +33,7 @@ public class PSAClientTest {
 
     }
     @Test
-    public void  testcheckpass() throws SQLException, IOException {
+    public void  testcheckpass() throws SQLException, IOException, ClassNotFoundException {
         var psasearch =  new PSAClient("jdbc:mysql://192.168.0.121:3306/psa", "root", "123", "https://passport.avs.com.ru/");
         System.out.println(psasearch.checkpass("4544545545"));
         assertTrue(psasearch.checkpass("4544545545"));
