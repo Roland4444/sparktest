@@ -60,6 +60,7 @@ public class InputRequestProcessor {
             return;
         }
         HelperDBUpdate helper = DSL.getHelperDBUpdate();
+        assert (helper != null);
         var dsl = DSL.getDSLforObject("dbhelper", "server");
         HelperDBUpdate.Companion.fullupdate(helper, dsl, ParcedJSON.parse(req.JSONed), ParcedJSON.parse(json));
 
