@@ -30,7 +30,11 @@ public class Spark {
     public static Map<String, Object> model = new HashMap<>();
 
     public static void main(String[] args) throws InterruptedException, SQLException, IOException, ClassNotFoundException {
-        System.out.println("production RF Version with PSA DSL MODULE");
+        System.out.println("€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€");
+        System.out.println("€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€");
+        System.out.println("€€€   Production RF Version with PSA DSL MODULE  €€");
+        System.out.println("€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€");
+        System.out.println("€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€");
         Class.forName("com.mysql.cj.jdbc.Driver");
         Class.forName("org.postgresql.Driver");
         staticFiles.location("/public");
