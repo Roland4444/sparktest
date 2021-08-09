@@ -147,7 +147,7 @@ public class Spark {
                         (byte[]) data.get("SECOND_SNAPSHOT"),
                         String.valueOf(data.get("DEPART_ID")),
                         String.valueOf(data.get("DATE")),
-                        String.valueOf(data.get("WAYBILL"))
+                        String.valueOf(data.get("ID"))
                 );
             }
             return "ok";
