@@ -110,7 +110,7 @@ public class PSAClient {
    ////     }
     ////    else
     ////        type = "B";
-        return res.getString("fname")+delimiter+res.getString("mname")+delimiter+res.getString("lname")+info_start+"'"+type+"':"+"'"+res.getString("id")+"'"+info_finish;
+        return res.getString("lname")+delimiter+res.getString("fname")+delimiter+res.getString("mname")+info_start+"'"+type+"':"+"'"+res.getString("id")+"'"+info_finish;
     };
 
 
