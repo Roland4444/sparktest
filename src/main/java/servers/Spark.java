@@ -276,6 +276,7 @@ public class Spark {
             params.put("Sor", req.queryParams("Sor"));
             params.put("Tara", req.queryParams("Tara"));
             params.put("UUID", req.queryParams("UUID"));
+            params.put("Price", req.queryParams("Price"));
             var DSLforSMS = deps.DSL.getDSLforObject("psa", "server");
             var reqs = deps.DSL.getDslProcessors().get("psa");
             PSADSLProcessor.Companion.completePSA(params, DSLforSMS, (PSADSLProcessor) reqs);
