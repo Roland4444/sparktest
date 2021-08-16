@@ -276,8 +276,14 @@ public class Spark {
             params.put("Sor", req.queryParams("Sor"));
             params.put("Tara", req.queryParams("Tara"));
             params.put("UUID", req.queryParams("UUID"));
-            if (req.queryParams("Price")!=null)
+            System.out.println("Sor PARAM::"+req.queryParams("Sor"));
+            System.out.println("Tara PARAM::"+req.queryParams("Tara"));
+            System.out.println("UUID PARAM::"+req.queryParams("UUID"));
+
+            if (req.queryParams("Price")!=null) {
+                System.out.println("PRICE PARAM::"+req.queryParams("Price"));
                 params.put("Price", req.queryParams("Price"));
+            }
             var DSLforSMS = deps.DSL.getDSLforObject("psa", "server");
             var reqs = deps.DSL.getDslProcessors().get("psa");
             PSADSLProcessor.Companion.completePSA(params, DSLforSMS, (PSADSLProcessor) reqs);
