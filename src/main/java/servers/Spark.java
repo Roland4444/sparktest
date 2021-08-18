@@ -48,15 +48,12 @@ public class Spark {
             return deps.DSL.getPSADSLProcessor().getPSANumberviaDSL(reqs);
         });
 
-
-
         get("/getpsanumber", (req,res)-> {return deps.loginchecker.test();});
 
         get("/checkpassport", (req,res)->{
             var pass = req.queryParams("pass");
             return deps.PSAClient.checkpass(pass);
         });
-
 
         get("/psaproc", (req,res)-> {   ///@ PSAX.html
             var reqs = req.queryParams("input");
@@ -279,10 +276,13 @@ public class Spark {
             System.out.println("Sor PARAM::"+req.queryParams("Sor"));
             System.out.println("Tara PARAM::"+req.queryParams("Tara"));
             System.out.println("UUID PARAM::"+req.queryParams("UUID"));
-
             if (req.queryParams("Price")!=null) {
                 System.out.println("PRICE PARAM::"+req.queryParams("Price"));
                 params.put("Price", req.queryParams("Price"));
+            }
+            if (req.queryParams("ClientPrice")!=null) {
+                System.out.println("PRICE PARAM::"+req.queryParams("ClientPrice"));
+                params.put("ClientPrice", req.queryParams("ClientPrice"));
             }
             var DSLforSMS = deps.DSL.getDSLforObject("psa", "server");
             var reqs = deps.DSL.getDslProcessors().get("psa");
