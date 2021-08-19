@@ -119,6 +119,9 @@ public class PSAClient {
         var res = exec.executePreparedSelect("SELECT * FROM `psa`.`company` WHERE `inn` LIKE ?;",param);
         if (res.next())
             return processCOmpanyRequest(res);
+        res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `number` LIKE ?;",param);
+        if (res.next())
+            return processPassportRequest(res);
         res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;",processPassportField(input, 4, false));
         if (res.next())
             return processPassportRequest(res);
