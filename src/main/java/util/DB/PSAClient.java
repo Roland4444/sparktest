@@ -129,6 +129,7 @@ public class PSAClient {
         if (res.next())
             return processPassportRequest(res);
         res = exec.executePreparedSelect("SELECT * FROM `psa`.`passport` WHERE `series` LIKE ? AND `number` LIKE ?;", processPassportField(input, 3, true));
+
         if (res.next())
             return processPassportRequest(res);
         return "";
