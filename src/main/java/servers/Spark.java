@@ -197,6 +197,35 @@ public class Spark {
             System.out.println(se);
             model.clear();
             model.put("idbutton", 44);
+            model.put("APPLY", """
+                    function apply(){
+                            var xhr = new XMLHttpRequest()
+                            var request = "/psasetclient?name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
+                            console.log("\\n\\nNAME::"+name+"\\n\\n")
+                            const params = "name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
+                            var url = "psasetclient"
+                            xhr.open("POST", url, true);
+                            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                        
+                            xhr.addEventListener("readystatechange", () => {
+                                        
+                            if(request.readyState === 4 && request.status === 200) {
+                                alert('Успешно изменен!')
+                    		    console.log(request.responseText);
+                            }
+                            });
+                                        
+                            xhr.send(params);
+                            alert('Запрос отправлен  JS generated!')
+                            $("#dialog").dialog("close");
+                            console.log("\\N\\N\\Nfinding=>"+rowid+'a4')
+                            var changeclient = document.getElementById(rowid+'a4')
+                            changeclient.innerHTML = '<h5>'+name+'</h5>'
+                                        
+                                        
+                    }
+                                        
+                    """  );
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psax.html"));});
 
@@ -222,6 +251,8 @@ public class Spark {
 
             deps.PSAClient.updateclient(name, psanumber, idclient, type);
 
+            System.out.println("THERE MUST REDIRECTED!");
+            res.redirect("https://google.com");
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psapage.html"));});
 
@@ -595,6 +626,15 @@ public class Spark {
                 //return eng.render(OK);
             }
             return eng.render(BAD);
+        });
+
+        get("/test333", (req,res)->{
+            System.out.print("REDIRECT \n\n\n");
+
+            res.redirect("http://192.168.0.126:15000/psa");
+
+
+            return "OK";
         });
 
 
