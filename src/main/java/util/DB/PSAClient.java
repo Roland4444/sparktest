@@ -50,7 +50,7 @@ public class PSAClient {
     }
 
     private void updateCompany(String psanumber, String name , String idclient) throws SQLException {
-        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set company_id = ?, client = ?, passport_id=NULL   WHERE uuid = ?");
+        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set company_id = ?, `vat`='НДС исчисляется налоговым агентом', client = ?, passport_id=NULL   WHERE uuid = ?");
         stmt.setString(1, idclient);
         stmt.setString(2, name);
         stmt.setString(3, psanumber);
@@ -59,7 +59,7 @@ public class PSAClient {
     }
 
     private void updateClient(String psanumber, String name, String idclient) throws SQLException {
-        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set passport_id = ?, client = ?, company_id=NULL   WHERE uuid = ?");
+        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set passport_id = ?, `vat`='без НДС', client = ?, company_id=NULL   WHERE uuid = ?");
         stmt.setString(1, idclient);
         stmt.setString(2, name);
         stmt.setString(3, psanumber);

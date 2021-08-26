@@ -26,39 +26,6 @@
     <link rel="stylesheet" href="dp.css">
 </head>
 <body style="margin:0; padding-left:20px; padding-right:20px">
-<!-- <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-    <form class="form-inline">
-
-    </form>
-
-    <div class="btn-group  mr-sm-2">
-        <button type="button" class="btn btn-sq-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-user fa-2x">$user</i><br>
-        </button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item"   data-toggle="modal"  data-target="#gridSystemModal">Сменить пароль</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/logout">Выйти</a>
-        </div>
-    </div>
-</nav> -->
-
-<!--nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-    <div class="bd-example bd-example-padded-bottom">
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"  data-target="#gridSystemModal">
-            Сменить пароль
-        </button>
-    </div>
-</nav-->
-
-
-
-<!--div id="loginform" class="logindiv">
-    <form action="approve" >
-        <h5>ID</h5><input name="id" id="inputid"> </input><br>
-        <button type="submit" onclick="alert('Запрос одобрен')" >Одобрить запрос</button>
-    </form>
-</div-->
 
 <div id="gridSystemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -87,11 +54,6 @@
 
 
 </div>
-<!-- <button onclick="openmodal()">Show modal</button>
-<button onclick="createdynamical()">Dinamical create</button>
-<button onclick="createdynamicalX()">Dinamical create many</button>
-<button onclick="checkpassport()">Проверить паспорт</button>
-<button onclick="checktime()"></button> -->
 <script>
 
 let passcheckurl =  "/checkpassport"
@@ -121,30 +83,27 @@ function constructInitialRequest(){
 
     var dd2 = String(gårdagens.getDate()).padStart(2, '0');
     var mm2 = String(gårdagens.getMonth()+1 ).padStart(2, '0'); //January is 0!
-    var yyyy2 = gårdagens.getFullYear();
+    var yyyy2 = gårdagens.getFullYear()
 
 
-
-    today = yyyy+ '-'+ mm + '-' + dd ;
-    gårdagens = yyyy2+ '-'+ mm2 + '-' + dd2 ;
-    // document.write(today);
-    // document.write(today);
+    today = yyyy+ '-'+ mm + '-' + dd 
+    gårdagens = yyyy2+ '-'+ mm2 + '-' + dd2 
 
     searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'},::client{'Не выбран'},::limit{200}."
     var xhr = new XMLHttpRequest()
-    var url = "psasearch";
-    var params = "search="+searchdsl;
-    xhr.open("POST", url, true); // set true for async, false for sync request
+    var url = "psasearch"
+    var params = "search="+searchdsl
+    xhr.open("POST", url, true)
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.send(params); // or null, if no parameters are passed
+    xhr.send(params);
 
     xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
     try {
-        // alert('rendering!')
+      
         loadBlock(xhr.responseText);
 
-        // do your work here
+       
 
     } catch (error) {
     throw Error;
@@ -155,14 +114,6 @@ function constructInitialRequest(){
 
 }
     constructInitialRequest()
-    // alert()
-//		'search'=>::sql('SELECT * FROM psa')
-//               ::numberpsa{[1900, 1902]},
-//               ::department('ПЗУ№1'),
-//               ::datarange('12.06.1940':'12.07.1940'),
-//               ::client('ООО Артемий'),
-//               ::typepayment('cash','bank'),
-//               ::platenumber('KAMAZ K582HB30').
 	var searchdsl ="'search'=>"
     var platenumber_="";
     var department_="";
@@ -173,7 +124,6 @@ function constructInitialRequest(){
     var startvaluedatapicker =""
     var finishvaluedatapicker =""
     function checktime(){
-    ////     alert(findFrom+";;;;"+findTo)
     }
 </script>
 <script>
@@ -231,18 +181,7 @@ function constructInitialRequest(){
 
 
 <div>
-    <!-- <div id="dialog2" title="Basic dialog" style="background-color: #333333;">
-        <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the &apos;x&apos; icon.</p>
-      </div> -->
-
-      <script>
-        // $( function() {
-        //   $( "#dialog2" ).dialog();
-        // } );
-        // </script>
       </head>
-      <!-- <button onclick="checkpass(1203855467)">Check pass</button>
-      <button id="1" onClick="reply_click(this.id, 2)">B1</button> -->
       <script type="text/javascript">
         function reply_click(clicked_id, a)
         {
@@ -267,34 +206,28 @@ function constructInitialRequest(){
 
     
         function recodedate(a){
-        //'12/34/2020
         var mm = a.substring(0,2)
         var dd = a.substring(3,5)
         var yy = a.substring(6,10)
         return yy+"-"+mm+"-"+dd
     }
          recodedate("12/34/2020")
-        //'12/34/2020
-            // alert(client.value)
-            var replyobj
+                var replyobj
         function clearfilter(){
             findFrom = ""
             findTo =""
-        ///    to.value=""
             client.value=""
             platenumber.value=""
             psanumber.value=""
-           // alert(findFrom+":"+platenumber.value+":"+client.value+":"+psanumber.value)
         }
     
         function readdate(){
            if ((startvaluedatapicker != "") && (finishvaluedatapicker !="")){
             findFrom = startvaluedatapicker
             findTo = finishvaluedatapicker
-           }
+        }
                 
-      ///      if ((to.value != "") && (to.value.length>1))
-      ////          findTo = recodedate(to.value)    
+
             if ((client.value != "") && (client.value.length>1))
                 client_ = client.value 
             if ((psanumber.value != "") && (psanumber.value.length>1))
@@ -335,13 +268,11 @@ function constructInitialRequest(){
             console.log('dsl to request=>'+params)
             xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
-            try {
-                // alert('rendering!')
+            try 
+            {
                 loadBlock(xhr.responseText);
-    
-               // do your work here
-    
-           } catch (error) {
+              
+            } catch (error) {
                throw Error;
            }
                 }
@@ -395,21 +326,7 @@ function constructInitialRequest(){
         <th class="text-center">Сумма, руб</th>
         <th class="text-center">Действия</th>
         <tbody id="tbody">
-        <!-- <tr><td>fgfg-hjjhh</td>
-            <td>12.03.2010</td>
-            <td>#3</td>
-            <td>12066</td>
-            <td>Конкин</td>
-            <td>!2ОСНЕХАЙ</td>
-            <td>Золото</td>
-            <td>20</td>
-            <td>500000000</td>
-    
-            <td><button id="confirm2" type="button" class="btn btn-success" onclick="setup($idbutton)" ><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                Установить контрагента</button>
-        </td>
-        </tr>     -->
-    
+
         </tbody>
     </table>
     
@@ -435,42 +352,30 @@ function constructInitialRequest(){
         confirm2.style.visibility = 'visible'
     }
 
-function checkpassport(){////serianumber
+function checkpassport(){
         var xhr__ = new XMLHttpRequest()
         const params = "serie="+1210+"&number="+322280;
-        var url = "checkpost"  ////passport.avs.com.ru
+        var url = "checkpost"
         // alert(request)
         xhr__.open("POST", url, true);
         //В заголовке говорим что тип передаваемых данных закодирован.
         xhr__.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr__.onreadystatechange=function()
         {
-
-            if (xhr__.status == 200) {
-
+         if (xhr__.status == 200) {
                 let resp = xhr__.responseText
-
-
-  /////////////              location.reload();
             }
 
 
-   //     if(xhr__.readyState === 4 && xhr__.status === 200) {
-	//	    alert(xhr__.responseText);
-   //     }
-       
 
-        //	Вот здесь мы и передаем строку с данными, которую формировали выше. И собственно выполняем запрос.
         xhr__.send(params);
     }
     }   
 
     let json_withnull = '{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"    ", "platenumber":"FF12RX",\
     "metals":"БРОНЗА", "uuid":"126103"}';
-    // alert('parsing null')
     var obj_withnull = JSON.parse(json_withnull)
     console.log("parced" +obj_withnull.psanumber)
-    // alert(obj_withnull.uuid)
 
     let json_ = '{"id":"GGGGHHH","datetime":"12.03.2020","department":"KUTUM","psanumber":"1206","client":"АО МЕГАФОН", "platenumber":"FF12RX",\
     "metals":"БРОНЗА", "uuid":"126103"}';
@@ -487,9 +392,7 @@ function checkpassport(){////serianumber
         console.log("received json=>" +a)
         var table = document.getElementById("tbody");
         table.innerHTML=""
-        // alert('parsing......')
         var obj = JSON.parse(a)
-        // alert('parse success!')
         for (var item in obj){
             var id  = (obj[item].id);
             createRow(obj[item])
@@ -526,20 +429,16 @@ function checkpassport(){////serianumber
         var btn2 = document.createElement("button")
         tr.appendChild(td)
         tbdy.prepend(tr);
-    ///////    alert('create row success!')
         }
 
     function applyusinguuid(a){
-        // alert("UUID::"+a);
     }
 
 
     function fillRow(a)
     {
-         ////   alert('in fillRow')
 
        
-     ///////  alert(index____)
        var id = document.getElementById(index____+'a'+0);
        var datetime_ = document.getElementById(index____+'a'+1);
        var department = document.getElementById(index____+'a'+2);
@@ -561,8 +460,6 @@ function checkpassport(){////serianumber
        summ.innerHTML = ''
        var uuid_index = a.uuid+"::"+index____
        approvebutton.setAttribute("onclick", "openmodal('"+uuid_index+"')")
-       
-     ///  alert('fill row success!')
 
     }    
     
@@ -603,10 +500,6 @@ function checkpassport(){////serianumber
             <button id="confirm" type="button" class="btn btn-success" onclick="apply()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
                 Установить контрагента</button><div id="warning"></div>
 
-
-        <!-- <button id="confirm" type="button" class="btn btn-warning" onclick="createpsa()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-
-            Создать ПСА</button><div id="warning"></div> -->
 
 </div>
 
@@ -928,24 +821,13 @@ function search(){
 
       }
 
-    //  search()
 function apply(){
-
-
-   //     get("/psasetclient", (req,res)-> {
-   //         var name  = req.queryParams("name");
-   //         var psanumber  = req.queryParams("psanumber"И);
-   //         var idclient  = req.queryParams("idclient");
-   //         var type = req.queryParams("idclient");
-
         var xhr = new XMLHttpRequest()
         var request = "/psasetclient?name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
         console.log("\n\nNAME::"+name+"\n\n")
         const params = "name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
         var url = "psasetclient"
-        // alert(request)
         xhr.open("POST", url, true);
-//В заголовке говорим что тип передаваемых данных закодирован.
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         xhr.addEventListener("readystatechange", () => {
@@ -956,7 +838,6 @@ function apply(){
         }
         });
 
-//	Вот здесь мы и передаем строку с данными, которую формировали выше. И собственно выполняем запрос.
         xhr.send(params);
         alert('Запрос отправлен')
         $("#dialog").dialog("close");
@@ -964,7 +845,6 @@ function apply(){
         var changeclient = document.getElementById(rowid+'a4')
         changeclient.innerHTML = '<h5>'+name+'</h5>'
 
-      ///'  alert('dialog hidden!')
 
 }
 
