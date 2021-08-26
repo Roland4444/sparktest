@@ -66,7 +66,7 @@ public class PSAClient {
         System.out.println(stmt);
         stmt.executeUpdate();
     }
-
+///
     public ClientType getType(String input) throws SQLException {
         ArrayList param = new ArrayList();
         param.add("%"+input+"%");
