@@ -250,7 +250,9 @@ public class Spark {
             var type = req.queryParams("type");
 
             deps.PSAClient.updateclient(name, psanumber, idclient, type);
-
+            var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
+            var reqs = deps.DSL.getPSADSLProcessor();
+            PSADSLProcessor.Companion.activatePSA(DSLforPSA, (PSADSLProcessor) reqs, psanumber);
             System.out.println("THERE MUST REDIRECTED!");
             res.redirect("https://google.com");
             return new VelocityTemplateEngine().render(
