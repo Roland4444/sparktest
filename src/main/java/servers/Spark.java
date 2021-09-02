@@ -243,6 +243,17 @@ public class Spark {
                 return PSASearchProcessor.Companion.search(reqs, deps.DSL.getPSASearchProcessor(),depid);
             }
         });
+
+        get("/aktivera", (req,res)-> {
+            var UUID = req.queryParams("uuid");
+            var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
+            var reqs = deps.DSL.getPSADSLProcessor();
+            PSADSLProcessor.Companion.activatePSA(DSLforPSA, (PSADSLProcessor) reqs, UUID);
+            System.out.println("ACTIVATE UUID::"+UUID);
+            return "OK";
+        });
+
+
         post("/psasetclient", (req,res)-> {
             var name  = req.queryParams("name");
             var psanumber  = req.queryParams("psanumber");
