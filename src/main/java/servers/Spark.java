@@ -248,8 +248,9 @@ public class Spark {
             var UUID = req.queryParams("uuid");
             var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
             var reqs = deps.DSL.getPSADSLProcessor();
-            PSADSLProcessor.Companion.activatePSA(DSLforPSA, (PSADSLProcessor) reqs, UUID);
             System.out.println("ACTIVATE UUID::"+UUID);
+            PSADSLProcessor.Companion.activatePSA(DSLforPSA, (PSADSLProcessor) reqs, UUID);
+
             return "OK";
         });
 
