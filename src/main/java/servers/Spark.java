@@ -288,7 +288,7 @@ public class Spark {
             params.put("Sor", data.get("SOR").toString());
             params.put("Metal", data.get("METALL").toString());
             params.put("DepId", data.get("DEPART_ID").toString());
-            params.put("PlateNumber", data.get("PLATE_NUMBER").toString());
+            params.put("PlateNumber", data.get("CAR").toString()+" "+data.get("PLATE_NUMBER").toString());
             params.put("UUID", data.get("UUID").toString());
             params.put("Type", "black");
             params.put("Section", data.get("SECTION").toString());
