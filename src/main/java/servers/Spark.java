@@ -35,6 +35,9 @@ public class Spark {
         System.out.println("€€€   Production RF Version with PSA DSL MODULE  €€");
         System.out.println("€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€");
         System.out.println("€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€");
+
+        System.out.println("WITH BINARY DRAFT PSA");
+
         Class.forName("com.mysql.cj.jdbc.Driver");
         Class.forName("org.postgresql.Driver");
         staticFiles.location("/public");
