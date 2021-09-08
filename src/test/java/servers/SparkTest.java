@@ -17,7 +17,7 @@ public class SparkTest {
         String str1 = new String(Arr, Charset.forName("Windows-1251"));
         String str3 = new String(Arr, Charset.forName("Windows-1251"));
         String str2 = "bla";
-        byte[] Arr2 = str1.getBytes(Charset.forName("UTF8"));
+        byte[] Arr2 = str1.getBytes(Charset.forName("Windows-1251"));
         assertEquals(Arr[0], Arr2[0]);
         assertEquals(Arr[1], Arr2[1]);
         assertTrue(str1.equals(str3));

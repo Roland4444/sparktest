@@ -254,6 +254,12 @@ public class Spark {
             return "OK";
         });
 
+        get("/getsummary", (req,res)-> {
+            var id = req.queryParams("id");
+
+            return "OK";
+        });
+
 
         post("/psasetclient", (req,res)-> {
             var name  = req.queryParams("name");
@@ -266,9 +272,49 @@ public class Spark {
             var reqs = deps.DSL.getPSADSLProcessor();
             PSADSLProcessor.Companion.activatePSA(DSLforPSA, (PSADSLProcessor) reqs, psanumber);
             System.out.println("THERE MUST REDIRECTED!");
-            res.redirect("https://google.com");
+            ///res.redirect("https://google.com");
             return new VelocityTemplateEngine().render(
                     new ModelAndView(model, "psapage.html"));});
+
+        post("/draftpsabinary",(req,res)->{
+            byte[] msg = req.bodyAsBytes();
+            HashMap data = (HashMap) Saver.Companion.restored(msg);
+            HashMap params = new HashMap();
+            data.entrySet().stream().forEach(e -> System.out.println(e.toString()));
+            params.put("Brutto", data.get("BRUTTO").toString());
+            params.put("Sor", data.get("SOR").toString());
+            params.put("Metal", data.get("METALL").toString());
+            params.put("DepId", data.get("DEPART_ID").toString());
+            params.put("PlateNumber", data.get("PLATE_NUMBER").toString());
+            params.put("UUID", data.get("UUID").toString());
+            params.put("Type", "black");
+            params.put("Section", data.get("SECTION").toString());
+            var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
+            var reqs = deps.DSL.getDslProcessors().get("psa");
+            PSADSLProcessor.Companion.createdraftPSA(params, DSLforPSA, (PSADSLProcessor) reqs);
+            return "ok";
+
+
+
+//            System.out.println("DATA::\n\n");
+//            var proc = (WProcessor) deps.DSL.getDslProcessors().get("wprocessor");
+//            var dsl = deps.DSL.getDSLforObject("wprocessor", "server");
+//            System.out.println("extracted DSL::"+dsl);
+//            WProcessor.Companion.resend(dsl, proc, data);
+//            if ((data.get("FIRST_SNAPSHOT")!=null)&&(data.get("SECOND_SNAPSHOT")!=null)){
+//                System.out.println("EXTRACTED PARAMS!!!");
+//                WProcessor.Companion.saveImages(
+//                        dsl,
+//                        proc,
+//                        (byte[]) data.get("FIRST_SNAPSHOT") ,
+//                        (byte[]) data.get("SECOND_SNAPSHOT"),
+//                        String.valueOf(data.get("DEPART_ID")),
+//                        String.valueOf(data.get("DATE")),
+//                        String.valueOf(data.get("ID"))
+//                );
+//            }
+//            return "ok";
+        });
 
         post("/draftpsa", (req, res)->{
             System.out.println("RECEIVED draft psa request");
@@ -333,9 +379,9 @@ public class Spark {
                 System.out.println("Client PARAM::"+req.queryParams("Client"));
                 params.put("Client", req.queryParams("Client"));
             }
-            var DSLforSMS = deps.DSL.getDSLforObject("psa", "server");
-            var reqs = deps.DSL.getDslProcessors().get("psa");
-            PSADSLProcessor.Companion.completePSA(params, DSLforSMS, (PSADSLProcessor) reqs);
+            var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
+            var PSAProc = deps.DSL.getDslProcessors().get("psa");
+            PSADSLProcessor.Companion.completePSA(params, DSLforPSA, (PSADSLProcessor) PSAProc);
             return "OK";
         });
 
