@@ -277,7 +277,41 @@ public class Spark {
             System.out.println("THERE MUST REDIRECTED!");
             ///res.redirect("https://google.com");
             return new VelocityTemplateEngine().render(
-                    new ModelAndView(model, "psapage.html"));});
+                      new ModelAndView(model, "psapage.html"));});
+
+        post("/m",(req,res)->{
+            System.out.println("MESSAGE!!!");
+            byte[] msg = req.bodyAsBytes();
+            HashMap data = (HashMap) Saver.Companion.restored(msg);
+            if (data.get("MSG")==null)
+                return "bad";
+            var DSLforPSA = data.get("MSG").toString();
+            System.out.println("DSL!!!>>"+DSLforPSA);
+            var reqs = deps.DSL.getDslProcessors().get("psa");
+            PSADSLProcessor.Companion.deletePSA(DSLforPSA, (PSADSLProcessor) reqs);
+            return "ok";
+
+
+
+//            System.out.println("DATA::\n\n");
+//            var proc = (WProcessor) deps.DSL.getDslProcessors().get("wprocessor");
+//            var dsl = deps.DSL.getDSLforObject("wprocessor", "server");
+//            System.out.println("extracted DSL::"+dsl);
+//            WProcessor.Companion.resend(dsl, proc, data);
+//            if ((data.get("FIRST_SNAPSHOT")!=null)&&(data.get("SECOND_SNAPSHOT")!=null)){
+//                System.out.println("EXTRACTED PARAMS!!!");
+//                WProcessor.Companion.saveImages(
+//                        dsl,
+//                        proc,
+//                        (byte[]) data.get("FIRST_SNAPSHOT") ,
+//                        (byte[]) data.get("SECOND_SNAPSHOT"),
+//                        String.valueOf(data.get("DEPART_ID")),
+//                        String.valueOf(data.get("DATE")),
+//                        String.valueOf(data.get("ID"))
+//                );
+//            }
+//            return "ok";
+        });
 
         post("/draftpsabinary",(req,res)->{
             byte[] msg = req.bodyAsBytes();
