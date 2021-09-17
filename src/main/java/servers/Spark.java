@@ -287,10 +287,9 @@ public class Spark {
             String TYPE = data.get("TYPE").toString();
             System.out.println("TYPE::"+TYPE);
             var MSG = data.get("MSG");
-            switch (MSG){
-                case null -> {return "bad";}
-                default -> {}
-            }
+            if (MSG == null)
+                return "bad";
+
             switch (TYPE) {
                 case "DELETE" -> {
                     var DSLforPSA = MSG.toString();
@@ -299,26 +298,10 @@ public class Spark {
                     PSADSLProcessor.Companion.deletePSA(DSLforPSA, (PSADSLProcessor) reqs);
                     return "ok";
                 }
-                case "NOT_CREATE_PSA" -> {
-                    switch (MSG) {
-                        case (HashMap t) -> {
-                            var REASON = t.get("REASON");
-                            var UUID   = t.get("UUID");
-                            System.out.println("REASON::"+ REASON.toString());
-                            System.out.println("UUID::"  + UUID.toString());
-                            return "ok";
-                        }
-                        default -> {
-                        }
-                    }
-                }
-            }
 
-            var DSLforPSA = data.get("MSG").toString();
-            System.out.println("DSL!!!>>"+DSLforPSA);
-            var reqs = deps.DSL.getDslProcessors().get("psa");
-            PSADSLProcessor.Companion.deletePSA(DSLforPSA, (PSADSLProcessor) reqs);
-            return "ok";
+            }
+            return "bad";
+
 
 
 
