@@ -2,6 +2,7 @@ package servers;
 import DSLGuided.requestsx.PSA.PSADSLProcessor;
 import DSLGuided.requestsx.PSA.PSASearchProcessor;
 import DSLGuided.requestsx.WProcessor.WProcessor;
+import com.mysql.cj.conf.RuntimeProperty;
 import org.jetbrains.annotations.NotNull;
 import spark.ModelAndView;
 import spark.Request;
@@ -283,8 +284,36 @@ public class Spark {
             System.out.println("MESSAGE!!!");
             byte[] msg = req.bodyAsBytes();
             HashMap data = (HashMap) Saver.Companion.restored(msg);
-            if (data.get("MSG")==null)
-                return "bad";
+            String TYPE = data.get("TYPE").toString();
+            System.out.println("TYPE::"+TYPE);
+            var MSG = data.get("MSG");
+            switch (MSG){
+                case null -> {return "bad";}
+                default -> {}
+            }
+            switch (TYPE) {
+                case "DELETE" -> {
+                    var DSLforPSA = MSG.toString();
+                    System.out.println("\n\n\n\n\n\nDSL!!!>>" + DSLforPSA);
+                    var reqs = deps.DSL.getDslProcessors().get("psa");
+                    PSADSLProcessor.Companion.deletePSA(DSLforPSA, (PSADSLProcessor) reqs);
+                    return "ok";
+                }
+                case "NOT_CREATE_PSA" -> {
+                    switch (MSG) {
+                        case (HashMap t) -> {
+                            var REASON = t.get("REASON");
+                            var UUID   = t.get("UUID");
+                            System.out.println("REASON::"+ REASON.toString());
+                            System.out.println("UUID::"  + UUID.toString());
+                            return "ok";
+                        }
+                        default -> {
+                        }
+                    }
+                }
+            }
+
             var DSLforPSA = data.get("MSG").toString();
             System.out.println("DSL!!!>>"+DSLforPSA);
             var reqs = deps.DSL.getDslProcessors().get("psa");
