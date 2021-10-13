@@ -2,6 +2,7 @@ package servers;
 import DSLGuided.requestsx.PSA.PSADSLProcessor;
 import DSLGuided.requestsx.PSA.PSASearchProcessor;
 import DSLGuided.requestsx.WProcessor.WProcessor;
+import abstractions.HOT;
 import com.mysql.cj.conf.RuntimeProperty;
 import org.jetbrains.annotations.NotNull;
 import spark.ModelAndView;
@@ -74,6 +75,11 @@ public class Spark {
 
             return "OK";});
 
+        get("/hot", (req,res)-> {
+
+
+            return new HOT().hot();});
+
         post("/paystatus", (req,res)-> {
             var cardNumber = req.queryParams("cardNumber");
             var psaId = req.queryParams("psaId");
@@ -81,6 +87,14 @@ public class Spark {
             System.out.println("psaId::"+psaId);
 
             return "OK";});
+
+
+        String ret = """ 
+        <br><h1>Труба Б26 рифленая алюминием (Газпром)</h1><br>
+    <h1>Труба углеродная Чермет рифленая алюминием (Газпром)</h1>
+                """;
+
+        get("/metals__", (req,res)-> ret);
 
         post("/colorpsa", (req,res)-> {
             var data = req.queryParams("data");
