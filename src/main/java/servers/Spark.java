@@ -352,6 +352,8 @@ public class Spark {
             params.put("UUID", data.get("UUID").toString());
             params.put("Type", "black");
             params.put("Section", data.get("SECTION").toString());
+            if (data.get("CLIENT_COMPANY")!=null)
+                params.put("Client", data.get("CLIENT_COMPANY").toString());
             var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
             var reqs = deps.DSL.getDslProcessors().get("psa");
             PSADSLProcessor.Companion.createdraftPSA(params, DSLforPSA, (PSADSLProcessor) reqs);
@@ -381,7 +383,7 @@ public class Spark {
 
         post("/draftpsa", (req, res)->{
             System.out.println("RECEIVED draft psa request");
-            HashMap<String, String> params = new HashMap<>();
+            HashMap<String, Object> params = new HashMap<>();
             System.out.println("PARAMS!!!!!");
             System.out.println(req.queryParams("Brutto"));
             System.out.println(req.queryParams("Sor"));
