@@ -89,7 +89,7 @@ function constructInitialRequest(){
     today = yyyy+ '-'+ mm + '-' + dd 
     gårdagens = yyyy2+ '-'+ mm2 + '-' + dd2 
 
-    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'},::client{'Не выбран'},::limit{200}."
+    searchdsl+="::sql{'SELECT * FROM psa '},::datarange{'"+gårdagens+"':'"+ today   +"'},::client{'Клиент не установлен'},::limit{200}."
     var xhr = new XMLHttpRequest()
     var url = "psasearch"
     var params = "search="+searchdsl
@@ -193,7 +193,7 @@ function constructInitialRequest(){
             <label for="fromto">Диапазон дат</label>
             <input type="text" name="daterange"  id="fromto" />
             <label for="client">Имя клиента или наименование компании</label>
-            <input type="text" id="client" name="client" onkeyup="client_=this.value"  value ="Не выбран">
+            <input type="text" id="client" name="client" onkeyup="client_=this.value"  value ="Клиент не установлен">
             <label for="psanumber">Номер ПСА</label>
             <input type="text" id="psanumber" name="psanumber" onkeyup="numberpsa_=this.value">
             <label for="platenumber">Номер машины</label>
