@@ -551,7 +551,7 @@ public class Spark {
             if (check(req)){
                 String user = req.session().attribute("user");
                 String pass = req.queryParams("pass");
-            //    deps.loginchecker.updatepass(user, pass);
+                deps.loginchecker.updatepass(user, pass);
                 return "OK";
             }
             res.status(500);
