@@ -1,6 +1,8 @@
 package servers;
+import DSLGuided.requestsx.DSL;
 import DSLGuided.requestsx.PSA.PSADSLProcessor;
 import DSLGuided.requestsx.PSA.PSASearchProcessor;
+import DSLGuided.requestsx.Sber.SberDSLProcessor;
 import DSLGuided.requestsx.WProcessor.WProcessor;
 import abstractions.HOT;
 import com.mysql.cj.conf.RuntimeProperty;
@@ -634,6 +636,18 @@ public class Spark {
         post("ps", (req, res)->{
             String depid = req.queryParams("depid");
             return depid;
+        });
+
+        post("/sber/register", (req,res)->{
+            String psaid = req.queryParams("psaid");
+            System.out.println("PSAID::"+psaid);
+            SberDSLProcessor Sber = (SberDSLProcessor) deps.DSL.getDSLProc(DSL.Companion.getSberDSLProcessor_ATOM());
+            var DSL4Sber = deps.DSL.getDSLforObject(DSL.Companion.getSberDSLProcessor_ATOM(), "server");
+            return SberDSLProcessor.Companion.registerPayment(DSL4Sber, Sber, psaid);
+        });
+
+        post("/sber/p2p/", (req,res)->{
+            return "OK2";
         });
 
         get("psalogin", (req, res)->{
