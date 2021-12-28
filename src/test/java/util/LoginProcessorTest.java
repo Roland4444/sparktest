@@ -42,7 +42,7 @@ public class LoginProcessorTest {
         LoginProcessor login = new LoginProcessor();
         var psaconnectordsl = "'psaconnector'=>::psa{'login':'root','pass':'123'},::db{jdbc:mysql://192.168.0.121:3306/psa},::enabled{'true'}." ;
         PSAConnector connector = new PSAConnector();
-        connector.render(psaconnectordsl);
+        connector.r(psaconnectordsl);
         login.PSAConnector = connector;
         assertEquals(true, login.checkpsalogin(user, pass));
 
@@ -55,7 +55,7 @@ public class LoginProcessorTest {
         LoginProcessor login = new LoginProcessor();
         var psaconnectordsl = "'psaconnector'=>::psa{'login':'root','pass':'123'},::db{jdbc:mysql://192.168.0.121:3306/psa},::enabled{'true'}." ;
         PSAConnector connector = new PSAConnector();
-        connector.render(psaconnectordsl);
+        connector.r(psaconnectordsl);
         login.PSAConnector = connector;
         assertEquals(null, login.getpsadepid("coder"));
         assertEquals("24", login.getpsadepid("denis"));

@@ -67,7 +67,7 @@ public class Deps {
                 HashMap data = (HashMap) Saver.Companion.restored(msg);
                 System.out.println("DATA::\n\n");
                 var name = "wprocessor";
-                var proc = (WProcessor) DSL.getDslProcessors().get(name);
+                var proc = (WProcessor) DSL.getDSLProc(name);
                 var dsl = DSL.getDSLforObject(name, "server");
                 System.out.println("extracted DSL::"+dsl);
                 WProcessor.Companion.resend(dsl, proc, data);
