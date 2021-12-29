@@ -202,6 +202,53 @@ public class Spark {
             return "OK";
         });
 
+        get("/sber", (req,res)-> {
+            System.out.println(req.cookies());
+            var se = req.cookie("userpsa");
+//            var depid = req.cookie("depid");
+//            if (depid == null){
+//                System.out.println("DEPID NULL!!!");
+//            }
+//            if (depid.equals("")){
+//                System.out.println("DEPID EQUALS '''''!!!");
+//            }
+            if (se == null)
+                res.redirect("/psalogin");
+            System.out.println(se);
+            model.clear();
+            model.put("idbutton", 44);
+            model.put("APPLY", """
+                    function apply(){
+                            var xhr = new XMLHttpRequest()
+                            var request = "/psasetclient?name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
+                            console.log("\\n\\nNAME::"+name+"\\n\\n")
+                            const params = "name="+name+"&psanumber="+initial+"&idclient="+value+"&type="+key;
+                            var url = "psasetclient"
+                            xhr.open("POST", url, true);
+                            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                        
+                            xhr.addEventListener("readystatechange", () => {
+                                        
+                            if(request.readyState === 4 && request.status === 200) {
+                                alert('Успешно изменен!')
+                    		    console.log(request.responseText);
+                            }
+                            });
+                                        
+                            xhr.send(params);
+                            alert('Запрос отправлен  JS generated!')
+                            $("#dialog").dialog("close");
+                            console.log("\\N\\N\\Nfinding=>"+rowid+'a4')
+                            var changeclient = document.getElementById(rowid+'a4')
+                            changeclient.innerHTML = '<h5>'+name+'</h5>'
+                                        
+                                        
+                    }
+                                        
+                    """  );
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "sber.html"));});
+
         get("/psa", (req,res)-> {
             System.out.println(req.cookies());
             var se = req.cookie("userpsa");
@@ -645,6 +692,8 @@ public class Spark {
             var DSL4Sber = deps.DSL.getDSLforObject(DSL.Companion.getSberDSLProcessor_ATOM(), "server");
             return SberDSLProcessor.Companion.registerPayment(DSL4Sber, Sber, psaid);
         });
+
+
 
         post("/sber/p2p/", (req,res)->{
             return "OK2";
