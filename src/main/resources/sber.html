@@ -10,7 +10,7 @@
     <script src="https://use.fontawesome.com/a0f7b43176.js"></script>
 
 
-    <!-- Не используйте это в production -->
+    <!-- Не используйте это в production  url(sber2.jpg) -->
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
     <!-- jQuery and JS bundle w/ Popper.js -->
@@ -26,28 +26,103 @@
     <link rel="stylesheet" href="dp.css">
 </head>
 <body style="margin:0; padding-left:20px; padding-right:20px;
-background: #000 url(sber2.jpg);
-		color: #000; /*Цвет текста на странице*/
+background: #fff ;
+		color: #000; 
 		background-attachment: fixed;
 		background-size: 100% auto;
 ">
+<script>
+    var PSA_NUMBER = $numberpsa
 
-<img src="sber.jpg"><h1> Оплата Сбербанк</h1>
-<div class="p-3 mb-2 bg-light text-dark" id="sber" title="Работа со Сбербанком">
-    <h3>Выберите действие</h3>
+    var show_=()=> {
+        alert('hi from show')
+        $("#sber").dialog({ width: 1000 });
+    }
 
-        <button id="register_btn" type="button" align="center" class="btn btn-primary" onclick="apply()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-            Создать платеж</button><div id="register"></div>
-        <button id="pay_btn" type="button"  align="center" class="btn btn-success" onclick="apply()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-            Оплатить</button><div id="pay"></div>
-        <button id="status_btn" type="button" align="center" class="btn btn-warning" onclick="apply()"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-            Узнать статус</button><div id="status"></div>
+    var register_=()=>  {
+    function getXmlHttp()
+    {
+        var xmlhttp;
+        try {
+        xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e)
+        {
+            try
+        {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (E)
+        {
+            xmlhttp = false;
+        }
+            }
+            if (!xmlhttp && typeof XMLHttpRequest!='undefined')
+            {
+                xmlhttp = new XMLHttpRequest();
+            }
+            return xmlhttp;
+    }
+    var xhr = getXmlHttp()
+    var request = "/sber/register?psaid="+PSA_NUMBER;
+    console.log('sending  request::' +request)
+    xhr.open("GET", request, true);
+    xhr.onreadystatechange=function()
+    {
+        if (xhr.readyState != 4) return
+        clearTimeout(xhrTimeout)
+        if (xhr.status == 200) 
+        {
+            let resp = xhr.responseText
+            let COLOR = 'red'
+            if (resp.toUpperCase()==='УСПЕШНО')
+                COLOR = 'green'; 
 
+               
+            var regdiv = document.getElementById("register")
+            regdiv.innerHTML =  "<p style='color:"+COLOR+"''>"+resp
+        }
+    }
+    xhr.send("a=5&b=4");
+    var xhrTimeout = setTimeout( function(){ xhr.abort(); handleError("Timeout") }, 10000);
+
+    function handleError(message)
+    {
+        alert("Ошибка: "+message)
+    }
+}
+    
+
+    var pay_=()=>  {
+        var regdiv = document.getElementById("register")
+        regdiv.innerHTML = "<h1>Helllo</h1>"
+    }
+
+    var status_=()=> {
+        var regdiv = document.getElementById("register")
+        regdiv.innerHTML = "<h1>Helllo</h1>"
+    }
+
+
+</script>
+<h4> <img src="sber.jpg" >Оплата Сбербанк. ПСА #$numberpsa<br>Карта #$cardnumber</h4>
+
+<div class="p-3 mb-2 bg-light text-dark " id="sber" title="Работа со Сбербанком">
+  
+    <button id="register_btn" type="button" align="center" class="btn btn-primary btn-block" onclick="register_()" ><i class="btn-lg fa fa-hand-pointer-o" aria-hidden="true"></i>
+        Создать платеж</button><div id="register"></div><br>
+    <button id="pay_btn" type="button"  align="center" class="btn btn-success btn-block" onclick="pay_()"><i class="btn-lg fa fa-hand-pointer-o" aria-hidden="true"></i>
+        Оплатить</button><div id="pay"></div><br>
+    <button id="status_btn" type="button" align="center" class="btn btn-warning btn-block" onclick="status_()"><i class="btn-lg fa fa-hand-pointer-o" aria-hidden="true"></i>
+        Узнать статус</button><div id="status"></div>
 
     </div>
 
 
 
 </div>
+
+<script>
+    show_()
+    alert('PSANUMBER=>'+ PSA_NUMBER)
+</script>
 </body>
 </html>

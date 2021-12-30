@@ -204,6 +204,9 @@ public class Spark {
 
         get("/sber", (req,res)-> {
             System.out.println(req.cookies());
+            var cardnumber = req.queryParams("cardnumber");
+            var numberpsa = req.queryParams("numberpsa");
+
             var se = req.cookie("userpsa");
 //            var depid = req.cookie("depid");
 //            if (depid == null){
@@ -216,6 +219,9 @@ public class Spark {
                 res.redirect("/psalogin");
             System.out.println(se);
             model.clear();
+            model.put("cardnumber", cardnumber);
+            model.put("numberpsa",numberpsa);
+
             model.put("idbutton", 44);
             model.put("APPLY", """
                     function apply(){
@@ -686,6 +692,14 @@ public class Spark {
         });
 
         post("/sber/register", (req,res)->{
+            String psaid = req.queryParams("psaid");
+            System.out.println("PSAID::"+psaid);
+            SberDSLProcessor Sber = (SberDSLProcessor) deps.DSL.getDSLProc(DSL.Companion.getSberDSLProcessor_ATOM());
+            var DSL4Sber = deps.DSL.getDSLforObject(DSL.Companion.getSberDSLProcessor_ATOM(), "server");
+            return SberDSLProcessor.Companion.registerPayment(DSL4Sber, Sber, psaid);
+        });
+
+        get("/sber/register", (req,res)->{
             String psaid = req.queryParams("psaid");
             System.out.println("PSAID::"+psaid);
             SberDSLProcessor Sber = (SberDSLProcessor) deps.DSL.getDSLProc(DSL.Companion.getSberDSLProcessor_ATOM());
