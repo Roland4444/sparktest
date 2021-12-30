@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body><ns1:registerP2PResponse xmlns:ns1="http://engine.paymentgate.ru/webservices/p2p">
+        <return xmlns:ns2="http://engine.paymentgate.ru/webservices/p2p" orderNumber="68672" errorCode="0" errorMessage="Успешно"><orderId>cf2b5476-00a3-7982-9e63-d8e72823c181</orderId><formUrl>https://3dsec.sberbank.ru/payment/merchants/p2p_aft_oct/payment_binding_ru.html?mdOrder=cf2b5476-00a3-7982-9e63-d8e72823c181</formUrl></return></ns1:registerP2PResponse></soap:Body></soap:Envelope>RESPONCE::
