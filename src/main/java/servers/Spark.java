@@ -396,6 +396,8 @@ public class Spark {
 
         post("/draftpsabinary",(req,res)->{
             byte[] msg = req.bodyAsBytes();
+            Saver.Companion.write(msg, "DUMP.D.BIN");
+            System.out.println("NEW REQUEST!!!");
             HashMap data = (HashMap) Saver.Companion.restored(msg);
             HashMap params = new HashMap();
             data.entrySet().stream().forEach(e -> System.out.println(e.toString()));
@@ -409,8 +411,12 @@ public class Spark {
             params.put("Section", data.get("SECTION").toString());
             if (data.get("CLIENT_COMPANY")!=null)
                 params.put("Client", data.get("CLIENT_COMPANY").toString());
+            Saver.Companion.write(Saver.Companion.savedToBLOB(params), "DUMP.D.BIN");
+
             var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
             var reqs = deps.DSL.getDSLProc("psa");
+            System.out.println("DSL::>>"+ DSLforPSA);
+
             PSADSLProcessor.Companion.createdraftPSA(params, DSLforPSA, (PSADSLProcessor) reqs);
             return "ok";
 
