@@ -400,7 +400,7 @@ public class Spark {
             System.out.println("NEW REQUEST!!!");
             HashMap data = (HashMap) Saver.Companion.restored(msg);
             HashMap params = new HashMap();
-            data.entrySet().stream().forEach(e -> System.out.println(e.toString()));
+        /////    data.entrySet().stream().forEach(e -> System.out.println(e.toString()));
             params.put("Brutto", data.get("BRUTTO").toString());
             params.put("Sor", data.get("SOR").toString());
             params.put("Metal", data.get("METALL").toString());
