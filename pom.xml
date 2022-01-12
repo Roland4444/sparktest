@@ -53,7 +53,7 @@
         <dependency>
             <groupId>se.roland</groupId>
             <artifactId>Odin</artifactId>
-            <version>4.0.7-R4</version>
+            <version>4.0.7-R5</version>
         </dependency>
         <dependency>
             <groupId>fr.roland</groupId>

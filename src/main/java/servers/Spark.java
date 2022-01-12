@@ -1,5 +1,6 @@
 package servers;
 import DSLGuided.requestsx.DSL;
+import DSLGuided.requestsx.EcoProcessor.EcoProcessor;
 import DSLGuided.requestsx.PSA.PSADSLProcessor;
 import DSLGuided.requestsx.PSA.PSASearchProcessor;
 import DSLGuided.requestsx.Sber.SberDSLProcessor;
@@ -9,6 +10,7 @@ import com.mysql.cj.conf.RuntimeProperty;
 import org.jetbrains.annotations.NotNull;
 import spark.ModelAndView;
 import spark.Request;
+import spark.Response;
 import spark.template.velocity.VelocityTemplateEngine;
 import spark.utils.IOUtils;
 import util.Deps;
@@ -24,6 +26,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 import static spark.Spark.*;
 public class Spark {
     public static Map map_ = new HashMap<>();
@@ -526,6 +531,20 @@ public class Spark {
             return "OK";
         });
 
+        get("/testdelay", (req, res) -> {
+            EcoProcessor reqs = (EcoProcessor) deps.DSL.getDSLProc("eco");
+            return EcoProcessor.Companion.testdelay(reqs);
+        });
+
+        post("/eco", (req, res)->{
+            String DslForEco = req.queryParams("dsl");
+            EcoProcessor reqs = (EcoProcessor) deps.DSL.getDSLProc("eco");
+            return EcoProcessor.Companion.process(DslForEco, reqs);
+        });
+
+        get("/eco", (req, res)->{
+            return new VelocityTemplateEngine().render(
+                    new ModelAndView(model, "ecopage.html"));});
 
 
         post("/psatransferprocess", (req, res)->{
@@ -1092,5 +1111,32 @@ public class Spark {
                 "</html>");
         return sb.toString();
     };
+
+    private static Object getFile(String FileName, Request request, Response responce) {
+        File file = new File(FileName);
+        responce.raw().setContentType("application/octet-stream");
+        responce.raw().setHeader("Content-Disposition", "attachment; filename=" + file.getName() + ".zip");
+        try {
+
+            try (ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(responce.raw().getOutputStream()));
+                 BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file))) {
+                ZipEntry zipEntry = new ZipEntry(file.getName());
+
+                zipOutputStream.putNextEntry(zipEntry);
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = bufferedInputStream.read(buffer)) > 0) {
+                    zipOutputStream.write(buffer, 0, len);
+                }
+            }
+        } catch (Exception e) {
+            halt(405, "server error");
+        }
+
+        return null;
+    }
+
+
+
 
 }
