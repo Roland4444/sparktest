@@ -538,7 +538,7 @@ public class Spark {
 
         post("/eco", (req, res)->{
             String DslForEco = req.queryParams("dsl");
-            EcoProcessor reqs = (EcoProcessor) deps.DSL.getDSLProc("eco");
+            EcoProcessor reqs =  deps.DSL.getNewEcoProc();
             return EcoProcessor.Companion.process(DslForEco, reqs);
         });
 
