@@ -39,6 +39,8 @@ public class Spark {
     public static Map<String, Object> model = new HashMap<>();
 
     public static void main(String[] args) throws InterruptedException, SQLException, IOException, ClassNotFoundException {
+
+        
         System.out.println("€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€");
         System.out.println("€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€");
         System.out.println("€€€   Production RF Version with PSA DSL MODULE  €€");
@@ -96,12 +98,9 @@ public class Spark {
             return "OK";});
 
 
-        String ret = """ 
-        <br><h1>Труба Б26 рифленая алюминием (Газпром)</h1><br>
-    <h1>Труба углеродная Чермет рифленая алюминием (Газпром)</h1>
-                """;
-
-        get("/metals__", (req,res)-> ret);
+//        String ret = "         <br><h1>Труба Б26 рифленая алюминием (Газпром)</h1><br> <h1>Труба углеродная Чермет рифленая алюминием (Газпром)</h1>;                ";
+//
+//        get("/metals__", (req,res)-> ret);
 
         post("/colorpsa", (req,res)-> {
             var data = req.queryParams("data");

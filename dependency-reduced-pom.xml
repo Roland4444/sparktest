@@ -7,6 +7,20 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>scala-compile-first</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>add-source</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <executions>
           <execution>
@@ -60,7 +74,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>servers.Spark</mainClass>
+                  <mainClass>DSL.DSLProcessor.SimpleSc</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -92,7 +106,7 @@
   </dependencies>
   <properties>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <java.version>11</java.version>
+    <java.version>15</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <sonar.host.url>http://192.168.0.159:9000</sonar.host.url>
   </properties>

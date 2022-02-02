@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <properties>
         <sonar.host.url>http://192.168.0.159:9000</sonar.host.url>
-        <java.version>11</java.version>
+        <java.version>15</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
@@ -53,12 +53,12 @@
         <dependency>
             <groupId>se.roland</groupId>
             <artifactId>Odin</artifactId>
-            <version>4.0.7-R7</version>
+            <version>5.0.1</version>
         </dependency>
         <dependency>
             <groupId>fr.roland</groupId>
             <artifactId>Executor</artifactId>
-            <version>1.0.5</version>
+            <version>1.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -81,6 +81,11 @@
             <version>2.7.1</version>
         </dependency>
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala3-library_3</artifactId>
+            <version>3.1.2-RC1-bin-20220120-246ee6a-NIGHTLY</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -89,6 +94,42 @@
     </dependencies>
     <build>
         <plugins>
+<!--            <plugin>-->
+<!--                &lt;!&ndash; see http://davidb.github.com/scala-maven-plugin &ndash;&gt;-->
+<!--                <groupId>net.alchim31.maven</groupId>-->
+<!--                <artifactId>scala-maven-plugin</artifactId>-->
+<!--                <version>3.3.2</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>compile</goal>-->
+<!--                            <goal>testCompile</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <args>-->
+<!--                                <arg>-dependencyfile</arg>-->
+<!--                                <arg>${project.build.directory}/.scala_dependencies</arg>-->
+<!--                            </args>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>scala-compile-first</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -145,7 +186,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>servers.Spark</mainClass>
+                                    <mainClass>DSL.DSLProcessor.SimpleSc</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
