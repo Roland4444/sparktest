@@ -160,10 +160,12 @@ function apply(){
    //         var type = req.queryParams("idclient");
 
         var xhr = new XMLHttpRequest()
-        var request = "/psasetclient?name="+name+"&psanumber=$initial"+"&idclient="+value+"&type="+key;
-        const params = "name="+name+"&psanumber=$initial"+"&idclient="+value+"&type="+key;
+        var KEY_SEND = key+"ID"
+        console.log("KEY TO SEND"+KEY_SEND)
+        var request = "/psasetclient?name="+name+"&psanumber=$initial"+"&idclient="+value+"&type="+KEY_SEND;
+        const params = "name="+name+"&psanumber=$initial"+"&idclient="+value+"&type="+KEY_SEND;
         var url = "psasetclient"
-<!--        alert(request)-->
+        alert(request)
         xhr.open("POST", url, true);
 //В заголовке говорим что тип передаваемых данных закодирован. 
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

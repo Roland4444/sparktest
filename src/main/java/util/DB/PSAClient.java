@@ -45,11 +45,14 @@ public class PSAClient {
         switch (type){
             case "P"-> updateClient(psanumber, name , idclient);
             case "C"-> updateCompany(psanumber, name, idclient);
+            case "PID"-> updateClientViaId(psanumber, name , idclient);
+            case "CID"-> updateCompanyViaId(psanumber, name, idclient);
         };
         return;
     }
 
-    private void updateCompany(String psanumber, String name , String idclient) throws SQLException {
+    private void updateCompanyViaId(String psanumber, String name , String idclient) throws SQLException {
+        System.out.println("CALL CID!!!");
         PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set company_id = ?, `vat`='НДС исчисляется налоговым агентом', client = ?, passport_id=NULL   WHERE id = ?");
         stmt.setString(1, idclient);
         stmt.setString(2, name);
@@ -58,8 +61,27 @@ public class PSAClient {
         stmt.executeUpdate();
     }
 
-    private void updateClient(String psanumber, String name, String idclient) throws SQLException {
+    private void updateClientViaId(String psanumber, String name, String idclient) throws SQLException {
+        System.out.println("CALL PID!!!");
         PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set passport_id = ?, `vat`='без НДС', client = ?, company_id=NULL   WHERE id = ?");
+        stmt.setString(1, idclient);
+        stmt.setString(2, name);
+        stmt.setString(3, psanumber);
+        System.out.println(stmt);
+        stmt.executeUpdate();
+    }
+
+    private void updateCompany(String psanumber, String name , String idclient) throws SQLException {
+        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set company_id = ?, `vat`='НДС исчисляется налоговым агентом', client = ?, passport_id=NULL   WHERE uuid = ?");
+        stmt.setString(1, idclient);
+        stmt.setString(2, name);
+        stmt.setString(3, psanumber);
+        System.out.println(stmt);
+        stmt.executeUpdate();
+    }
+
+    private void updateClient(String psanumber, String name, String idclient) throws SQLException {
+        PreparedStatement stmt = exec.getConn().prepareStatement("UPDATE psa set passport_id = ?, `vat`='без НДС', client = ?, company_id=NULL   WHERE uuid = ?");
         stmt.setString(1, idclient);
         stmt.setString(2, name);
         stmt.setString(3, psanumber);

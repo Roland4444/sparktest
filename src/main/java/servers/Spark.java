@@ -343,7 +343,7 @@ public class Spark {
             var psanumber  = req.queryParams("psanumber");
             var idclient  = req.queryParams("idclient");
             var type = req.queryParams("type");
-
+            System.out.println("TYPE:"+"\n\n\n\n\n"+type);
             deps.PSAClient.updateclient(name, psanumber, idclient, type);
             var DSLforPSA = deps.DSL.getDSLforObject("psa", "server");
             var reqs = deps.DSL.getPSADSLProcessor();
