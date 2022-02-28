@@ -25,9 +25,9 @@
 
 </head>
 <body>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-</button>
+<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
+<!--    Launch demo modal-->
+<!--</button>-->
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -59,7 +59,7 @@
             <h3> Введите ИНН или Номер паспорта</h3>
             <input align="center" id="googlesearch" onkeyup="search()" class="searchclient2">
             <div id="client"></div>
-            <button id="confirm" type="button" class="btn btn-success" onclick="apply()" л><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+            <button id="confirm" type="button" class="btn btn-success" onclick="apply()" ><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
                 Установить контрагента</button>
 </div>
 </div>
@@ -70,7 +70,7 @@
 
     <script>
    let initial = $initial
-   alert(initial)
+<!--   alert(initial)-->
    let name =""
    let key =""
    let value =""
@@ -163,7 +163,7 @@ function apply(){
         var request = "/psasetclient?name="+name+"&psanumber=$initial"+"&idclient="+value+"&type="+key;
         const params = "name="+name+"&psanumber=$initial"+"&idclient="+value+"&type="+key;
         var url = "psasetclient"
-        alert(request)
+<!--        alert(request)-->
         xhr.open("POST", url, true);
 //В заголовке говорим что тип передаваемых данных закодирован. 
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -172,6 +172,7 @@ function apply(){
 
         if(request.readyState === 4 && request.status === 200) {       
 		    console.log(request.responseText);
+		    Window.close()
         }
         });
  
